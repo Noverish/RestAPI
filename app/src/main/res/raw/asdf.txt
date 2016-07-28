@@ -1,0 +1,35 @@
+
+ <header class="_4g33 _5qc1">
+ 	<div class="_5s61 _2pii _5i2i _52wc">
+ 		<div class="_5xu4">
+ 			<a class="_4prr" href="/heeyounghyun?fref=nf&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865">
+ 				<i class="img profpic" aria-label="\uD76C\uC601" role="img" style="background:#d8dce6 url("https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-1/cp0/e15/q65/p120x120/13509080_790091907758631_7160761615107371925_n.jpg?efg=eyJpIjoidCJ9&oh=6e5eb134cf92319c801089e5d506356c&oe=57FF0D8A") no-repeat center;background-size:100% 100%;-webkit-background-size:100% 100%;width:40px;height:40px;">
+ 				</i>
+ 			</a>
+ 		</div>
+ 	</div>
+ 	<div class="_4g34 _5i2i _52we">
+ 		<div class="_5xu4">
+ 			<div class="_4g33 _52wc">
+ 				<div class="_4g34">
+ 					<h3 class="_52jd _52jb _52jg _5qc3" data-gt="{"tn":"C"}">
+ 						<strong>
+ 							<a href="/heeyounghyun?fref=nf&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865&__tn__=C">\uD76C\uC601</a>
+ 						</strong>\uB2D8\uC774 						<a href="/story.php?story_fbid=793086204125868&id=100002734881355&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865&__tn__=C">\uC0C8\uB85C\uC6B4 \uC0AC\uC9C4 4\uC7A5</a>\uC744 \uCD94\uAC00\uD588\uC2B5\uB2C8\uB2E4 \u2014 						<a href="/profile.php?id=100005244917501&fref=nf&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865&__tn__=C">\uC815\uB2E4\uC815</a>\uB2D8 						<a href="/browse/users/?ids=100003245631713%2C100002390574097&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865&__tn__=C">\uC678 2\uBA85</a>\uACFC \uD568\uAED8</h3>
+ 					<div class="_52jc _5qc4 _24u0" data-sigil="m-feed-voice-subtitle">
+ 						<a href="/story.php?story_fbid=793086204125868&id=100002734881355&refid=8&_ft_=qid.6302980931189104807%3Amf_story_key.8971446830719781865">
+ 							<abbr>15\uC2DC\uAC04 \uC804</abbr>
+ 						</a>
+ 						<span aria-hidden="true"> \u00B7 </span>
+ 						<span>
+ 							<span data-sigil="audience-icon">
+ 								<i class="feedAudienceIcon img sp_G1VP3uP_QGP_3x sx_4704b2" aria-label="\uD76C\uC601\uB2D8\uACFC \uD0DC\uADF8\uB41C \uC0AC\uB78C\uC758 \uCE5C\uAD6C\uB4E4" role="img">
+ 								</i>
+ 							</span>
+ 						</span>
+ 					</div>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+ </header>

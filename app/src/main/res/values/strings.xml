@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RestAPI</string>
+
+    <string name="activity_main_button">go!</string>
+    <string name="activity_main_twit_button">트윗하기</string>
+    <string name="acitivty_main_twitter_time_line_get_button">타임라인 받아오기</string>
+
+    <string name="activity_reply_twitter_reply_button">답장하기</string>
+
+    <string name="facebook_app_id">1738070796478578</string>
+
+    <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
+</resources>
