@@ -1,4 +1,4 @@
-package com.noverish.restapi.custom_view;
+package com.noverish.restapi.twitter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.RestAPIClient;
 import com.noverish.restapi.http.HttpConnectionThread;
-import com.noverish.restapi.twitter.ReplyTwitterActivity;
+import com.noverish.restapi.other.RestAPIClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +29,7 @@ import twitter4j.Status;
 /**
  * Created by Noverish on 2016-05-30.
  */
-public class StatusView extends LinearLayout implements View.OnClickListener{
+public class TwitterArticleView extends LinearLayout implements View.OnClickListener{
     private Context context;
 
     public static Status nowSelectedStatus;
@@ -38,7 +37,7 @@ public class StatusView extends LinearLayout implements View.OnClickListener{
 
     private final String TAG = getClass().getSimpleName();
 
-    public StatusView(Context context, Status nowSelectedStatus) {
+    public TwitterArticleView(Context context, Status nowSelectedStatus) {
         super(context);
         this.status = nowSelectedStatus;
 
@@ -49,7 +48,7 @@ public class StatusView extends LinearLayout implements View.OnClickListener{
         setStatus(nowSelectedStatus);
     }
 
-    public StatusView(Context context) {
+    public TwitterArticleView(Context context) {
         super(context);
 
         if(!isInEditMode()) {
@@ -57,7 +56,7 @@ public class StatusView extends LinearLayout implements View.OnClickListener{
         }
     }
 
-    public StatusView(Context context, AttributeSet attrs) {
+    public TwitterArticleView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         if(!isInEditMode()) {

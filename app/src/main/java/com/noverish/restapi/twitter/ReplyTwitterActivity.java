@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.custom_view.StatusView;
 
 import twitter4j.Status;
 
@@ -26,8 +25,8 @@ public class ReplyTwitterActivity extends AppCompatActivity {
         this.context = this;
 
         editText = (EditText) findViewById(R.id.activity_reply_twitter_edit_text);
-        StatusView statusView = (StatusView) findViewById(R.id.activity_reply_twitter_status_view);
-        statusView.setStatus(StatusView.nowSelectedStatus);
+        TwitterArticleView statusView = (TwitterArticleView) findViewById(R.id.activity_reply_twitter_status_view);
+        statusView.setStatus(TwitterArticleView.nowSelectedStatus);
         Button button = (Button) findViewById(R.id.activity_reply_twitter_reply_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +42,7 @@ public class ReplyTwitterActivity extends AppCompatActivity {
             public void run() {
                 TwitterClient twitterClient = TwitterClient.getInstance();
 
-                Status status = StatusView.nowSelectedStatus;
+                Status status = TwitterArticleView.nowSelectedStatus;
                 long inReplyToStatusId = status.getId();
                 String screenName = status.getUser().getScreenName();
                 String text = editText.getText().toString();

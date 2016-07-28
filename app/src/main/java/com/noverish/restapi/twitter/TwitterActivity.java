@@ -1,7 +1,6 @@
-package com.noverish.restapi.other;
+package com.noverish.restapi.twitter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.custom_view.StatusView;
-import com.noverish.restapi.facebook.FaceBookActivity;
-import com.noverish.restapi.twitter.TwitterClient;
+import com.noverish.restapi.other.RestAPIClient;
 
 import java.util.List;
 
 import twitter4j.Status;
 
-public class MainActivity extends AppCompatActivity{
+public class TwitterActivity extends AppCompatActivity{
     private LinearLayout textViewList;
     private EditText editText;
     private android.os.Handler handler = new Handler();
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_twitter);
 
         this.context = this;
 
@@ -49,25 +46,14 @@ public class MainActivity extends AppCompatActivity{
                 semanticOnClick(v);
             }
         });*/
+
+        timeLineOnClick();
+
         Button twitButton = (Button) findViewById(R.id.activity_main_twitter_button);
         twitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tweetOnClick();
-            }
-        });
-        Button timeLineButton = (Button) findViewById(R.id.acitivty_main_twitter_time_line_get_button);
-        timeLineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timeLineOnClick();
-            }
-        });
-        Button faceBookButton = (Button) findViewById(R.id.activity_main_face_book);
-        faceBookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                facebookOnClick();
             }
         });
 
@@ -85,7 +71,6 @@ public class MainActivity extends AppCompatActivity{
 
         textViewList.addView(textView);
 
-
         //Hide keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -101,7 +86,7 @@ public class MainActivity extends AppCompatActivity{
                 List<Status> statuses = twitterClient.getTimeLine();
 
                 for (Status status : statuses) {
-                    handler.post(new AddViewRunnable(textViewList, new StatusView(context, status)));
+                    handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(context, status)));
                 }
             }
         });
@@ -117,11 +102,6 @@ public class MainActivity extends AppCompatActivity{
 
         editText.setText("");
         Toast.makeText(this, "트윗을 보냈습니다.",Toast.LENGTH_SHORT).show();
-    }
-
-    private void facebookOnClick() {
-        Intent intent = new Intent(this, FaceBookActivity.class);
-        context.startActivity(intent);
     }
 
     class AddViewRunnable implements Runnable {

@@ -21,24 +21,21 @@
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name=".other.MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
-        </activity>
-        <activity android:name=".twitter.ReplyTwitterActivity" />
-        <activity android:name=".facebook.FaceBookActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" >
-
-
-        </activity>
-        
-        <activity android:name=".kakao.KakaoLoginActivity" >
+        <!--android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"-->
+        <activity android:name=".activity.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity android:name=".twitter.TwitterActivity" />
+        <activity android:name=".twitter.ReplyTwitterActivity" />
+        <activity android:name=".facebook.FaceBookActivity" />
+        <activity android:name=".kakao.KakaoLoginActivity" />
 
     </application>
 

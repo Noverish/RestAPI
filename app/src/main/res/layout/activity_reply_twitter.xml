@@ -8,11 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <com.noverish.restapi.custom_view.StatusView
+        <com.noverish.restapi.twitter.TwitterArticleView
             android:id="@+id/activity_reply_twitter_status_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.noverish.restapi.custom_view.StatusView>
+        </com.noverish.restapi.twitter.TwitterArticleView>
         <EditText
             android:id="@+id/activity_reply_twitter_edit_text"
             android:layout_width="match_parent"
