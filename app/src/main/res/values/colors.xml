@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="pure_white">#FFFFFF</color>
+    <color name="pure_dark">#000000</color>
+
+    <color name="facebook_window_background">#777777</color>
+    <color name="facebook_comment_background">#DDDDDD</color>
 </resources>

@@ -10,4 +10,16 @@
     <string name="facebook_app_id">1738070796478578</string>
 
     <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
+
+    <string name="facebook_article_default_header">임꺽정님이 좋아합니다.</string>
+    <string name="facebook_article_default_title">홍길동님이 무얼 했습니다.</string>
+    <string name="facebook_article_default_time">123시간 전</string>
+    <string name="facebook_article_default_content">내용</string>
+    <string name="facebook_article_default_sympathy">임꺽정님 외 00명</string>
+    <string name="facebook_article_default_share">공유 0회</string>
+    <string name="facebook_article_default_comment">댓글 0개</string>
+    <string name="facebook_article_default_like_button">좋아요</string>
+    <string name="facebook_article_default_comment_button">댓글 달기</string>
+    <string name="facebook_article_default_share_button">공유하기</string>
+
 </resources>

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/pure_white">
 
     <TextView
         android:id="@+id/facebook_article_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="13dp"
-        android:textSize="13sp"/>
+        android:textSize="13sp"
+        android:text="@string/facebook_article_default_header"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/facebook_window_background" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +25,9 @@
         <ImageView
             android:id="@+id/facebook_article_profile_img"
             android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/default_profile_image"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,12 +39,15 @@
                 android:id="@+id/facebook_article_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="@string/facebook_article_default_title"
+                android:textSize="17sp"/>
 
             <TextView
                 android:id="@+id/facebook_article_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/facebook_article_default_time"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -44,7 +56,8 @@
         android:id="@+id/facebook_article_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="13dp"/>
+        android:layout_margin="13dp"
+        android:text="@string/facebook_article_default_content"/>
 
     <LinearLayout
         android:id="@+id/facebook_article_media_layout"
@@ -54,28 +67,65 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="13dp">
+        android:layout_height="wrap_content"
+        android:padding="13dp">
 
         <TextView
             android:id="@+id/facebook_article_sympathy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:text="@string/facebook_article_default_sympathy"/>
 
         <TextView
             android:id="@+id/facebook_article_sharing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:text="@string/facebook_article_default_share"/>
 
         <TextView
             android:id="@+id/facebook_article_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/facebook_article_sharing"/>
-
+            android:layout_toStartOf="@id/facebook_article_sharing"
+            android:text="@string/facebook_article_default_comment"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/facebook_comment_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/facebook_article_like_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/facebook_article_default_like_button"/>
+
+        <Button
+            android:id="@+id/facebook_article_comment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/facebook_article_default_comment_button"/>
+
+        <Button
+            android:id="@+id/facebook_article_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/facebook_article_default_share_button"/>
+    </LinearLayout>
+
 
 </LinearLayout>
