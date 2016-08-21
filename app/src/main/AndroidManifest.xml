@@ -22,13 +22,16 @@
             android:exported="true" />
 
 
-        <!--android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"-->
-        <activity android:name=".activity.HomeActivity" >
+        <activity android:name=".activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!--android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"-->
+        <activity android:name=".activity.HomeActivity" >
+
 
         </activity>
 
