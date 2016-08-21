@@ -127,6 +127,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void changeFragment(Fragment fr) {
+        try {
+            facebookWebView = (FacebookWebView) fr;
+        } catch (Exception ex) {
+            facebookWebView = null;
+        }
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.content_main_fragment_layout, fr);

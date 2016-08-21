@@ -1,18 +1,23 @@
 package com.noverish.restapi.facebook;
 
-import android.util.Log;
-
-import com.noverish.restapi.http.HttpConnectionThread;
-
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Noverish on 2016-07-17.
  */
 public class FacebookArticleItem {
-    public String htmlCode;
+    public String header;
+    public String profileImgUrl;
+    public String title;
+    public String time;
+    public String location;
+    public String content;
+    public ArrayList<String> media;
+    public String sympathyNum;
+    public String commentNum;
+    public String sharingNum;
+
+    /*public String htmlCode;
     public Header header;
     public Title title;
     public Body body;
@@ -302,5 +307,5 @@ public class FacebookArticleItem {
                     ", sharingNum='" + sharingNum + '\'' +
                     '}';
         }
-    }
+    }*/
 }
