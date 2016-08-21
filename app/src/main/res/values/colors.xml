@@ -7,7 +7,8 @@
     <color name="pure_white">#FFFFFF</color>
     <color name="pure_dark">#000000</color>
 
-    <color name="facebook_window_background">#777777</color>
+    <color name="facebook_window_background">#dddfe2</color>
+    <color name="facebook_article_button_bar_background">#f3f3f3</color>
     <color name="facebook_comment_background">#DDDDDD</color>
 
     <color name="facebook">#3b5998</color>

@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/facebook_article_default_title"
-                android:textSize="17sp"/>
+                android:textSize="17sp"
+                android:textColor="@color/pure_dark"/>
 
             <TextView
                 android:id="@+id/facebook_article_time"
@@ -103,7 +104,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/facebook_article_button_bar_background">
 
         <Button
             android:id="@+id/facebook_article_like_button"
