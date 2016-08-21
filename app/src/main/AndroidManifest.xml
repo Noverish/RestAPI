@@ -35,7 +35,6 @@
 
         </activity>
 
-        <activity android:name=".twitter.TwitterActivity" />
         <activity android:name=".twitter.ReplyTwitterActivity" />
         <activity android:name=".facebook.FaceBookActivity" />
         <activity android:name=".kakao.KakaoLoginActivity" />

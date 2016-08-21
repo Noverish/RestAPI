@@ -9,4 +9,8 @@
 
     <color name="facebook_window_background">#777777</color>
     <color name="facebook_comment_background">#DDDDDD</color>
+
+    <color name="facebook">#3b5998</color>
+    <color name="twitter">#2aa9e0</color>
+    <color name="kakao">#fab900</color>
 </resources>

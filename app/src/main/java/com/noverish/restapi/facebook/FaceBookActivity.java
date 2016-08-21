@@ -31,7 +31,7 @@ public class FaceBookActivity extends AppCompatActivity{
     private String htmlCode;
 
     private final String TAG = getClass().getSimpleName();
-    public ArrayList<FacebookArticle> articles = new ArrayList<>();
+    public ArrayList<FacebookArticleItem> articles = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -113,10 +113,10 @@ public class FaceBookActivity extends AppCompatActivity{
 
         while (matcher.find()) {
             String tmp = matcher.group();
-            articles.add(new FacebookArticle(tmp));
+            articles.add(new FacebookArticleItem(tmp));
         }
 
-        for(FacebookArticle article : articles) {
+        for(FacebookArticleItem article : articles) {
             list.addView(new FacebookArticleView(this, article));
         }
     }

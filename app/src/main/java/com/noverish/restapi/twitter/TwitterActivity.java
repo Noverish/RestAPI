@@ -1,9 +1,11 @@
 package com.noverish.restapi.twitter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,22 +23,19 @@ import java.util.List;
 
 import twitter4j.Status;
 
-public class TwitterActivity extends AppCompatActivity{
+public class TwitterActivity extends Fragment {
     private LinearLayout textViewList;
     private EditText editText;
     private android.os.Handler handler = new Handler();
-    private Context context;
 
     private final String TAG = getClass().getSimpleName();
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_twitter);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_twitter, container, false);
 
-        this.context = this;
-
-        textViewList = (LinearLayout) findViewById(R.id.activity_main_text_view_list);
+        textViewList = (LinearLayout) view.findViewById(R.id.activity_main_text_view_list);
         //editText = (EditText) findViewById(R.id.activity_main_edit_text);
 
         /*Button semanticButton = (Button) findViewById(R.id.activity_main_button);
@@ -49,7 +48,7 @@ public class TwitterActivity extends AppCompatActivity{
 
         timeLineOnClick();
 
-        Button twitButton = (Button) findViewById(R.id.activity_main_twitter_button);
+        Button twitButton = (Button) view.findViewById(R.id.activity_main_twitter_button);
         twitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,21 +57,22 @@ public class TwitterActivity extends AppCompatActivity{
         });
 
 
-        editText = (EditText) findViewById(R.id.activity_main_twitter_edit_text);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        editText = (EditText) view.findViewById(R.id.activity_main_twitter_edit_text);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        return view;
     }
 
     private void semanticOnClick(View v) {
         RestAPIClient client = new RestAPIClient(editText.getText().toString());
 
-        TextView textView = new TextView(this);
+        TextView textView = new TextView(getActivity());
         textView.setText(client.getHtmlCode());
 
         textViewList.addView(textView);
 
         //Hide keyboard
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
@@ -86,7 +86,7 @@ public class TwitterActivity extends AppCompatActivity{
                 List<Status> statuses = twitterClient.getTimeLine();
 
                 for (Status status : statuses) {
-                    handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(context, status)));
+                    handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
                 }
             }
         });
@@ -94,14 +94,14 @@ public class TwitterActivity extends AppCompatActivity{
     }
 
     private void tweetOnClick() {
-        EditText editText = (EditText) findViewById(R.id.activity_main_twitter_edit_text);
+        EditText editText = (EditText) getView().findViewById(R.id.activity_main_twitter_edit_text);
         String twit = editText.getText().toString();
 
         TwitterClient twitterClient = TwitterClient.getInstance();
         twitterClient.updateStatus(twit + " - RestAPIExample 에서 작성");
 
         editText.setText("");
-        Toast.makeText(this, "트윗을 보냈습니다.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "트윗을 보냈습니다.",Toast.LENGTH_SHORT).show();
     }
 
     class AddViewRunnable implements Runnable {
