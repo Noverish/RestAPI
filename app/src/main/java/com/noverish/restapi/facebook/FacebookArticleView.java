@@ -14,10 +14,10 @@ import com.noverish.restapi.http.HttpImageThread;
  * Created by Noverish on 2016-07-17.
  */
 public class FacebookArticleView extends LinearLayout {
-    private FacebookArticle article;
+    private FacebookArticleItem article;
     private android.os.Handler handler;
 
-    public FacebookArticleView(Context context,FacebookArticle article) {
+    public FacebookArticleView(Context context,FacebookArticleItem article) {
         super(context);
 
         this.article = article;

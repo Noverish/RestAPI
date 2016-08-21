@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Noverish on 2016-07-17.
  */
-public class FacebookArticle {
+public class FacebookArticleItem {
     public String htmlCode;
     public Header header;
     public Title title;
@@ -19,7 +19,7 @@ public class FacebookArticle {
     public Media media;
     public Footer footer;
 
-    public FacebookArticle(String htmlCode) {
+    public FacebookArticleItem(String htmlCode) {
         this.htmlCode = htmlCode;
 
         try {
@@ -57,7 +57,7 @@ public class FacebookArticle {
 
     @Override
     public String toString() {
-        return "FacebookArticle{" +
+        return "FacebookArticleItem{" +
                 "header=" + header +
                 ", title=" + title +
                 ", body=" + body +

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -45,5 +46,9 @@ public class FacebookWebView extends Fragment {
         public void onPageFinished(final WebView view, String url) {
 
         }
+    }
+
+    public void evaluateJavascript(String script, ValueCallback<String> resultCallBack) {
+        webView.evaluateJavascript(script, resultCallBack);
     }
 }
