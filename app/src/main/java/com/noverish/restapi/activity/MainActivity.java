@@ -15,10 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ValueCallback;
+import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookWebView;
+import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-
+                RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
+                Essentials.makeHipassPopup(MainActivity.this, layout);
 
             }
         });
