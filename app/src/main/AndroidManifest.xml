@@ -21,7 +21,8 @@
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name=".activity.SplashActivity" >
+        <activity android:name=".activity.SplashActivity"
+            android:theme="@style/SplashActivityStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
