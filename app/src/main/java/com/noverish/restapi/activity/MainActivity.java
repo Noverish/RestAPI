@@ -1,8 +1,5 @@
 package com.noverish.restapi.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -23,8 +20,6 @@ import com.noverish.restapi.twitter.TwitterActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private FacebookWebView facebookWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        changeFragment(new HomeFragment());
+        Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
     }
 
     @Override
@@ -98,9 +93,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
-            changeFragment(new FacebookWebView());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new FacebookWebView());
         } else if (id == R.id.nav_twitter) {
-            changeFragment(new TwitterActivity());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {
 
         } else if (id == R.id.nav_share) {
@@ -112,19 +107,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void changeFragment(Fragment fr) {
-        try {
-            facebookWebView = (FacebookWebView) fr;
-        } catch (Exception ex) {
-            facebookWebView = null;
-        }
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.content_main_fragment_layout, fr);
-        fragmentTransaction.commit();
-
     }
 }

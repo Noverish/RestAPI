@@ -1,5 +1,9 @@
 package com.noverish.restapi.other;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,5 +41,12 @@ public class Essentials {
         editText.setText("오늘의 서울 최고 온도 26.6℃");
 
         popupWindow.showAtLocation(parent, Gravity.CENTER, 0, 0);
+    }
+
+    public static void changeFragment(Activity activity, int layoutId, Fragment fr) {
+        FragmentManager fm = activity.getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(layoutId, fr);
+        fragmentTransaction.commit();
     }
 }
