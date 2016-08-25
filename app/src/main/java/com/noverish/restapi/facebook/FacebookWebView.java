@@ -11,12 +11,16 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+
 /**
  * Created by Noverish on 2016-08-21.
  */
 public class FacebookWebView extends Fragment {
     private WebView webView;
     private String htmlCode;
+
+    private OnHtmlLoadSuccessListener listener;
 
     private final String url = "https://m.facebook.com/?_rdr";
     private final String TAG = getClass().getSimpleName();
@@ -49,7 +53,15 @@ public class FacebookWebView extends Fragment {
                     @Override
                     public void onReceiveValue(String html) {
                         htmlCode = html;
+
+                        if(listener != null) {
+                            listener.onHtmlLoadSuccess(html);
+                        }
                     }
                 });
+    }
+
+    public void setOnHtmlLoadSuccessListener(OnHtmlLoadSuccessListener listener) {
+        this.listener = listener;
     }
 }
