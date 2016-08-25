@@ -3,7 +3,6 @@ package com.noverish.restapi.facebook;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,9 @@ import android.webkit.WebViewClient;
  */
 public class FacebookWebView extends Fragment {
     private WebView webView;
+    private String htmlCode;
 
-    private final String url = "http://www.facebook.com";
+    private final String url = "https://m.facebook.com/?_rdr";
     private final String TAG = getClass().getSimpleName();
 
     @Nullable
@@ -37,18 +37,19 @@ public class FacebookWebView extends Fragment {
 
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.e(TAG, "shouldOverrideUrlLoading : " + url);
-            return false;
-        }
-
-        @Override
         public void onPageFinished(final WebView view, String url) {
-
+            extractHtml();
         }
     }
 
-    public void evaluateJavascript(String script, ValueCallback<String> resultCallBack) {
-        webView.evaluateJavascript(script, resultCallBack);
+    public void extractHtml() {
+        webView.evaluateJavascript(
+                "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();",
+                new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String html) {
+                        htmlCode = html;
+                    }
+                });
     }
 }

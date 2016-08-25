@@ -14,11 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.ValueCallback;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookWebView;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterActivity;
@@ -87,20 +85,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.action_favorite) {
-            if(facebookWebView != null) {
-                facebookWebView.evaluateJavascript(
-                        "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();",
-                        new ValueCallback<String>() {
-                            @Override
-                            public void onReceiveValue(String html) {
-                                FacebookFragment fragment = new FacebookFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("html", html);
-                                fragment.setArguments(bundle);
-                                changeFragment(fragment);
-                            }
-                        });
-            }
+
         }
 
         return super.onOptionsItemSelected(item);
