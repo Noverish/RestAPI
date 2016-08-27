@@ -50,7 +50,7 @@ public class FacebookHtmlCodeProcessor {
         for(Element article : articles) {
             FacebookArticleItem item = new FacebookArticleItem();
 
-            Log.d("article",article.classNames().toString());
+//            Log.d("article",article.classNames().toString());
             if(article.classNames().contains("_35au"))
                 continue;
 
@@ -164,8 +164,10 @@ public class FacebookHtmlCodeProcessor {
                     if(medias != null && medias.size() != 0) {
                         for(Element media : medias) {
                             mediaArrayList.add(findOriginOfJsoupBuggedUrl(media.outerHtml(), htmlCode));
+                            Log.d("media", media.outerHtml());
                         }
                     }
+
 
                     item.media = mediaArrayList;
 
@@ -186,6 +188,7 @@ public class FacebookHtmlCodeProcessor {
         헤더없는 _55wo _5rgr _5gh8 async_like
         내부 아티클 _56be _4hkg _5rgr _5s1m async_like
         커뮤니티 추천 _57_6 fullwidth carded _58vs _5o5d _5o5c _t26 _45js _29d0 _51s _55wr acw apm
+        페이지를 좋아합니다 _55wo _5rgr _5gh8 async_like
         비어있음 _55wo _5rgr _5gh8 _35au
 
          */
@@ -196,7 +199,7 @@ public class FacebookHtmlCodeProcessor {
     }
 
     private static String findOriginOfJsoupBuggedUrl(String buggedHtml, String htmlCode) {
-        Pattern pattern1 = Pattern.compile("oh=.*?&");
+        Pattern pattern1 = Pattern.compile("[\\d_]*[\\S][.]jpg");
         Matcher matcher1 = pattern1.matcher(buggedHtml);
 
         if(matcher1.find()) {
