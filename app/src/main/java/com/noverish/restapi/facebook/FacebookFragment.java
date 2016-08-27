@@ -41,6 +41,7 @@ public class FacebookFragment extends Fragment {
 
         if(items != null) {
             for (FacebookArticleItem item : items) {
+                Log.d("facebook",item.toString());
                 views.add(new FacebookArticleView(getActivity(), item));
             }
 

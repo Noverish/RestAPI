@@ -42,17 +42,19 @@ public class FacebookHtmlCodeProcessor {
         htmlCode = htmlCode.replaceAll("(\\\\){1,2}u003C","<");
         htmlCode = htmlCode.replaceAll("(\\\\){1,2}u003E",">");
         htmlCode = htmlCode.replaceAll("(\\\\){1,2}/","/");
+        htmlCode = HttpConnectionThread.unicodeToString(htmlCode);
 
-        Pattern pattern = Pattern.compile("<article(\\S|\\s)*?</article>");
-        Matcher matcher = pattern.matcher(htmlCode);
+        Document document = Jsoup.parse(htmlCode);
+        Elements articles = document.select("article");
 
-        while (matcher.find()) {
-            Log.i("article","article");
+        for(Element article : articles) {
             FacebookArticleItem item = new FacebookArticleItem();
 
-            Document doc = Jsoup.parse(matcher.group());
+            Log.d("article",article.classNames().toString());
+            if(article.classNames().contains("_35au"))
+                continue;
 
-            Elements headerPart = doc.select(HEADER_PART_QUERY);
+            Elements headerPart = article.select(HEADER_PART_QUERY);
             if(headerPart != null && headerPart.size() != 0) {
                 if(headerPart.size() == 1) {
                     Elements header = headerPart.first().select(HEADER_QUERY);
@@ -75,7 +77,7 @@ public class FacebookHtmlCodeProcessor {
             }
 
 
-            Elements titlePart = doc.select(TITLE_PART_QUERY);
+            Elements titlePart = article.select(TITLE_PART_QUERY);
             if(titlePart != null && titlePart.size() != 0) {
                 if(titlePart.size() == 1) {
 
@@ -137,7 +139,7 @@ public class FacebookHtmlCodeProcessor {
                 }
             }
 
-            Elements content = doc.select(CONTENT_QUERY);
+            Elements content = article.select(CONTENT_QUERY);
             if(content != null && content.size() != 0) {
                 if(content.size() == 1) {
 
@@ -152,7 +154,7 @@ public class FacebookHtmlCodeProcessor {
                 }
             }
 
-            Elements mediaPart = doc.select(MEDIA_PART_QUERY);
+            Elements mediaPart = article.select(MEDIA_PART_QUERY);
             if(mediaPart != null && mediaPart.size() != 0) {
                 if(mediaPart.size() == 1) {
 
@@ -176,9 +178,19 @@ public class FacebookHtmlCodeProcessor {
             }
 
             items.add(item);
-
-            Log.d("item",item.toString());
         }
+
+        /*
+
+        헤더있는 _55wo _5rgr _5gh8
+        헤더없는 _55wo _5rgr _5gh8 async_like
+        내부 아티클 _56be _4hkg _5rgr _5s1m async_like
+        커뮤니티 추천 _57_6 fullwidth carded _58vs _5o5d _5o5c _t26 _45js _29d0 _51s _55wr acw apm
+        비어있음 _55wo _5rgr _5gh8 _35au
+
+         */
+
+
 
         return items;
     }
