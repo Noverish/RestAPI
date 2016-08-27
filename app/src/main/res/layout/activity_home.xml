@@ -3,22 +3,5 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/activity_home_twitter_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Twitter"/>
-
-    <Button
-        android:id="@+id/activity_home_facebook_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Facebook"/>
-
-    <Button
-        android:id="@+id/activity_home_kakao_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="KakaoStory"/>
 
 </LinearLayout>
