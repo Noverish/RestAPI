@@ -8,9 +8,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
@@ -57,9 +59,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        FrameLayout layout = (FrameLayout) findViewById(R.id.content_main_fragment_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(layout.getChildCount() > 0){
+            layout.removeAllViews();
         } else {
+            Log.d("back","super");
             super.onBackPressed();
         }
     }
@@ -108,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, webView);
+            Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
         } else if (id == R.id.nav_twitter) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {

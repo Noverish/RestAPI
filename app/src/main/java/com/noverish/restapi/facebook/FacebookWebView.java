@@ -21,6 +21,7 @@ public class FacebookWebView extends Fragment {
     private WebView webView;
     private String htmlCode;
 
+    private static FacebookWebView instance;
     private OnHtmlLoadSuccessListener listener;
 
     private final String url = "https://m.facebook.com/?_rdr";
@@ -29,6 +30,8 @@ public class FacebookWebView extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        instance = this;
+
         webView = new WebView(getActivity());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new Callback());  //HERE IS THE MAIN CHANGE
@@ -65,5 +68,14 @@ public class FacebookWebView extends Fragment {
 
     public void setOnHtmlLoadSuccessListener(OnHtmlLoadSuccessListener listener) {
         this.listener = listener;
+    }
+
+    public void scrollBottom() {
+        Log.d("scroll","bottom");
+        webView.scrollBy(0, 10000);
+    }
+
+    public static FacebookWebView getInstance() {
+        return instance;
     }
 }

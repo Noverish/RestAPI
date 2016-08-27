@@ -5,7 +5,8 @@
     android:gravity="center_horizontal"
     android:background="@color/facebook_window_background">
 
-    <ScrollView
+    <com.noverish.restapi.view.ScrollBottomDetectScrollview
+        android:id="@+id/fragment_facebook_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -15,5 +16,5 @@
             android:orientation="vertical">
 
         </LinearLayout>
-    </ScrollView>
+    </com.noverish.restapi.view.ScrollBottomDetectScrollview>
 </FrameLayout>
