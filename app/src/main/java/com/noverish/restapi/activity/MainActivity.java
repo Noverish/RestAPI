@@ -14,8 +14,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookWebView;
 import com.noverish.restapi.other.Essentials;
+import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -93,7 +95,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new FacebookWebView());
+            FacebookWebView webView = new FacebookWebView();
+            webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+                @Override
+                public void onHtmlLoadSuccess(String htmlCode) {
+                    FacebookFragment fragment = new FacebookFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("html", htmlCode);
+                    fragment.setArguments(bundle);
+
+                    Essentials.changeFragment(MainActivity.this, R.id.content_main_fragment_layout, fragment);
+                }
+            });
+
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, webView);
         } else if (id == R.id.nav_twitter) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {

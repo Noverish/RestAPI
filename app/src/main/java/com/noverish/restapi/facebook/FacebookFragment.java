@@ -39,15 +39,17 @@ public class FacebookFragment extends Fragment {
         ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
         ArrayList<FacebookArticleView> views = new ArrayList<>();
 
-        for(FacebookArticleItem item : items) {
-            views.add(new FacebookArticleView(getActivity(), item));
-        }
+        if(items != null) {
+            for (FacebookArticleItem item : items) {
+                views.add(new FacebookArticleView(getActivity(), item));
+            }
 
-        for(FacebookArticleView article : views) {
-            if(list != null)
-                list.addView(article);
-            else
-                Log.e("ERROR!","list is null");
+            for (FacebookArticleView article : views) {
+                if (list != null)
+                    list.addView(article);
+                else
+                    Log.e("ERROR!", "list is null");
+            }
         }
     }
 

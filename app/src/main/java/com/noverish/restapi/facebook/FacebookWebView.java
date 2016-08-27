@@ -3,6 +3,7 @@ package com.noverish.restapi.facebook;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class FacebookWebView extends Fragment {
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
         @Override
         public void onPageFinished(final WebView view, String url) {
+            Log.d("onPageFinished",url);
             extractHtml();
         }
     }
