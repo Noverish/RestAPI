@@ -106,16 +106,12 @@ public class MainActivity extends AppCompatActivity
             webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
                 @Override
                 public void onHtmlLoadSuccess(String htmlCode) {
-                    FacebookFragment fragment = new FacebookFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("html", htmlCode);
-                    fragment.setArguments(bundle);
-
-                    Essentials.changeFragment(MainActivity.this, R.id.content_main_fragment_layout, fragment);
+                    FacebookFragment.getInstance().htmlHasChanged(htmlCode);
                 }
             });
 
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
+            Essentials.changeFragment(MainActivity.this, R.id.content_main_fragment_layout, new FacebookFragment());
         } else if (id == R.id.nav_twitter) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {

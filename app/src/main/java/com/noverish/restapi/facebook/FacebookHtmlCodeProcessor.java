@@ -31,6 +31,17 @@ public class FacebookHtmlCodeProcessor {
     private static final String MEDIA_QUERY = "i[style]";
 
 
+    private static final String RECOMMEND_VIDEO_QUERY = "header[class=\"_5rgs _5sg5\"]";
+    /*
+        헤더있는 _55wo _5rgr _5gh8
+        헤더없는 _55wo _5rgr _5gh8 async_like
+        내부 아티클 _56be _4hkg _5rgr _5s1m async_like
+        커뮤니티 추천 _57_6 fullwidth carded _58vs _5o5d _5o5c _t26 _45js _29d0 _51s _55wr acw apm
+        페이지를 좋아합니다 _55wo _5rgr _5gh8 async_like
+        비어있음 _55wo _5rgr _5gh8 _35au
+         */
+
+
     public static ArrayList<FacebookArticleItem> process(String htmlCodeParam) {
         ArrayList<FacebookArticleItem> items = new ArrayList<>();
 
@@ -49,10 +60,21 @@ public class FacebookHtmlCodeProcessor {
 
         for(Element article : articles) {
             FacebookArticleItem item = new FacebookArticleItem();
+            boolean hasInsideArticle = false;
 
 //            Log.d("article",article.classNames().toString());
             if(article.classNames().contains("_35au"))
                 continue;
+            if(article.select(RECOMMEND_VIDEO_QUERY).size() > 0)
+                continue;
+            if(article.classNames().contains("fullwidth"))
+                continue;
+
+            if(article.select("article").size() > 0) {
+                hasInsideArticle = true;
+            }
+
+
 
             Elements headerPart = article.select(HEADER_PART_QUERY);
             if(headerPart != null && headerPart.size() != 0) {
@@ -131,10 +153,15 @@ public class FacebookHtmlCodeProcessor {
                     }
 
 
+                } else if(titlePart.size() == 0) {
+                    Log.w("titlePart","there is no titlePart");
+                    Log.w("titlePart",article.outerHtml());
                 } else {
-                    Log.e("titlePart","There are " + titlePart.size() + " titlePart");
-                    for(Element ele : titlePart) {
-                        Log.e("ele",ele.outerHtml());
+                    if(!hasInsideArticle) {
+                        Log.e("titlePart", "There are " + titlePart.size() + " titlePart");
+                        for (Element ele : titlePart) {
+                            Log.e("ele", ele.outerHtml());
+                        }
                     }
                 }
             }
@@ -144,12 +171,14 @@ public class FacebookHtmlCodeProcessor {
                 if(content.size() == 1) {
 
                     item.content = content.outerHtml().replaceAll("<[^>]*>","");
-                    item.content = HttpConnectionThread.unicodeToString(item.content);
+                    item.content = HttpConnectionThread.unicodeToString(item.content.trim());
 
                 } else {
-                    Log.e("content","There are " + content.size() + " content");
-                    for(Element ele : content) {
-                        Log.e("ele",ele.outerHtml());
+                    if(!hasInsideArticle) {
+                        Log.e("content", "There are " + content.size() + " content");
+                        for (Element ele : content) {
+                            Log.e("ele", ele.outerHtml());
+                        }
                     }
                 }
             }
@@ -164,7 +193,6 @@ public class FacebookHtmlCodeProcessor {
                     if(medias != null && medias.size() != 0) {
                         for(Element media : medias) {
                             mediaArrayList.add(findOriginOfJsoupBuggedUrl(media.outerHtml(), htmlCode));
-                            Log.d("media", media.outerHtml());
                         }
                     }
 
@@ -172,28 +200,31 @@ public class FacebookHtmlCodeProcessor {
                     item.media = mediaArrayList;
 
                 } else {
-                    Log.e("mediaPart","There are " + mediaPart.size() + " mediaPart");
-                    for(Element ele : mediaPart) {
-                        Log.e("ele",ele.outerHtml());
+                    if(!hasInsideArticle) {
+                        Log.e("mediaPart", "There are " + mediaPart.size() + " mediaPart");
+                        for (Element ele : mediaPart) {
+                            Log.e("ele", ele.outerHtml());
+                        }
                     }
                 }
             }
 
-            items.add(item);
+            if(item.profileImgUrl == null || item.title == null || item.time == null) {
+                if(item.profileImgUrl == null)
+                    Log.w("null","profile is null");
+
+                if(item.title == null)
+                    Log.w("null","title is null");
+
+                if(item.time == null)
+                    Log.w("null","time is null");
+
+                Log.w("null",article.outerHtml());
+            } else {
+                items.add(item);
+            }
+
         }
-
-        /*
-
-        헤더있는 _55wo _5rgr _5gh8
-        헤더없는 _55wo _5rgr _5gh8 async_like
-        내부 아티클 _56be _4hkg _5rgr _5s1m async_like
-        커뮤니티 추천 _57_6 fullwidth carded _58vs _5o5d _5o5c _t26 _45js _29d0 _51s _55wr acw apm
-        페이지를 좋아합니다 _55wo _5rgr _5gh8 async_like
-        비어있음 _55wo _5rgr _5gh8 _35au
-
-         */
-
-
 
         return items;
     }

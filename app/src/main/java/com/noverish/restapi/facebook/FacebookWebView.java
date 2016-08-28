@@ -71,7 +71,6 @@ public class FacebookWebView extends Fragment {
     }
 
     public void scrollBottom() {
-        Log.d("scroll","bottom");
         webView.scrollBy(0, 10000);
     }
 

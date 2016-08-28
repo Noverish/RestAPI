@@ -15,14 +15,18 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Noverish on 2016-08-21.
  */
 public class FacebookFragment extends Fragment {
-    private String htmlCode;
     private LinearLayout list;
-    private ScrollBottomDetectScrollview scrollView;
+
+    private ArrayList<FacebookArticleItem> items = new ArrayList<>();
+    private ArrayList<FacebookArticleView> views = new ArrayList<>();
+
+    private static FacebookFragment instance;
 
     @Nullable
     @Override
@@ -34,45 +38,58 @@ public class FacebookFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        instance = this;
+
         if(getView() != null) {
             list = (LinearLayout) getView().findViewById(R.id.activity_facebook_text_view_list);
-            scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_facebook_scroll_view);
+
+            ScrollBottomDetectScrollview scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_facebook_scroll_view);
+            scrollView.setHandler(new ScrollBottomHandler());
         } else {
             Log.e("ERROR!","view is null");
         }
 
-        ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
-        ArrayList<FacebookArticleView> views = new ArrayList<>();
 
-        if(items != null) {
-            for (FacebookArticleItem item : items) {
-                Log.d("facebook",item.toString());
-                views.add(new FacebookArticleView(getActivity(), item));
-            }
 
-            for (FacebookArticleView article : views) {
-                if (list != null)
-                    list.addView(article);
-                else
-                    Log.e("ERROR!", "list is null");
-            }
-        }
-
-        scrollView.setHandler(new ScrollBottomHandler());
-    }
-
-    @Override
-    public void setArguments(Bundle args) {
-        super.setArguments(args);
-
-        htmlCode = args.getString("html");
     }
 
     private static class ScrollBottomHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.d("handle","message");
             FacebookWebView.getInstance().scrollBottom();
+        }
+    }
+
+    public static FacebookFragment getInstance() {
+        return instance;
+    }
+
+    public void htmlHasChanged(String html) {
+        ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(html);
+
+        Iterator<FacebookArticleItem> iterator = newItems.iterator();
+        while(iterator.hasNext()) {
+            FacebookArticleItem item = iterator.next();
+            if (items.contains(item)) {
+                iterator.remove();
+            } else {
+                items.add(item);
+            }
+            Log.d("newItem",newItems.size() + "");
+        }
+
+
+        for (FacebookArticleItem item : newItems) {
+            Log.d("facebook",item.toString());
+
+            FacebookArticleView view = new FacebookArticleView(getActivity(), item);
+
+            views.add(view);
+
+            if(list != null)
+                list.addView(view);
+            else
+                Log.e("ERROR","list is null");
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.noverish.restapi.facebook;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -18,15 +20,35 @@ public class FacebookArticleItem {
     public String sharingNum;
 
     @Override
+    public boolean equals(Object obj) {
+        FacebookArticleItem item = (FacebookArticleItem) obj;
+
+        if(item.profileImgUrl.equals(profileImgUrl)) {
+            if (item.title.equals(title)) {
+                if (item.time.equals(time)) {
+                    return true;
+                } else {
+                    Log.w("equal", item.toString());
+                    Log.w("equal", this.toString());
+                    Log.w("equal", "프로필과 제목은 같은데 시간이 다름");
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "FacebookArticleItem{" +
                 "header='" + header + '\'' +
-                ", profileImgUrl='" + profileImgUrl + '\'' +
+                ", profileImgUrl='" + "url" + '\'' +
                 ", title='" + title + '\'' +
                 ", time='" + time + '\'' +
                 ", location='" + location + '\'' +
                 ", content='" + content + '\'' +
-                ", media=" + media +
+                ", media=" + "media" +
                 ", sympathyNum='" + sympathyNum + '\'' +
                 ", commentNum='" + commentNum + '\'' +
                 ", sharingNum='" + sharingNum + '\'' +

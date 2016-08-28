@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -56,8 +55,6 @@ public class ScrollBottomDetectScrollview extends ScrollView {
             /// bottom값의 변화가 없으면 처리 안해요
             /// 그리고 현재 bottom이 내용물의 맨 아래까지 왔으면 맨 아래까지 스크롤 한겁니다.
             if (oldBottom != m_rect.bottom && m_rect.bottom == v.getMeasuredHeight() + getPaddingTop() + getPaddingBottom()) {
-                // 끝에 왔을 때의 처리
-                Log.d("ghlab", "끝에 왔을 때의 처리");
 
                 /// 핸들러가 처음에는 널인데 사용자가 셋팅해주면 그 핸들러로 메세지 날립니다.
                 if (m_hd != null) {
