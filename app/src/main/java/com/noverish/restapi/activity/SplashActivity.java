@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(SplashActivity.this, "로그인 되있어염", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
                 }
             }
         });
