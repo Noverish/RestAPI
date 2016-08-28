@@ -1,5 +1,6 @@
 package com.noverish.restapi.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,8 @@ import android.widget.RelativeLayout;
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookWebView;
+import com.noverish.restapi.kakao.KakaoFragment;
+import com.noverish.restapi.kakao.KakaoLoginActivity;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterActivity;
@@ -115,9 +118,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_twitter) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {
-
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new KakaoFragment());
         } else if (id == R.id.nav_share) {
-
+            startActivity(new Intent(this, KakaoLoginActivity.class));
         } else if (id == R.id.nav_send) {
 
         }

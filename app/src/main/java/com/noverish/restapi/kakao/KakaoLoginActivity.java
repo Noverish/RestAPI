@@ -201,6 +201,8 @@ public class KakaoLoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 /*
     private void getAppKeyHash() {
         try {
