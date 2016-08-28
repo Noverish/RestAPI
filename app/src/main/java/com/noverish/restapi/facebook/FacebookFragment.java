@@ -1,6 +1,5 @@
 package com.noverish.restapi.facebook;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
@@ -21,7 +21,7 @@ import java.util.Iterator;
 /**
  * Created by Noverish on 2016-08-21.
  */
-public class FacebookFragment extends Fragment {
+public class FacebookFragment extends BaseFragment {
     private LinearLayout list;
 
     private ArrayList<FacebookArticleItem> items = new ArrayList<>();
@@ -53,13 +53,13 @@ public class FacebookFragment extends Fragment {
 
 
     }
-
     private static class ScrollBottomHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             HtmlParsingWebView.getInstance().scrollBottom();
         }
     }
+
 
     public static FacebookFragment getInstance() {
         return instance;
@@ -91,5 +91,15 @@ public class FacebookFragment extends Fragment {
             else
                 Log.e("ERROR","list is null");
         }
+    }
+
+    @Override
+    public void onPostButtonClicked(String content) {
+
+    }
+
+    @Override
+    public void onFreshButtonClicked() {
+
     }
 }

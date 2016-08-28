@@ -1,6 +1,5 @@
 package com.noverish.restapi.kakao;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
@@ -21,7 +21,7 @@ import java.util.Iterator;
 /**
  * Created by Noverish on 2016-08-24.
  */
-public class KakaoFragment extends Fragment {
+public class KakaoFragment extends BaseFragment {
 
     private LinearLayout list;
 
@@ -94,6 +94,16 @@ public class KakaoFragment extends Fragment {
             else
                 Log.e("ERROR","list is null");
         }
+    }
+
+    @Override
+    public void onPostButtonClicked(String content) {
+
+    }
+
+    @Override
+    public void onFreshButtonClicked() {
+
     }
 
     /*private String execParam = "";

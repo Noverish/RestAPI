@@ -1,6 +1,5 @@
 package com.noverish.restapi.twitter;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,13 +10,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.List;
 
 import twitter4j.Status;
 
-public class TwitterFragment extends Fragment {
+public class TwitterFragment extends BaseFragment {
     private LinearLayout textViewList;
     private android.os.Handler handler = new Handler();
     private ScrollBottomDetectScrollview scrollView;
@@ -95,5 +95,16 @@ public class TwitterFragment extends Fragment {
         public void handleMessage(Message msg) {
             loadTweets(++nowPage);
         }
+    }
+
+    @Override
+    public void onPostButtonClicked(String content) {
+        TwitterClient twitterClient = TwitterClient.getInstance();
+        twitterClient.updateStatus(content);
+    }
+
+    @Override
+    public void onFreshButtonClicked() {
+
     }
 }

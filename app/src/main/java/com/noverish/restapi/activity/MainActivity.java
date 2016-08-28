@@ -1,5 +1,6 @@
 package com.noverish.restapi.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,17 +10,24 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
+import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterFragment;
@@ -29,6 +37,8 @@ import org.jsoup.Jsoup;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private BaseFragment nowFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +51,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
-                Essentials.makeHipassPopup(MainActivity.this, layout);
-
+                onPostButtonClicked();
             }
         });
 
@@ -119,12 +125,19 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
+            FacebookFragment fragment = new FacebookFragment();
+            nowFragment = fragment;
+
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new FacebookFragment());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_twitter) {
             ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
             viewGroup.removeAllViews();
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterFragment());
+
+            TwitterFragment fragment = new TwitterFragment();
+            nowFragment = fragment;
+
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_kakao) {
             Bundle bundle = new Bundle();
             bundle.putString("url","https://story.kakao.com/s/login");
@@ -151,8 +164,11 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
+            KakaoFragment fragment = new KakaoFragment();
+            nowFragment = fragment;
+
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new KakaoFragment());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -162,5 +178,42 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onPostButtonClicked() {
+        RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.article_add, null);
+
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 223, this.getResources().getDisplayMetrics());
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 280, this.getResources().getDisplayMetrics());
+
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height);
+
+        Button cancelButton = (Button) popupView.findViewById(R.id.article_add_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        final EditText editText = (EditText) popupView.findViewById(R.id.article_add_edit_text);
+
+        Button postButton = (Button) popupView.findViewById(R.id.article_add_add);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(nowFragment != null) {
+                    nowFragment.onPostButtonClicked(editText.getText().toString());
+                    popupWindow.dismiss();
+                }
+            }
+        });
+
+        popupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+        popupWindow.setFocusable(true);
+        popupWindow.update();
     }
 }
