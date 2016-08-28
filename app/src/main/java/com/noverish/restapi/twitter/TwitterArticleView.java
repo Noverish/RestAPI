@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
@@ -70,10 +69,6 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.status_view, this, true);
 
-
-
-        setPadding(0, 0, 0, 50);
-
         setOnClickListener(this);
     }
 
@@ -81,9 +76,11 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         if(status.getRetweetedStatus() != null) {
             TextView isRetweetedTextView = (TextView) findViewById(R.id.status_view_is_retweeted);
             isRetweetedTextView.setText(status.getUser().getName() + " 님이 리트윗하셨습니다");
-            isRetweetedTextView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
             status = status.getRetweetedStatus();
+        } else {
+            TextView isRetweetedTextView = (TextView) findViewById(R.id.status_view_is_retweeted);
+            isRetweetedTextView.setVisibility(GONE);
         }
 
         String realText = status.getText();
@@ -107,7 +104,9 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         if(!sc.classification.equals("")) {
             TextView classificationTextView = (TextView) findViewById(R.id.status_view_classification);
             classificationTextView.setText(sc.classification);
-            classificationTextView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        } else {
+            TextView classificationTextView = (TextView) findViewById(R.id.status_view_classification);
+            classificationTextView.setVisibility(GONE);
         }
 
 

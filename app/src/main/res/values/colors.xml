@@ -14,4 +14,6 @@
     <color name="facebook">#3b5998</color>
     <color name="twitter">#2aa9e0</color>
     <color name="kakao">#fab900</color>
+
+    <color name="twitter_gray_text">#aab8c2</color>
 </resources>
