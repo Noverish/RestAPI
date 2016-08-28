@@ -41,6 +41,9 @@ public class Essentials {
         editText.setText("오늘의 서울 최고 온도 26.6℃");
 
         popupWindow.showAtLocation(parent, Gravity.CENTER, 0, 0);
+
+        popupWindow.setFocusable(true);
+        popupWindow.update();
     }
 
     public static void changeFragment(Activity activity, int layoutId, Fragment fr) {

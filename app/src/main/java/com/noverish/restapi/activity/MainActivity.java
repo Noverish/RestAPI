@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_facebook) {
             Bundle bundle = new Bundle();
-            bundle.putString("url","https://m.face  book.com/?_rdr");
+            bundle.putString("url","https://m.facebook.com/?_rdr");
 
             HtmlParsingWebView webView = new HtmlParsingWebView();
             webView.setArguments(bundle);

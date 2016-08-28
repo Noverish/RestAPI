@@ -62,7 +62,6 @@ public class TwitterClient {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("getTimeLine","run");
                 try {
                     Log.e("getTimeLine","getHomeTimeline start");
                     statuses = twitter.getHomeTimeline(page);
@@ -71,7 +70,6 @@ public class TwitterClient {
                     Log.e(TAG, "TwitterException occurred");
                     tw.printStackTrace();
                 }
-                Log.e("getTimeLine","run end");
             }
         });
 
