@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new FacebookFragment());
         } else if (id == R.id.nav_twitter) {
+            ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
+            viewGroup.removeAllViews();
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {
             Bundle bundle = new Bundle();

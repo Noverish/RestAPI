@@ -76,7 +76,6 @@ public class FacebookFragment extends Fragment {
             } else {
                 items.add(item);
             }
-            Log.d("newItem",newItems.size() + "");
         }
 
 
