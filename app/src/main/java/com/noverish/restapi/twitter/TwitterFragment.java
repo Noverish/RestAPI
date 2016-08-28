@@ -3,6 +3,7 @@ package com.noverish.restapi.twitter;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +11,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.List;
 
 import twitter4j.Status;
 
-public class TwitterActivity extends Fragment {
+public class TwitterFragment extends Fragment {
     private LinearLayout textViewList;
     private android.os.Handler handler = new Handler();
+    private ScrollBottomDetectScrollview scrollView;
+
+    private int nowPage;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -26,7 +31,6 @@ public class TwitterActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_twitter, container, false);
 
-        textViewList = (LinearLayout) view.findViewById(R.id.activity_main_text_view_list);
         //editText = (EditText) findViewById(R.id.activity_main_edit_text);
 
         /*Button semanticButton = (Button) findViewById(R.id.activity_main_button);
@@ -37,19 +41,31 @@ public class TwitterActivity extends Fragment {
             }
         });*/
 
-        timeLineOnClick();
 
         return view;
     }
 
-    private void timeLineOnClick() {
-        textViewList.removeAllViews();
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        this.nowPage = 1;
+
+        if (getView() != null) {
+            textViewList = (LinearLayout) getView().findViewById(R.id.activity_main_text_view_list);
+            scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_twitter_scroll_view);
+            scrollView.setHandler(new ScrollBottomHandler());
+        }
+
+        loadTweets(nowPage);
+    }
+
+    private void loadTweets(final int page) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 TwitterClient twitterClient = TwitterClient.getInstance();
-                List<Status> statuses = twitterClient.getTimeLine();
+                List<Status> statuses = twitterClient.getTimeLine(page);
 
                 for (Status status : statuses) {
                     handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
@@ -71,6 +87,13 @@ public class TwitterActivity extends Fragment {
         @Override
         public void run() {
             viewGroup.addView(view);
+        }
+    }
+
+    private class ScrollBottomHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            loadTweets(++nowPage);
         }
     }
 }

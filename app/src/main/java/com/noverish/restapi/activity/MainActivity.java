@@ -22,7 +22,7 @@ import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.twitter.TwitterActivity;
+import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 
 import org.jsoup.Jsoup;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_facebook) {
             Bundle bundle = new Bundle();
-            bundle.putString("url","https://m.facebook.com/?_rdr");
+            bundle.putString("url","https://m.face  book.com/?_rdr");
 
             HtmlParsingWebView webView = new HtmlParsingWebView();
             webView.setArguments(bundle);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_twitter) {
             ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
             viewGroup.removeAllViews();
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterFragment());
         } else if (id == R.id.nav_kakao) {
             Bundle bundle = new Bundle();
             bundle.putString("url","https://story.kakao.com/s/login");

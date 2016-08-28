@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -55,16 +56,22 @@ public class TwitterClient {
         thread.start();
     }
 
-    public List<Status> getTimeLine() {
+    public List<Status> getTimeLine(int pageNum) {
+        final Paging page = new Paging (pageNum, 20);//page number, number per page
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.e("getTimeLine","run");
                 try {
-                    statuses = twitter.getHomeTimeline();
+                    Log.e("getTimeLine","getHomeTimeline start");
+                    statuses = twitter.getHomeTimeline(page);
+                    Log.e("getTimeLine","getHomeTimeline end");
                 } catch (TwitterException tw) {
                     Log.e(TAG, "TwitterException occurred");
                     tw.printStackTrace();
                 }
+                Log.e("getTimeLine","run end");
             }
         });
 
