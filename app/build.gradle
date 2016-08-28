@@ -38,6 +38,7 @@ dependencies {
     compile 'org.twitter4j:twitter4j-core:4.0.2'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    compile group: 'com.kakao.sdk', name: 'kakaostory', version: project.KAKAO_SDK_VERSION
 }
 
 

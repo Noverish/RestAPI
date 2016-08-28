@@ -10,6 +10,9 @@
     <string name="facebook_app_id">1738070796478578</string>
 
     <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
+    <string name="kakao_scheme">kakao2b3b894cfd9d116da24862f7c06b8171</string>
+    <string name="kakaostory_host">kakaostory</string>
+
 
     <string name="facebook_article_default_header">임꺽정님이 좋아합니다.</string>
     <string name="facebook_article_default_title">홍길동님이 무얼 했습니다.</string>

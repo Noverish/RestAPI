@@ -36,6 +36,16 @@
 
         <activity android:name=".kakao.KakaoLoginActivity" />
 
+        <activity
+            android:name=".kakao.KakaoMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/kakao_scheme"
+                    android:host="@string/kakaostory_host" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
