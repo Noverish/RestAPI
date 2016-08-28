@@ -1,32 +1,102 @@
 package com.noverish.restapi.kakao;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
-import com.kakao.kakaostory.KakaoStoryService;
-import com.kakao.kakaostory.callback.StoryResponseCallback;
-import com.kakao.kakaostory.request.PostRequest;
-import com.kakao.kakaostory.response.ProfileResponse;
-import com.kakao.kakaostory.response.model.MyStoryInfo;
-import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.MeResponseCallback;
-import com.kakao.usermgmt.response.model.UserProfile;
-import com.kakao.util.KakaoParameterException;
-import com.kakao.util.helper.log.Logger;
 import com.noverish.restapi.R;
+import com.noverish.restapi.view.HtmlParsingWebView;
+import com.noverish.restapi.view.ScrollBottomDetectScrollview;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Noverish on 2016-08-24.
  */
 public class KakaoFragment extends Fragment {
-    private String execParam = "";
+
+    private LinearLayout list;
+
+    private ArrayList<KakaoArticleItem> items = new ArrayList<>();
+    private ArrayList<KakaoArticleView> views = new ArrayList<>();
+
+    private static KakaoFragment instance;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_kakao, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        instance = this;
+
+        if(getView() != null) {
+            list = (LinearLayout) getView().findViewById(R.id.activity_kakao_text_view_list);
+
+            ScrollBottomDetectScrollview scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_kakao_scroll_view);
+            scrollView.setHandler(new ScrollBottomHandler());
+        } else {
+            Log.e("ERROR!","view is null");
+        }
+
+
+
+    }
+
+    private static class ScrollBottomHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            HtmlParsingWebView.getInstance().scrollBottom();
+        }
+    }
+
+    public static KakaoFragment getInstance() {
+        return instance;
+    }
+
+    public void htmlHasChanged(String html) {
+        Log.d("htmlHasChanged","htmlHasChanged");
+        ArrayList<KakaoArticleItem> newItems = KakaoHtmlCodeProcessor.process(html);
+
+        Iterator<KakaoArticleItem> iterator = newItems.iterator();
+        while(iterator.hasNext()) {
+            KakaoArticleItem item = iterator.next();
+            if (items.contains(item)) {
+                iterator.remove();
+            } else {
+                items.add(item);
+            }
+            Log.d("newItem",newItems.size() + "");
+        }
+
+
+        for (KakaoArticleItem item : newItems) {
+            Log.d("kakao",item.toString());
+
+            KakaoArticleView view = new KakaoArticleView(getActivity(), item);
+
+            views.add(view);
+
+            if(list != null)
+                list.addView(view);
+            else
+                Log.e("ERROR","list is null");
+        }
+    }
+
+    /*private String execParam = "";
     private String marketParam = "";
 
     @Nullable
@@ -127,5 +197,5 @@ public class KakaoFragment extends Fragment {
                 Log.d("requestUserProfile", "onNotSignedUp");
             }
         });
-    }
+    }*/
 }

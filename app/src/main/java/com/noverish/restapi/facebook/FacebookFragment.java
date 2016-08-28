@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class FacebookFragment extends Fragment {
     private static class ScrollBottomHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            FacebookWebView.getInstance().scrollBottom();
+            HtmlParsingWebView.getInstance().scrollBottom();
         }
     }
 

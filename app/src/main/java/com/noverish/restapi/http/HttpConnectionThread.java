@@ -158,6 +158,11 @@ public class HttpConnectionThread extends Thread {
     }
 
     public static String unicodeToString(String str) {
+        if(str == null) {
+            Log.w("unicodeToString","str is null!");
+            return "";
+        }
+
         Pattern pattern = Pattern.compile("(\\\\){1,2}u([0-9]|[A-F]|[a-f]){4}");
         Matcher matcher = pattern.matcher(str);
 

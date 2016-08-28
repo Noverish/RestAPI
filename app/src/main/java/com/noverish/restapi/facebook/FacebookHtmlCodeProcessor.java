@@ -46,14 +46,7 @@ public class FacebookHtmlCodeProcessor {
         ArrayList<FacebookArticleItem> items = new ArrayList<>();
 
         String htmlCode = htmlCodeParam;
-        htmlCode = htmlCode.replaceAll("(\\\\){1,7}\"","\"");
-        htmlCode = htmlCode.replaceAll("&amp;","&");
-        htmlCode = htmlCode.replaceAll("(\\\\){0,2}&quot;","\"");
-        htmlCode = htmlCode.replaceAll("(\\\\){2,3}x3C", "<");
-        htmlCode = htmlCode.replaceAll("(\\\\){1,2}u003C","<");
-        htmlCode = htmlCode.replaceAll("(\\\\){1,2}u003E",">");
-        htmlCode = htmlCode.replaceAll("(\\\\){1,2}/","/");
-        htmlCode = HttpConnectionThread.unicodeToString(htmlCode);
+//        htmlCode = HttpConnectionThread.unicodeToString(htmlCode);
 
         Document document = Jsoup.parse(htmlCode);
         Elements articles = document.select("article");

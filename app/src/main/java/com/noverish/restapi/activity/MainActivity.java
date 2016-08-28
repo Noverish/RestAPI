@@ -1,6 +1,5 @@
 package com.noverish.restapi.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,12 +17,14 @@ import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
-import com.noverish.restapi.facebook.FacebookWebView;
+import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
-import com.noverish.restapi.kakao.KakaoLoginActivity;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterActivity;
+import com.noverish.restapi.view.HtmlParsingWebView;
+
+import org.jsoup.Jsoup;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -105,7 +106,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
-            FacebookWebView webView = new FacebookWebView();
+            Bundle bundle = new Bundle();
+            bundle.putString("url","https://m.facebook.com/?_rdr");
+
+            HtmlParsingWebView webView = new HtmlParsingWebView();
+            webView.setArguments(bundle);
             webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
                 @Override
                 public void onHtmlLoadSuccess(String htmlCode) {
@@ -114,13 +119,39 @@ public class MainActivity extends AppCompatActivity
             });
 
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
-            Essentials.changeFragment(MainActivity.this, R.id.content_main_fragment_layout, new FacebookFragment());
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new FacebookFragment());
         } else if (id == R.id.nav_twitter) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new TwitterActivity());
         } else if (id == R.id.nav_kakao) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url","https://story.kakao.com/s/login");
+
+            HtmlParsingWebView webView = new HtmlParsingWebView();
+            webView.setArguments(bundle);
+            webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+                @Override
+                public void onHtmlLoadSuccess(String htmlCode) {
+                    KakaoFragment kakaoFragment = KakaoFragment.getInstance();
+                    String title = HttpConnectionThread.unicodeToString(Jsoup.parse(htmlCode).title());
+
+                    if(kakaoFragment.getView() != null) {
+                        if (title.contains("로그인")) {
+                            kakaoFragment.getView().setVisibility(View.GONE);
+                        } else {
+                            kakaoFragment.getView().setVisibility(View.VISIBLE);
+                            KakaoFragment.getInstance().htmlHasChanged(htmlCode);
+                        }
+                    } else {
+                        Log.e("ERROR", "kakaoFragment.getView() is null");
+                    }
+
+                }
+            });
+
+            Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new KakaoFragment());
         } else if (id == R.id.nav_share) {
-            startActivity(new Intent(this, KakaoLoginActivity.class));
+
         } else if (id == R.id.nav_send) {
 
         }

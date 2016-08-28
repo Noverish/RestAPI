@@ -3,4 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.noverish.restapi.view.ScrollBottomDetectScrollview
+        android:id="@+id/fragment_kakao_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/activity_kakao_text_view_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </com.noverish.restapi.view.ScrollBottomDetectScrollview>
 </LinearLayout>

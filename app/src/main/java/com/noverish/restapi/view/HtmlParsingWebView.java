@@ -1,4 +1,4 @@
-package com.noverish.restapi.facebook;
+package com.noverish.restapi.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,19 +12,24 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.noverish.restapi.http.ImagePicassoThread;
+import com.noverish.restapi.kakao.ExtractHtmlThread;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by Noverish on 2016-08-21.
  */
-public class FacebookWebView extends Fragment {
+public class HtmlParsingWebView extends Fragment {
     private WebView webView;
-    private String htmlCode;
 
-    private static FacebookWebView instance;
+    private static HtmlParsingWebView instance;
     private OnHtmlLoadSuccessListener listener;
+    private ArrayList<ImagePicassoThread> threads = new ArrayList<>();
+    private android.os.Handler handler = new android.os.Handler();
 
-    private final String url = "https://m.facebook.com/?_rdr";
+    private String url;
     private final String TAG = getClass().getSimpleName();
 
     @Nullable
@@ -43,21 +48,57 @@ public class FacebookWebView extends Fragment {
         return webView;
     }
 
+    @Override
+    public void setArguments(Bundle args) {
+        super.setArguments(args);
+
+        url = args.getString("url");
+    }
+
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
         @Override
         public void onPageFinished(final WebView view, String url) {
             Log.d("onPageFinished",url);
-            extractHtml();
+
+            if(!url.equals("https://story.kakao.com/")) {
+                extractHtml();
+            }
+
+        }
+
+        @Override
+        public void onLoadResource(WebView view, String url) {
+            if(url.contains("kakao") && (url.contains(".jpg") || url.contains(".png"))) {
+                Log.d("onLoadResource", url);
+                ExtractHtmlThread.post(handler, new ExtractHtmlThread.CustomListener() {
+                    @Override
+                    public void listen() {
+                        extractHtml();
+                    }
+                });
+            }
+
+            super.onLoadResource(view, url);
         }
     }
 
+
+
     public void extractHtml() {
+        Log.d("extractHtml","extractHtml");
         webView.evaluateJavascript(
                 "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();",
                 new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String html) {
-                        htmlCode = html;
+
+                        html = html.replaceAll("(\\\\){1,7}\"","\"");
+                        html = html.replaceAll("&amp;","&");
+                        html = html.replaceAll("(\\\\){0,2}&quot;","\"");
+                        html = html.replaceAll("(\\\\){2,3}x3C", "<");
+                        html = html.replaceAll("(\\\\){1,2}u003C","<");
+                        html = html.replaceAll("(\\\\){1,2}u003E",">");
+                        html = html.replaceAll("(\\\\){1,2}/","/");
 
                         if(listener != null) {
                             listener.onHtmlLoadSuccess(html);
@@ -74,7 +115,11 @@ public class FacebookWebView extends Fragment {
         webView.scrollBy(0, 10000);
     }
 
-    public static FacebookWebView getInstance() {
+    public static HtmlParsingWebView getInstance() {
         return instance;
+    }
+
+    public ArrayList<ImagePicassoThread> getThreads() {
+        return threads;
     }
 }
