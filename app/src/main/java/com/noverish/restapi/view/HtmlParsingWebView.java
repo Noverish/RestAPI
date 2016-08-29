@@ -121,4 +121,8 @@ public class HtmlParsingWebView extends Fragment {
     public ArrayList<ImagePicassoThread> getThreads() {
         return threads;
     }
+
+    public void refresh() {
+        webView.loadUrl(url);
+    }
 }

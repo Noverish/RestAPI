@@ -32,6 +32,8 @@ public class KakaoFragment extends BaseFragment {
     private ArrayList<KakaoArticleItem> items = new ArrayList<>();
     private ArrayList<KakaoArticleView> views = new ArrayList<>();
 
+    private HtmlParsingWebView webView;
+
     private static KakaoFragment instance;
 
     @Nullable
@@ -121,6 +123,12 @@ public class KakaoFragment extends BaseFragment {
     public void onFreshButtonClicked() {
         list.removeAllViews();
 
+        if(webView != null)
+            webView.refresh();
+
+        if(scrollView != null) {
+            scrollView.startLoading();
+        }
 
     }
 
@@ -131,6 +139,10 @@ public class KakaoFragment extends BaseFragment {
             return scrollView.getHeight() < childHeight + scrollView.getPaddingTop() + scrollView.getPaddingBottom();
         }
         return false;
+    }
+
+    public void setWebView(HtmlParsingWebView webView) {
+        this.webView = webView;
     }
 
     /*private String execParam = "";

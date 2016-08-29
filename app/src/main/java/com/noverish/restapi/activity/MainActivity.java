@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,11 +42,13 @@ public class MainActivity extends AppCompatActivity
 
     private BaseFragment nowFragment;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -114,6 +117,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.facebook));
+
             Bundle bundle = new Bundle();
             bundle.putString("url","https://m.facebook.com/?_rdr");
 
@@ -132,6 +137,8 @@ public class MainActivity extends AppCompatActivity
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_twitter) {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.twitter));
+
             ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
             viewGroup.removeAllViews();
 
@@ -140,6 +147,9 @@ public class MainActivity extends AppCompatActivity
 
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_kakao) {
+
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.kakao));
+
             Bundle bundle = new Bundle();
             bundle.putString("url","https://story.kakao.com/s/login");
 
@@ -166,6 +176,7 @@ public class MainActivity extends AppCompatActivity
             });
 
             KakaoFragment fragment = new KakaoFragment();
+            fragment.setWebView(webView);
             nowFragment = fragment;
 
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
@@ -182,6 +193,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onPostButtonClicked() {
+        if(nowFragment.getClass().getSimpleName().equals("FacebookFragment")) {
+            nowFragment.onPostButtonClicked("");
+            return;
+        }
+
         RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.article_add, null);

@@ -1,5 +1,6 @@
 package com.noverish.restapi.facebook;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
@@ -107,7 +110,7 @@ public class FacebookFragment extends BaseFragment {
 
     @Override
     public void onPostButtonClicked(String content) {
-        /*ShareDialog shareDialog = new ShareDialog(this);
+        ShareDialog shareDialog = new ShareDialog(this);
         CallbackManager callbackManager = CallbackManager.Factory.create();
         shareDialog.registerCallback(callbackManager, new
                 FacebookCallback<Sharer.Result>() {
@@ -131,16 +134,15 @@ public class FacebookFragment extends BaseFragment {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle("Hello Facebook")
                     .setContentDescription("The 'Hello Facebook' sample  showcases simple Facebook integration")
-
                     .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
                     .build();
 
             shareDialog.show(linkContent);
-        }*/
+        }
 
-        Bundle params = new Bundle();
+        /*Bundle params = new Bundle();
         params.putString("message", content);
-        /* make the API call */
+        *//* make the API call *//*
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/me/feed",
@@ -148,11 +150,11 @@ public class FacebookFragment extends BaseFragment {
                 HttpMethod.POST,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-            /* handle the result */
+            *//* handle the result *//*
                         Log.d("onPostButtonClicked","onCompleted - " + response.toString());
                     }
                 }
-        ).executeAsync();
+        ).executeAsync();*/
 
     }
 
