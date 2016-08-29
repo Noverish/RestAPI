@@ -48,6 +48,11 @@
                 android:layout_height="match_parent"/>
 
             <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/pure_white"/>
+
+            <FrameLayout
                 android:id="@+id/content_main_fragment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

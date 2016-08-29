@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 
 import com.kakao.util.KakaoParameterException;
 import com.noverish.restapi.R;
+import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
@@ -35,6 +36,8 @@ public class KakaoFragment extends BaseFragment {
     private HtmlParsingWebView webView;
 
     private static KakaoFragment instance;
+
+    private boolean init = true;
 
     @Nullable
     @Override
@@ -73,6 +76,13 @@ public class KakaoFragment extends BaseFragment {
     }
 
     public void htmlHasChanged(String html) {
+        Log.d("init",init + "");
+        if(init) {
+            HtmlParsingWebView.getInstance().scrollBottom();
+            init = false;
+            return;
+        }
+
         Log.d("htmlHasChanged","htmlHasChanged");
         ArrayList<KakaoArticleItem> newItems = KakaoHtmlCodeProcessor.process(html);
 
@@ -94,8 +104,10 @@ public class KakaoFragment extends BaseFragment {
 
             views.add(view);
 
-            if(list != null)
+            if(list != null) {
                 list.addView(view);
+                Log.d("list","addView(view)");
+            }
             else
                 Log.e("ERROR","list is null");
         }
@@ -106,6 +118,11 @@ public class KakaoFragment extends BaseFragment {
 
         if(!canScroll(scrollView)) {
             HtmlParsingWebView.getInstance().scrollBottom();
+        }
+
+        if(MainActivity.dialog != null) {
+            Log.d("mainActivity","dialog dismiss");
+            MainActivity.dialog.dismiss();
         }
     }
 
@@ -121,6 +138,7 @@ public class KakaoFragment extends BaseFragment {
 
     @Override
     public void onFreshButtonClicked() {
+        init = true;
         list.removeAllViews();
 
         if(webView != null)

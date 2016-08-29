@@ -1,5 +1,6 @@
 package com.noverish.restapi.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private BaseFragment nowFragment;
 
     private Toolbar toolbar;
+
+    public static ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +181,8 @@ public class MainActivity extends AppCompatActivity
             KakaoFragment fragment = new KakaoFragment();
             fragment.setWebView(webView);
             nowFragment = fragment;
+
+            dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
 
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
