@@ -13,4 +13,27 @@ public class KakaoArticleItem {
     public ArrayList<String> imageUrls;
     public ArrayList<String> videoUrls;
 
+    @Override
+    public boolean equals(Object obj) {
+        KakaoArticleItem item = (KakaoArticleItem) obj;
+
+        if(profileImgUrl.equals(item.profileImgUrl))
+            if(title.equals(item.title))
+                if(time.equals(item.time))
+                    return true;
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "KakaoArticleItem{" +
+                "profileImgUrl='" + profileImgUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", time='" + time + '\'' +
+                ", content='" + content + '\'' +
+                ", imageUrls=" + imageUrls +
+                ", videoUrls=" + videoUrls +
+                '}';
+    }
 }

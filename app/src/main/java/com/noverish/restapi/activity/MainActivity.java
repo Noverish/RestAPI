@@ -1,6 +1,7 @@
 package com.noverish.restapi.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(this, LoginCenterActivity.class));
         } else if(id == R.id.action_favorite) {
 
         }

@@ -1,7 +1,5 @@
 package com.noverish.restapi.kakao;
 
-import android.util.Log;
-
 /**
  * Created by Noverish on 2016-08-28.
  */
@@ -22,22 +20,20 @@ public class ExtractHtmlThread extends Thread {
 
         try {
             Thread.sleep(3000);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.listen();
+                }
+            });
         } catch (Exception ex) {
 
         }
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                listener.listen();
-            }
-        });
     }
 
     public static void post(android.os.Handler handler, CustomListener listenerParam) {
         if(thread != null) {
             thread.interrupt();
-            Log.d("interrupt","interrupt");
         }
         thread = new ExtractHtmlThread(handler, listenerParam);
         thread.start();

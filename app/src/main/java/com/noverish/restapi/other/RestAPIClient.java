@@ -45,8 +45,8 @@ public class RestAPIClient extends Thread {
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestMethod("POST");
-//            urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
-//            urlConnection.setReadTimeout(DATARETRIEVAL_TIMEOUT);
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             htmlCode = getStringFromInputStream(in);

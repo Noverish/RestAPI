@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="27sp"
+    android:paddingRight="27sp">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="306dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="310dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/activity_login_naver"
+            android:layout_height="46sp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <RelativeLayout
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginLeft="41sp"
+                >
+            </RelativeLayout>
+
+            <TextView
+                android:layout_marginLeft="11sp"
+                android:id="@+id/logged_naver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="20sp"
+                android:text="네이버로 로그인"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/login_layout_kakaotalk"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="46sp"
+            android:layout_marginTop="11sp"
+            android:gravity="center_vertical"
+            >
+            <RelativeLayout
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="41sp"
+                >
+            </RelativeLayout>
+
+            <TextView
+                android:layout_marginLeft="11sp"
+                android:id="@+id/logged_kakaotalk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="20sp"
+                android:text="카카오계정으로 로그인"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/login_layout_facebook"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="46sp"
+            android:layout_marginTop="11sp"
+            android:gravity="center_vertical"
+            >
+
+            <RelativeLayout
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="41sp"
+                >
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/logged_facebook"
+                android:layout_marginLeft="11sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="20sp"
+                android:text="페이스북으로 로그인"
+                android:typeface="sans"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/avtivity_login_byemail"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="19sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일로 로그인"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/activity_login_ester_egg"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="140dp" />
+</RelativeLayout>

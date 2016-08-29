@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookLoginClient;
 
 /**
  * Created by Noverish on 2016-08-25.
@@ -37,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
 
         Essentials.changeFragment(this, R.id.activity_splash_web_view_layout, webView);*/
 
+        FacebookLoginClient client = new FacebookLoginClient(this);
 
         Toast.makeText(SplashActivity.this, "로그인 되있어염", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(SplashActivity.this, MainActivity.class));

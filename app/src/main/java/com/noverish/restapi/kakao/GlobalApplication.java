@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 
+import com.facebook.FacebookSdk;
 import com.kakao.auth.KakaoSDK;
 
 /**
@@ -37,5 +38,6 @@ public class GlobalApplication extends Application {
         super.onCreate();
         mInstance = this;
         KakaoSDK.init(new KakaoSDKAdapter());
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 }

@@ -4,19 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/pure_white">
 
-    <TextView
-        android:id="@+id/kakao_article_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="13dp"
-        android:textSize="13sp"
-        android:text="@string/facebook_article_default_header"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/facebook_window_background" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,34 +67,6 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="13dp">
-
-        <TextView
-            android:id="@+id/kakao_article_sympathy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:text="@string/facebook_article_default_sympathy"/>
-
-        <TextView
-            android:id="@+id/kakao_article_sharing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/facebook_article_default_share"/>
-
-        <TextView
-            android:id="@+id/kakao_article_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/facebook_article_sharing"
-            android:text="@string/facebook_article_default_comment"/>
-
-    </RelativeLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -126,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/facebook_article_default_like_button"/>
+            android:text="느낌"/>
 
         <Button
             android:id="@+id/kakao_article_comment_button"

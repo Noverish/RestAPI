@@ -69,7 +69,6 @@ public class HtmlParsingWebView extends Fragment {
         @Override
         public void onLoadResource(WebView view, String url) {
             if(url.contains("kakao") && (url.contains(".jpg") || url.contains(".png"))) {
-                Log.d("onLoadResource", url);
                 ExtractHtmlThread.post(handler, new ExtractHtmlThread.CustomListener() {
                     @Override
                     public void listen() {

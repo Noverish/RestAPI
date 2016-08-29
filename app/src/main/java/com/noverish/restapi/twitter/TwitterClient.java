@@ -63,9 +63,9 @@ public class TwitterClient {
             @Override
             public void run() {
                 try {
-                    Log.e("getTimeLine","getHomeTimeline start");
+                    Log.i("getTimeLine","getHomeTimeline start");
                     statuses = twitter.getHomeTimeline(page);
-                    Log.e("getTimeLine","getHomeTimeline end");
+                    Log.i("getTimeLine","getHomeTimeline end");
                 } catch (TwitterException tw) {
                     Log.e(TAG, "TwitterException occurred");
                     tw.printStackTrace();

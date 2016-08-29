@@ -4,12 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by Noverish on 2016-08-28.
@@ -42,9 +40,24 @@ public class KakaoArticleView extends LinearLayout {
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.kakao_article_media_layout);
         if(article.imageUrls != null) {
             for (String url : article.imageUrls) {
-                ImageView image = new ImageView(context);
-                Picasso.with(context).load(url).into(image);
+
+                int width=300;
+                int height=300;
+
+
+
+
+                WebView image = new WebView(context);
+
+                String data="<html><head><title>Example</title><meta name=\"viewport\"\"content=\"width="+width+", initial-scale=0.65 \" /></head>";
+                data=data+"<body><center><img width=\""+width+"\" height=\""+height+"\" src=\""+url+"\" /></center></body></html>";
+                image.loadData(data, "text/html", null);
+
                 mediaLayout.addView(image);
+
+                /*ImageView image = new ImageView(context);
+                Picasso.with(context).load(url).into(image);
+                mediaLayout.addView(image);*/
             }
         }
     }

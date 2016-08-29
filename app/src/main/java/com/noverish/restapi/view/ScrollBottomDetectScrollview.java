@@ -70,4 +70,5 @@ public class ScrollBottomDetectScrollview extends ScrollView {
         m_hd = hd;
     }
 
+
 }

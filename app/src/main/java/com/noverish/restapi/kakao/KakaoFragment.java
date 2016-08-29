@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
+import com.kakao.util.KakaoParameterException;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
@@ -24,6 +26,8 @@ import java.util.Iterator;
 public class KakaoFragment extends BaseFragment {
 
     private LinearLayout list;
+
+    private ScrollBottomDetectScrollview scrollView;
 
     private ArrayList<KakaoArticleItem> items = new ArrayList<>();
     private ArrayList<KakaoArticleView> views = new ArrayList<>();
@@ -45,7 +49,7 @@ public class KakaoFragment extends BaseFragment {
         if(getView() != null) {
             list = (LinearLayout) getView().findViewById(R.id.activity_kakao_text_view_list);
 
-            ScrollBottomDetectScrollview scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_kakao_scroll_view);
+            scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_kakao_scroll_view);
             scrollView.setHandler(new ScrollBottomHandler());
         } else {
             Log.e("ERROR!","view is null");
@@ -78,7 +82,6 @@ public class KakaoFragment extends BaseFragment {
             } else {
                 items.add(item);
             }
-            Log.d("newItem",newItems.size() + "");
         }
 
 
@@ -94,16 +97,34 @@ public class KakaoFragment extends BaseFragment {
             else
                 Log.e("ERROR","list is null");
         }
+
+        if(!canScroll(scrollView)) {
+            HtmlParsingWebView.getInstance().scrollBottom();
+        }
     }
 
     @Override
     public void onPostButtonClicked(String content) {
-
+        KakaoLoginClient client = KakaoLoginClient.getInstance(getActivity());
+        try {
+            client.requestPostArticle(content);
+        } catch (KakaoParameterException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public void onFreshButtonClicked() {
 
+    }
+
+    private boolean canScroll(ScrollView scrollView) {
+        View child = (View) scrollView.getChildAt(0);
+        if (child != null) {
+            int childHeight = (child).getHeight();
+            return scrollView.getHeight() < childHeight + scrollView.getPaddingTop() + scrollView.getPaddingBottom();
+        }
+        return false;
     }
 
     /*private String execParam = "";

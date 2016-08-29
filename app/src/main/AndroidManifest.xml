@@ -29,15 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.HomeActivity" />
-
-        <activity android:name=".twitter.ReplyTwitterActivity" />
-
-        <activity android:name=".kakao.KakaoLoginActivity" />
-
-        <activity
-            android:name=".kakao.KakaoFragment">
+        <activity android:name=".activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -46,6 +38,13 @@
                     android:host="@string/kakaostory_host" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HomeActivity" />
+
+        <activity android:name=".twitter.ReplyTwitterActivity" />
+
+        <activity android:name=".kakao.KakaoLoginActivity" />
+        <activity android:name=".activity.LoginCenterActivity" />
+
     </application>
 
 </manifest>

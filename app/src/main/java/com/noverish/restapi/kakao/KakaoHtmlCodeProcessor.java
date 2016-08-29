@@ -41,6 +41,23 @@ public class KakaoHtmlCodeProcessor {
         for(Element article : articles) {
             KakaoArticleItem item = new KakaoArticleItem();
 
+            if(article.classNames().contains("section_hot")) {
+                Log.d("pass","스토리 인기 소식");
+                continue;
+            }
+            if(article.attr("data-kant-group").equals("feed.ch")){
+                Log.d("pass","소식을 받기 시작합니다.");
+                continue;
+            }
+            if(article.child(0).classNames().contains("loading_feed")) {
+                Log.d("pass","로딩중");
+                continue;
+            }
+            if(article.classNames().contains("section_intro")) {
+                Log.d("pass","자기소개");
+                continue;
+            }
+
 
             Elements titlePart = article.select(TITLE_PART);
             if(titlePart != null && titlePart.size() != 0) {
@@ -101,8 +118,10 @@ public class KakaoHtmlCodeProcessor {
                     if(content != null && content.size() != 0) {
                         if(content.size() == 1) {
 
+                            content.select("a[class=\"_btnFeedMore link_more\"]").remove();
+
                             item.content = content.outerHtml().replaceAll("<[^>]*>","");
-                            item.content = HttpConnectionThread.unicodeToString(item.content);
+                            item.content = HttpConnectionThread.unicodeToString(item.content.trim());
 
                         } else {
                             Log.e("content", "There are " + content.size() + " content");
@@ -118,7 +137,6 @@ public class KakaoHtmlCodeProcessor {
                             Elements images = imagePart.select("img");
                             if(images != null && images.size() != 0) {
                                 for(Element image : images) {
-                                    Log.d("image",image.attr("src"));
                                     imageArrayList.add(image.attr("src"));
                                 }
                             }
@@ -162,6 +180,27 @@ public class KakaoHtmlCodeProcessor {
                 }
             }
 
+            if(article.attr("data-kant-group").equals("feed.p")) {
+                item.profileImgUrl = article.select("img[class=\"img_thumb\"]").attr("src");
+
+                Element inner_news = article.select("span[class=\"inner_news\"]").first();
+                inner_news.child(1).remove();
+                item.title = inner_news.html().replaceAll("<[^>]*>","");
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
             if(item.profileImgUrl == null || item.title == null || item.time == null) {
                 if(item.profileImgUrl == null)
                     Log.w("null","profile is null");
@@ -174,7 +213,8 @@ public class KakaoHtmlCodeProcessor {
 
                 Log.w("null",article.outerHtml());
             } else {
-//                items.add(item);
+                Log.i("item",item.toString());
+                items.add(item);
             }
         }
 

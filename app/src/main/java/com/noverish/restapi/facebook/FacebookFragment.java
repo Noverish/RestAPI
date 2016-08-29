@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
@@ -95,6 +99,52 @@ public class FacebookFragment extends BaseFragment {
 
     @Override
     public void onPostButtonClicked(String content) {
+        /*ShareDialog shareDialog = new ShareDialog(this);
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+        shareDialog.registerCallback(callbackManager, new
+                FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result) {
+                        Log.d("onSuccess","onSuccess - " + result.toString());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d("onCancel","onCancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d("onError","onError - " + error.toString());
+                    }
+                });
+
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle("Hello Facebook")
+                    .setContentDescription("The 'Hello Facebook' sample  showcases simple Facebook integration")
+
+                    .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                    .build();
+
+            shareDialog.show(linkContent);
+        }*/
+
+        Bundle params = new Bundle();
+        params.putString("message", content);
+        /* make the API call */
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/feed",
+                params,
+                HttpMethod.POST,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+            /* handle the result */
+                        Log.d("onPostButtonClicked","onCompleted - " + response.toString());
+                    }
+                }
+        ).executeAsync();
 
     }
 
