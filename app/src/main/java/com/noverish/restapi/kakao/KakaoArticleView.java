@@ -25,8 +25,16 @@ public class KakaoArticleView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.article_kakao, this);
 
+
+
         WebView profileImg = (WebView) findViewById(R.id.kakao_article_profile_img);
-        profileImg.loadUrl(article.profileImgUrl);
+
+        int width1=40;
+        int height1=40;
+        String data1="<html><head><title>Example</title><meta name=\"viewport\"\"content=\"width="+width1+", initial-scale=0.65 \" /></head>";
+        data1=data1+"<body><center><img width=\""+width1+"\" height=\""+height1+"\" src=\""+article.profileImgUrl+"\" /></center></body></html>";
+        profileImg.loadData(data1, "text/html", null);
+
 
         TextView title = (TextView) findViewById(R.id.kakao_article_title);
         title.setText(article.title);
