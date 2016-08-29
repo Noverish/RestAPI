@@ -15,31 +15,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/activity_login_naver"
-            android:layout_height="46sp"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <RelativeLayout
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_marginLeft="41sp"
-                >
-            </RelativeLayout>
-
-            <TextView
-                android:layout_marginLeft="11sp"
-                android:id="@+id/logged_naver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:textSize="20sp"
-                android:text="네이버로 로그인"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/login_layout_kakaotalk"
             android:orientation="horizontal"
             android:layout_width="match_parent"

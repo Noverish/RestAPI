@@ -49,10 +49,11 @@ public class KakaoHtmlCodeProcessor {
                 Log.d("pass","소식을 받기 시작합니다.");
                 continue;
             }
-            if(article.child(0).classNames().contains("loading_feed")) {
-                Log.d("pass","로딩중");
-                continue;
-            }
+            if(article.children().size() > 0)
+                if(article.child(0).classNames().contains("loading_feed")) {
+                    Log.d("pass","로딩중");
+                    continue;
+                }
             if(article.classNames().contains("section_intro")) {
                 Log.d("pass","자기소개");
                 continue;

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, LoginCenterActivity.class));
         } else if(id == R.id.action_favorite) {
-
+            nowFragment.onFreshButtonClicked();
         }
 
         return super.onOptionsItemSelected(item);

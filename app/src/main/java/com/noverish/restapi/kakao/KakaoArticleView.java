@@ -50,15 +50,11 @@ public class KakaoArticleView extends LinearLayout {
             for (String url : article.imageUrls) {
 
                 int width=300;
-                int height=300;
-
-
-
 
                 WebView image = new WebView(context);
 
                 String data="<html><head><title>Example</title><meta name=\"viewport\"\"content=\"width="+width+", initial-scale=0.65 \" /></head>";
-                data=data+"<body><center><img width=\""+width+"\" height=\""+height+"\" src=\""+url+"\" /></center></body></html>";
+                data=data+"<body><center><img width=\""+width+"\" src=\""+url+"\" /></center></body></html>";
                 image.loadData(data, "text/html", null);
 
                 mediaLayout.addView(image);

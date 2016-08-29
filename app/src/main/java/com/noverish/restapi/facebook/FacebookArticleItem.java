@@ -1,7 +1,5 @@
 package com.noverish.restapi.facebook;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /**
@@ -27,12 +25,12 @@ public class FacebookArticleItem {
             if (item.title.equals(title)) {
                 if (item.time.equals(time)) {
                     return true;
-                } else {
+                }/* else {
                     Log.w("equal", item.toString());
                     Log.w("equal", this.toString());
                     Log.w("equal", "프로필과 제목은 같은데 시간이 다름");
                     return true;
-                }
+                }*/
             }
         }
 

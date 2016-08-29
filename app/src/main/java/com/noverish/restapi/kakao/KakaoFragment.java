@@ -98,6 +98,10 @@ public class KakaoFragment extends BaseFragment {
                 Log.e("ERROR","list is null");
         }
 
+        Log.d("scrollView","stopLoading");
+        if(scrollView != null)
+            scrollView.stopLoading();
+
         if(!canScroll(scrollView)) {
             HtmlParsingWebView.getInstance().scrollBottom();
         }
@@ -115,6 +119,8 @@ public class KakaoFragment extends BaseFragment {
 
     @Override
     public void onFreshButtonClicked() {
+        list.removeAllViews();
+
 
     }
 

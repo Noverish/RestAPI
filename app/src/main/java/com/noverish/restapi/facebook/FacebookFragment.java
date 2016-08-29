@@ -30,7 +30,7 @@ public class FacebookFragment extends BaseFragment {
 
     private ArrayList<FacebookArticleItem> items = new ArrayList<>();
     private ArrayList<FacebookArticleView> views = new ArrayList<>();
-
+    ScrollBottomDetectScrollview scrollView;
     private static FacebookFragment instance;
 
     @Nullable
@@ -48,7 +48,7 @@ public class FacebookFragment extends BaseFragment {
         if(getView() != null) {
             list = (LinearLayout) getView().findViewById(R.id.activity_facebook_text_view_list);
 
-            ScrollBottomDetectScrollview scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_facebook_scroll_view);
+            scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_facebook_scroll_view);
             scrollView.setHandler(new ScrollBottomHandler());
         } else {
             Log.e("ERROR!","view is null");
@@ -95,6 +95,14 @@ public class FacebookFragment extends BaseFragment {
             else
                 Log.e("ERROR","list is null");
         }
+
+        if(scrollView != null)
+            scrollView.stopLoading();
+    }
+
+    public void startLoading() {
+        if(scrollView != null)
+            scrollView.startLoading();
     }
 
     @Override

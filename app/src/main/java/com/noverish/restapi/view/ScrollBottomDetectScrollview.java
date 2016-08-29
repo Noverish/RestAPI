@@ -3,11 +3,14 @@ package com.noverish.restapi.view;
 /**
  * Created by http://www.androidpub.com/2304926
  */
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -17,11 +20,15 @@ public class ScrollBottomDetectScrollview extends ScrollView {
     /// 스크롤뷰 영역 체크하려고 두는 변수에용
     Rect m_rect;
 
+    ProgressDialog dialog;
+    Context context;
+
     /// 커스텀 View를 사용하려면 반드시!! 아래와 같은 (Context context, AttributeSet attrs) 를 인자로하는
     /// 생성자를 쓰셔야 합니다!!!
     public ScrollBottomDetectScrollview(Context context, AttributeSet attrs) {
         super(context, attrs);
         // TODO Auto-generated constructor stub
+        this.context = context;
     }
 
     /// 그리기가 끝나면 체크하기 위해 오버라이드
@@ -56,11 +63,14 @@ public class ScrollBottomDetectScrollview extends ScrollView {
             /// 그리고 현재 bottom이 내용물의 맨 아래까지 왔으면 맨 아래까지 스크롤 한겁니다.
             if (oldBottom != m_rect.bottom && m_rect.bottom == v.getMeasuredHeight() + getPaddingTop() + getPaddingBottom()) {
 
+
                 /// 핸들러가 처음에는 널인데 사용자가 셋팅해주면 그 핸들러로 메세지 날립니다.
                 if (m_hd != null) {
                     /// 핸들러에 이벤트 날리면 끗납니다.
                     m_hd.sendEmptyMessage(1);
                 }
+
+                startLoading();
             }
         }
     }
@@ -70,5 +80,19 @@ public class ScrollBottomDetectScrollview extends ScrollView {
         m_hd = hd;
     }
 
+    public void stopLoading() {
+        try {
+            if(dialog != null) {
+                dialog.dismiss();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    public void startLoading() {
+        Log.d("start","loading");
+        dialog = ProgressDialog.show(context, "", "Loading. Please wait...", true);
+        dialog.setCancelable(true);
+    }
 }

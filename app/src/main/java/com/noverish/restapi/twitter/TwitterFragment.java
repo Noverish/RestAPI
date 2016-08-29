@@ -1,13 +1,16 @@
 package com.noverish.restapi.twitter;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
@@ -67,9 +70,15 @@ public class TwitterFragment extends BaseFragment {
                 TwitterClient twitterClient = TwitterClient.getInstance();
                 List<Status> statuses = twitterClient.getTimeLine(page);
 
+                Log.d("loadTweets",page + " " + statuses.size());
+
                 for (Status status : statuses) {
-                    handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
+                    CustomThread thread1 = new CustomThread(textViewList, getActivity(), status);
+                    thread1.start();
                 }
+
+                Log.d("scrollView","stopLoading");
+                scrollView.stopLoading();
             }
         });
         thread.start();
@@ -90,6 +99,23 @@ public class TwitterFragment extends BaseFragment {
         }
     }
 
+    class CustomThread extends Thread {
+        private ViewGroup viewGroup;
+        private Context context;
+        private Status status;
+
+        CustomThread(ViewGroup viewGroup, Context context, Status status) {
+            this.viewGroup = viewGroup;
+            this.context = context;
+            this.status = status;
+        }
+
+        @Override
+        public void run() {
+            handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
+        }
+    }
+
     private class ScrollBottomHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -101,10 +127,13 @@ public class TwitterFragment extends BaseFragment {
     public void onPostButtonClicked(String content) {
         TwitterClient twitterClient = TwitterClient.getInstance();
         twitterClient.updateStatus(content);
+        Toast.makeText(getActivity(), "트윗을 보냈습니다",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFreshButtonClicked() {
-
+        textViewList.removeAllViews();
+        nowPage = 1;
+        loadTweets(nowPage);
     }
 }
