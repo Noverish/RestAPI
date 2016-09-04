@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private BaseFragment nowFragment;
+    private boolean isInHomefragment = true;
 
     private Toolbar toolbar;
 
@@ -81,8 +82,12 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(layout.getChildCount() > 0){
+        } else if(!isInHomefragment){
             layout.removeAllViews();
+            FrameLayout back = (FrameLayout) findViewById(R.id.content_main_background_layout);
+            back.removeAllViews();
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
+            isInHomefragment = true;
         } else {
             Log.d("back","super");
             super.onBackPressed();
@@ -120,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
+            isInHomefragment = false;
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.facebook));
 
             Bundle bundle = new Bundle();
@@ -135,11 +141,13 @@ public class MainActivity extends AppCompatActivity
             });
 
             FacebookFragment fragment = new FacebookFragment();
+            fragment.setWebView(webView);
             nowFragment = fragment;
 
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_twitter) {
+            isInHomefragment = false;
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.twitter));
 
             ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
@@ -151,6 +159,7 @@ public class MainActivity extends AppCompatActivity
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_kakao) {
 
+            isInHomefragment = false;
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.kakao));
 
             Bundle bundle = new Bundle();
@@ -198,6 +207,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onPostButtonClicked() {
+        if(isInHomefragment)
+            return;
+
         if(nowFragment.getClass().getSimpleName().equals("FacebookFragment")) {
             nowFragment.onPostButtonClicked("");
             return;
@@ -206,6 +218,12 @@ public class MainActivity extends AppCompatActivity
         RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.article_add, null);
+
+        if(nowFragment.getClass().getSimpleName().equals("KakaoFragment"))
+            popupView.setBackground(ContextCompat.getDrawable(this, R.drawable.border_kakao));
+
+        if(nowFragment.getClass().getSimpleName().equals("TwitterFragment"))
+            popupView.setBackground(ContextCompat.getDrawable(this, R.drawable.border_twitter));
 
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 223, this.getResources().getDisplayMetrics());
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 280, this.getResources().getDisplayMetrics());
