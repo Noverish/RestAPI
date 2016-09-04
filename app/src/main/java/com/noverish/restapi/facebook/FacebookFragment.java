@@ -36,6 +36,8 @@ public class FacebookFragment extends BaseFragment {
     ScrollBottomDetectScrollview scrollView;
     private static FacebookFragment instance;
 
+    private HtmlParsingWebView webView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -160,6 +162,17 @@ public class FacebookFragment extends BaseFragment {
 
     @Override
     public void onFreshButtonClicked() {
+        list.removeAllViews();
 
+        if(webView != null)
+            webView.refresh();
+
+        if(scrollView != null)
+            scrollView.startLoading();
+    }
+
+
+    public void setWebView(HtmlParsingWebView webView) {
+        this.webView = webView;
     }
 }
