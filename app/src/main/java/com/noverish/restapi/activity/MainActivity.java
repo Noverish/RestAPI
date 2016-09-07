@@ -35,6 +35,7 @@ import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
+import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
 
@@ -73,6 +74,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
+
+        HtmlParseWebView kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
+        kakaoWebView.loadUrl("https://story.kakao.com/s/login");
+
+        HtmlParseWebView twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
+
+
+        HtmlParseWebView facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
+        facebookWebView.loadUrl("https://m.facebook.com/?_rdr");
     }
 
     @Override
