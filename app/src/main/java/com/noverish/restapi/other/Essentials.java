@@ -13,7 +13,7 @@ public class Essentials {
     public static void changeFragment(Activity activity, int layoutId, Fragment fr) {
         FragmentManager fm = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(layoutId, fr);
+        fragmentTransaction.replace(layoutId, fr, fr.getClass().getSimpleName());
         fragmentTransaction.commit();
     }
 }
