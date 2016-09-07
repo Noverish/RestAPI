@@ -12,8 +12,13 @@
     <color name="facebook_comment_background">#DDDDDD</color>
 
     <color name="facebook">#3b5998</color>
+    <color name="facebook_article_background">#AFC9FF</color>
+
     <color name="twitter">#2aa9e0</color>
+    <color name="twitter_article_background">#7CD8FF</color>
+
     <color name="kakao">#fab900</color>
+    <color name="kakao_article_background">#FFD14C</color>
 
     <color name="twitter_gray_text">#aab8c2</color>
 </resources>
