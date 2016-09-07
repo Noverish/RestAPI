@@ -23,11 +23,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookArticleItem;
+import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookFragment;
+import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
@@ -38,6 +42,8 @@ import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -83,6 +89,26 @@ public class MainActivity extends AppCompatActivity
 
         HtmlParseWebView facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
         facebookWebView.loadUrl("https://m.facebook.com/?_rdr");
+        facebookWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(String htmlCode) {
+                ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
+                ArrayList<FacebookArticleView> views = new ArrayList<>();
+
+                for(FacebookArticleItem item : items) {
+                    views.add(new FacebookArticleView(MainActivity.this, item));
+                }
+
+                HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
+                if(fragment.getView() != null) {
+                    LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
+
+                    for (FacebookArticleView view : views) {
+                        mainLayout.addView(view);
+                    }
+                }
+            }
+        });
     }
 
     @Override
