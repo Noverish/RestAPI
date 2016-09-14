@@ -45,6 +45,10 @@
         <activity android:name=".kakao.KakaoLoginActivity" />
         <activity android:name=".activity.LoginCenterActivity" />
 
+        <activity android:name=".login.LoginManageActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".login.FacebookLoginWebViewActivity" />
+
     </application>
 
 </manifest>

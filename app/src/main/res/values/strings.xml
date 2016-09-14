@@ -8,6 +8,7 @@
     <string name="activity_reply_twitter_reply_button">답장하기</string>
 
     <string name="facebook_app_id">1738070796478578</string>
+    <string name="facebook_url">https://m.facebook.com/?_rdr</string>
 
     <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
     <string name="kakao_scheme">kakao2b3b894cfd9d116da24862f7c06b8171</string>
@@ -29,6 +30,7 @@
     <string name="navigation_facebook">페이스북</string>
     <string name="navigation_twitter">트위터</string>
     <string name="navigation_kakao">카카오스토리</string>
+    <string name="navigation_setting">설정</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -36,4 +38,7 @@
     <string name="article_add_add">추가</string>
     <string name="article_add_cancel">취소</string>
 
+    <string name="activity_setting_login">로그인</string>
+
+    <string name="activity_login_center_facebook">페이스북 로그인</string>
 </resources>

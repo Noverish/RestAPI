@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_share) {
-
+            startActivity(new Intent(this, SettingActivity.class));
         } else if (id == R.id.nav_send) {
 
         }
