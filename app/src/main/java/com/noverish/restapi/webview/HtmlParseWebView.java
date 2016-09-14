@@ -1,6 +1,7 @@
 package com.noverish.restapi.webview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.ValueCallback;
@@ -14,8 +15,12 @@ import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
  * Created by Noverish on 2016-09-07.
  */
 public class HtmlParseWebView extends WebView {
-    private OnHtmlLoadSuccessListener listener;
-    private String url;
+    private OnHtmlLoadSuccessListener onHtmlLoadSuccessListener;
+    private OnPageFinishedListener onPageFinishedListener;
+    private OnPageStartedListener onPageStartedListener;
+    private String originUrl;
+    private String nowUrl;
+    private String htmlCode;
 
     public HtmlParseWebView(Context context) {
         super(context);
@@ -42,8 +47,21 @@ public class HtmlParseWebView extends WebView {
 
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
         @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+
+            if(onPageStartedListener != null)
+                onPageStartedListener.onPageStarted(view, url, favicon);
+        }
+
+        @Override
         public void onPageFinished(final WebView view, String url) {
             Log.d("onPageFinished",url);
+
+            nowUrl = url;
+
+            if(onPageFinishedListener != null)
+                onPageFinishedListener.onPageFinished();
 
             extractHtml();
         }
@@ -70,9 +88,10 @@ public class HtmlParseWebView extends WebView {
                         html = html.replaceAll("(\\\\){1,2}u003E",">");
                         html = html.replaceAll("(\\\\){1,2}/","/");
 
-                        if(listener != null) {
-                            listener.onHtmlLoadSuccess(html);
-                        }
+                        htmlCode = html;
+
+                        if(onHtmlLoadSuccessListener != null)
+                            onHtmlLoadSuccessListener.onHtmlLoadSuccess(html);
                     }
                 });
     }
@@ -80,11 +99,27 @@ public class HtmlParseWebView extends WebView {
     @Override
     public void loadUrl(String url) {
         super.loadUrl(url);
-        this.url = url;
+        this.originUrl = url;
     }
 
     public void setOnHtmlLoadSuccessListener(OnHtmlLoadSuccessListener listener) {
-        this.listener = listener;
+        this.onHtmlLoadSuccessListener = listener;
+    }
+
+    public void setOnPageFinishedListener(OnPageFinishedListener listener) {
+        this.onPageFinishedListener = listener;
+    }
+
+    public void setOnPageStartedListener(OnPageStartedListener listener) {
+        this.onPageStartedListener = listener;
+    }
+
+    public String getHtmlCode() {
+        return htmlCode;
+    }
+
+    public String getNowUrl() {
+        return nowUrl;
     }
 
     public void scrollBottom() {
@@ -92,6 +127,6 @@ public class HtmlParseWebView extends WebView {
     }
 
     public void refresh() {
-        loadUrl(url);
+        loadUrl(originUrl);
     }
 }

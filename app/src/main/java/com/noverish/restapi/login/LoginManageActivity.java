@@ -13,17 +13,32 @@ import com.noverish.restapi.R;
  * Created by Noverish on 2016-09-14.
  */
 public class LoginManageActivity extends AppCompatActivity {
+    private Button facebookButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_manage);
 
-        Button facebookButton = (Button) findViewById(R.id.activity_login_manage_facebook);
+        facebookButton = (Button) findViewById(R.id.activity_login_manage_facebook);
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginManageActivity.this, FacebookLoginWebViewActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LoginDatabase database = LoginDatabase.getInstance();
+
+        if(database.isFacebookLogined()) {
+            facebookButton.setText(getText(R.string.activity_login_center_facebook_login));
+        } else {
+            facebookButton.setText(getText(R.string.activity_login_center_facebook));
+        }
     }
 }

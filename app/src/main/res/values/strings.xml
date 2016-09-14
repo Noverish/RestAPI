@@ -8,7 +8,10 @@
     <string name="activity_reply_twitter_reply_button">답장하기</string>
 
     <string name="facebook_app_id">1738070796478578</string>
-    <string name="facebook_url">https://m.facebook.com/?_rdr</string>
+    <string name="facebook_url">https://m.facebook.com/home.php</string>
+    <string name="facebook_login_url">https://m.facebook.com/?_rdr</string>
+    <string name="facebook_register_device_url">https://m.facebook.com/login/save-device/#_=_</string>
+    <string name="facebook_setting_url">https://m.facebook.com/home.php?soft=bookmarks</string>
 
     <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
     <string name="kakao_scheme">kakao2b3b894cfd9d116da24862f7c06b8171</string>
@@ -41,4 +44,5 @@
     <string name="activity_setting_login">로그인</string>
 
     <string name="activity_login_center_facebook">페이스북 로그인</string>
+    <string name="activity_login_center_facebook_login">페이스북 로그인 되어 있음</string>
 </resources>

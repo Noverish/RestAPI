@@ -34,6 +34,9 @@ import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
+import com.noverish.restapi.login.FacebookLoginWebViewActivity;
+import com.noverish.restapi.login.LoginDatabase;
+import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
@@ -88,24 +91,32 @@ public class MainActivity extends AppCompatActivity
 
 
         HtmlParseWebView facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
-        facebookWebView.loadUrl("https://m.facebook.com/?_rdr");
+        facebookWebView.loadUrl(getString(R.string.facebook_url));
         facebookWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(String htmlCode) {
-                ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
-                ArrayList<FacebookArticleView> views = new ArrayList<>();
+                LoginDatabase.getInstance().setFacebookLogined(Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0);
 
-                for(FacebookArticleItem item : items) {
-                    views.add(new FacebookArticleView(MainActivity.this, item));
-                }
+                if(LoginDatabase.getInstance().isFacebookLogined()) {
+                    ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
+                    ArrayList<FacebookArticleView> views = new ArrayList<>();
 
-                HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
-                if(fragment.getView() != null) {
-                    LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
-
-                    for (FacebookArticleView view : views) {
-                        mainLayout.addView(view);
+                    for(FacebookArticleItem item : items) {
+                        views.add(new FacebookArticleView(MainActivity.this, item));
                     }
+
+                    HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
+                    if(fragment.getView() != null) {
+                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
+
+                        for (FacebookArticleView view : views) {
+                            mainLayout.addView(view);
+                        }
+                    }
+                } else {
+                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                    startActivity(new Intent(MainActivity.this, LoginManageActivity.class));
+                    startActivity(new Intent(MainActivity.this, FacebookLoginWebViewActivity.class));
                 }
             }
         });
