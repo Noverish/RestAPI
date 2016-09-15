@@ -48,7 +48,7 @@
         <activity android:name=".login.LoginManageActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".login.FacebookLoginWebViewActivity" />
-
+        <activity android:name=".login.KakaoLoginWebViewActivity" />
     </application>
 
 </manifest>

@@ -43,6 +43,7 @@ public class LoginDatabase {
     }
 
     public void setKakaoLogined(boolean kakaoLogined) {
+        Log.i("kakao","kakao Login is " + kakaoLogined);
         isKakaoLogined = kakaoLogined;
     }
 }

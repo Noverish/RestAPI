@@ -16,6 +16,9 @@
     <string name="kakao_app_key">2b3b894cfd9d116da24862f7c06b8171</string>
     <string name="kakao_scheme">kakao2b3b894cfd9d116da24862f7c06b8171</string>
     <string name="kakaostory_host">kakaostory</string>
+    <string name="kakao_url">https://story.kakao.com/</string>
+    <string name="kakao_logout_url">https://story.kakao.com/s/logout</string>
+    <string name="kakao_login_url">https://story.kakao.com/s/login</string>
 
 
     <string name="facebook_article_default_header">임꺽정님이 좋아합니다.</string>
@@ -45,4 +48,6 @@
 
     <string name="activity_login_center_facebook">페이스북 로그인</string>
     <string name="activity_login_center_facebook_login">페이스북 로그인 되어 있음</string>
+    <string name="activity_login_center_kakao">카카오 로그인</string>
+    <string name="activity_login_center_kakao_login">카카오 로그인 되어 있음</string>
 </resources>

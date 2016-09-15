@@ -33,8 +33,12 @@ import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.http.HttpConnectionThread;
+import com.noverish.restapi.kakao.KakaoArticleItem;
+import com.noverish.restapi.kakao.KakaoArticleView;
 import com.noverish.restapi.kakao.KakaoFragment;
+import com.noverish.restapi.kakao.KakaoHtmlCodeProcessor;
 import com.noverish.restapi.login.FacebookLoginWebViewActivity;
+import com.noverish.restapi.login.KakaoLoginWebViewActivity;
 import com.noverish.restapi.login.LoginDatabase;
 import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.other.BaseFragment;
@@ -85,7 +89,36 @@ public class MainActivity extends AppCompatActivity
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
 
         HtmlParseWebView kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
-        kakaoWebView.loadUrl("https://story.kakao.com/s/login");
+        kakaoWebView.loadUrl(getString(R.string.kakao_login_url));
+        kakaoWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(String htmlCode) {
+                LoginDatabase.getInstance().setKakaoLogined(Jsoup.parse(htmlCode).select("div.login_wrap").size() == 0);
+
+                if(LoginDatabase.getInstance().isKakaoLogined()) {
+                    ArrayList<KakaoArticleItem> items = KakaoHtmlCodeProcessor.process(htmlCode);
+                    ArrayList<KakaoArticleView> views = new ArrayList<>();
+
+                    for(KakaoArticleItem item : items) {
+                        views.add(new KakaoArticleView(MainActivity.this, item));
+                    }
+
+                    HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
+                    if(fragment.getView() != null) {
+                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
+
+                        for (KakaoArticleView view : views) {
+                            mainLayout.addView(view);
+                        }
+                    }
+                } else {
+                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                    startActivity(new Intent(MainActivity.this, LoginManageActivity.class));
+                    startActivity(new Intent(MainActivity.this, KakaoLoginWebViewActivity.class));
+                }
+
+            }
+        });
 
         HtmlParseWebView twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
 

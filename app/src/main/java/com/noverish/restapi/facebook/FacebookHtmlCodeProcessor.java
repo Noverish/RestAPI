@@ -62,6 +62,8 @@ public class FacebookHtmlCodeProcessor {
                 continue;
             if(article.classNames().contains("fullwidth"))
                 continue;
+            if(article.classNames().contains("_d2r"))
+                continue;
 
             if(article.select("article").size() > 0) {
                 hasInsideArticle = true;
