@@ -25,8 +25,8 @@ public class ReplyTwitterActivity extends AppCompatActivity {
         this.context = this;
 
         editText = (EditText) findViewById(R.id.activity_reply_twitter_edit_text);
-        TwitterArticleView statusView = (TwitterArticleView) findViewById(R.id.activity_reply_twitter_status_view);
-        statusView.setStatus(TwitterArticleView.nowSelectedStatus);
+        TwitterArticleView twitterArticleView = (TwitterArticleView) findViewById(R.id.activity_reply_twitter_status_view);
+        twitterArticleView.setStatus(TwitterArticleView.nowSelectedStatus);
         Button button = (Button) findViewById(R.id.activity_reply_twitter_reply_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

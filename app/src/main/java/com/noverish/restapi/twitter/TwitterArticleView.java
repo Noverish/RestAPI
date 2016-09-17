@@ -47,7 +47,7 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         this.context = context;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.status_view, this, true);
+        inflater.inflate(R.layout.twitter_article_view, this, true);
 
         setOnClickListener(this);
 
@@ -56,41 +56,41 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
 
     public void setStatus(Status status) {
         if(status.getRetweetedStatus() != null) {
-            TextView isRetweetedTextView = (TextView) findViewById(R.id.status_view_is_retweeted);
+            TextView isRetweetedTextView = (TextView) findViewById(R.id.twitter_article_view_is_retweeted);
             isRetweetedTextView.setText(status.getUser().getName() + " 님이 리트윗하셨습니다");
 
             status = status.getRetweetedStatus();
         } else {
-            TextView isRetweetedTextView = (TextView) findViewById(R.id.status_view_is_retweeted);
+            TextView isRetweetedTextView = (TextView) findViewById(R.id.twitter_article_view_is_retweeted);
             isRetweetedTextView.setVisibility(GONE);
         }
 
         String realText = status.getText();
         realText = realText.replaceAll("https://t[.]co[\\S]*","");
 
-        TextView contentTextTextView = (TextView) findViewById(R.id.status_view_temporary_text_view);
+        TextView contentTextTextView = (TextView) findViewById(R.id.twitter_article_view_content);
         contentTextTextView.setText(realText);
 
-        ImageView profileImageView = (ImageView) findViewById(R.id.status_view_profile_image_view);
+        ImageView profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
         Picasso.with(context).load(status.getUser().getProfileImageURL()).into(profileImageView);
 
-        TextView nameTextView = (TextView) findViewById(R.id.status_view_name_text_view);
+        TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);
         nameTextView.setText(status.getUser().getName());
 
-        TextView screenNameTextView = (TextView) findViewById(R.id.status_view_screen_name_text_view);
+        TextView screenNameTextView = (TextView) findViewById(R.id.twitter_article_view_screen_name);
         screenNameTextView.setText("@" + status.getUser().getScreenName());
 
         RestAPIClient restAPIClient = new RestAPIClient(realText.replaceAll("#[\\S]*",""));
         RestAPIClient.SemanticClassification sc = restAPIClient.extract();
         if(!sc.classification.equals("")) {
-            TextView classificationTextView = (TextView) findViewById(R.id.status_view_classification);
+            TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
             classificationTextView.setText(sc.classification);
         } else {
-            TextView classificationTextView = (TextView) findViewById(R.id.status_view_classification);
+            TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
             classificationTextView.setVisibility(GONE);
         }
 
-        TextView timeTextView = (TextView) findViewById(R.id.status_view_time);
+        TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(status.getCreatedAt().toString());
 
 /*
@@ -102,7 +102,7 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
             Log.e(TAG,url);
         }
 */
-        LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.status_view_media_layout);
+        LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
         for(MediaEntity m : status.getExtendedMediaEntities()) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             ImageView mediaImageView = new ImageView(context);
