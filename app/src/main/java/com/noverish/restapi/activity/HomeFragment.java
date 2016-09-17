@@ -3,6 +3,7 @@ package com.noverish.restapi.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -39,7 +40,8 @@ public class HomeFragment extends Fragment {
 
     private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
     private LinearLayout mainLayout;
-    
+
+    private android.os.Handler handler = new Handler();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,11 +82,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        TwitterClient twitterClient = TwitterClient.getInstance();
-        List<Status> statuses = twitterClient.getTimeLine(1);
-        for (Status status : statuses) {
-            mainLayout.addView(new TwitterArticleView(getActivity(), status));
-        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TwitterClient twitterClient = TwitterClient.getInstance();
+                List<Status> statuses = twitterClient.getTimeLine(1);
+                for (Status status : statuses) {
+                    final TwitterArticleView view = new TwitterArticleView(getActivity(), status);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.downloadImages();
+                            mainLayout.addView(view);
+                        }
+                    });
+                }
+            }
+        });
+        thread.start();
+
 
         return view;
     }

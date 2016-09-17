@@ -2,8 +2,6 @@ package com.noverish.restapi.twitter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +12,6 @@ import android.widget.TextView;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import twitter4j.MediaEntity;
 import twitter4j.Status;
@@ -33,6 +26,9 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
     private Status status;
 
     private final String TAG = getClass().getSimpleName();
+
+    private ImageView profileImageView;
+    private LinearLayout mediaLayout;
 
     public TwitterArticleView(Context context, Status nowSelectedStatus) {
         super(context);
@@ -71,8 +67,7 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         TextView contentTextTextView = (TextView) findViewById(R.id.twitter_article_view_content);
         contentTextTextView.setText(realText);
 
-        ImageView profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
-        Picasso.with(context).load(status.getUser().getProfileImageURL()).into(profileImageView);
+        profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
 
         TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);
         nameTextView.setText(status.getUser().getName());
@@ -93,16 +88,12 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(status.getCreatedAt().toString());
 
-/*
-        Pattern pattern = Pattern.compile("http[\\S]*");
-        Matcher matcher = pattern.matcher(status.getText());
+        mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+    }
 
-        while(matcher.find()) {
-            String url = matcher.group();
-            Log.e(TAG,url);
-        }
-*/
-        LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+    public void downloadImages() {
+        Picasso.with(context).load(status.getUser().getProfileImageURL()).into(profileImageView);
+
         for(MediaEntity m : status.getExtendedMediaEntities()) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             ImageView mediaImageView = new ImageView(context);
@@ -111,7 +102,6 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
 
             mediaLayout.addView(mediaImageView);
         }
-
     }
 
     @Override
@@ -119,42 +109,5 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         nowSelectedStatus = status;
         Intent intent = new Intent(context, ReplyTwitterActivity.class);
         context.startActivity(intent);
-    }
-
-
-    public class ImageThread extends Thread {
-        public Bitmap bitmap;
-        public String src;
-
-        public ImageThread(String url) {
-            src = url;
-
-            run();
-        }
-
-        @Override
-        public void run() {
-            try {
-                URL url = new URL(src);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                bitmap = BitmapFactory.decodeStream(input);
-            } catch (IOException e) {
-                // Log exception
-            }
-        }
-
-        public Bitmap getImage() {
-            try {
-                join();
-            } catch (InterruptedException inter) {
-                inter.printStackTrace();
-                return null;
-            }
-
-            return bitmap;
-        }
     }
 }
