@@ -75,15 +75,9 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         TextView screenNameTextView = (TextView) findViewById(R.id.twitter_article_view_screen_name);
         screenNameTextView.setText("@" + status.getUser().getScreenName());
 
-        RestAPIClient restAPIClient = new RestAPIClient(realText.replaceAll("#[\\S]*",""));
-        RestAPIClient.SemanticClassification sc = restAPIClient.extract();
-        if(!sc.classification.equals("")) {
-            TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
-            classificationTextView.setText(sc.classification);
-        } else {
-            TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
-            classificationTextView.setVisibility(GONE);
-        }
+
+        TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
+        RestAPIClient.getInstance().process(realText.replaceAll("#[\\S]*",""), classificationTextView);
 
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(status.getCreatedAt().toString());

@@ -1,41 +1,38 @@
 package com.noverish.restapi.other;
 
-import com.noverish.restapi.http.HttpConnectionThread;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.TextView;
 
-import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import twitter4j.Status;
 
 /**
  * Created by Noverish on 2016-05-29.
  */
 public class RestAPIClient extends Thread {
     final static String openWeatherURL = "http://dilab.korea.ac.kr/sigma/sigmaService/Bilingual/ResultServlet";
-    private String content;
-    private JSONObject json = null;
-    private String htmlCode = null;
 
     private final String TAG = getClass().getSimpleName();
 
-    public RestAPIClient(String content) {
-        content = content.replaceAll("[\\s]","%20");
-        this.content = content;
+    private android.os.Handler handler = new Handler();
+
+    private static RestAPIClient instance;
+    public static RestAPIClient getInstance() {
+        if(instance == null)
+            instance = new RestAPIClient();
+
+        return instance;
+    }
+    private RestAPIClient() {
         start();
     }
 
-    public void run() {
+    /*public void run() {
         //Log.e(TAG,content);
         String urlString = openWeatherURL + "?query='" + content + "'";
 
@@ -59,11 +56,11 @@ public class RestAPIClient extends Thread {
             System.err.println("Malformed URL");
             e.printStackTrace();
             this.json = null;
-        }/*catch(JSONException e) {
+        }*//*catch(JSONException e) {
             System.err.println("JSON parsing error");
             e.printStackTrace();
             this.json = null;
-        }*/catch(IOException e){
+        }*//*catch(IOException e){
             System.err.println("URL Connection failed");
             e.printStackTrace();
             this.json = null;
@@ -138,7 +135,7 @@ public class RestAPIClient extends Thread {
         }
 
         return sb.toString();
-    }
+    }*/
 
     public class SemanticClassification {
         public long matchCase;
@@ -164,13 +161,52 @@ public class RestAPIClient extends Thread {
         }
     }
 
-    public static String statusToString(Status status) {
-        String content = status.toString();
+    public void process(String content, final OnSemanticProcessFinishedListener listener) {
+        content = content.replaceAll("[\\s]","%20");
+        final String urlStr = openWeatherURL + "?query='" + content + "'";
 
-        content = content.replaceAll("[{]","{\n");
-        content = content.replaceAll(", ",",\n");
-        content = content.replaceAll("HashtagEntityJSONImpl[{]\n","HashtagEntityJSONImpl{");
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Document document = Jsoup.connect(urlStr).post();
+                    Element element = document.select("table[width=\"650\"]").select("tr").first();
 
-        return content;
+                    if(element != null) {
+                        String matchCase = element.select("td[width=\"100\"]").html();
+                        String classificationStr = element.select("td[width=\"200\"]").html().replaceAll("<[^>]*>","");
+                        String percentage = element.select("td[width=\"300\"]").html();
+
+                        SemanticClassification classification = new SemanticClassification(matchCase, classificationStr, percentage);
+
+                        listener.onSemanticProcessFinished(classification);
+                    } else {
+                        listener.onSemanticProcessFinished(null);
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+    public interface OnSemanticProcessFinishedListener {
+        void onSemanticProcessFinished(SemanticClassification classification);
+    }
+
+    public void process(String content, final TextView textView) {
+        process(content, new OnSemanticProcessFinishedListener() {
+            @Override
+            public void onSemanticProcessFinished(final SemanticClassification classification) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(classification != null)
+                            textView.setText(classification.classification);
+                    }
+                });
+            }
+        });
     }
 }

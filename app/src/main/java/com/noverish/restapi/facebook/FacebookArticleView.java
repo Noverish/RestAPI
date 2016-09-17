@@ -28,12 +28,7 @@ public class FacebookArticleView extends LinearLayout {
         inflater.inflate(R.layout.article_facebook, this);
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIClient client = new RestAPIClient(article.content);
-        RestAPIClient.SemanticClassification sc = client.extract();
-        if(!sc.classification.equals(""))
-            classification.setText(sc.classification);
-        else
-            classification.setVisibility(GONE);
+        RestAPIClient.getInstance().process(article.content, classification);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
         header.setText(article.header);
