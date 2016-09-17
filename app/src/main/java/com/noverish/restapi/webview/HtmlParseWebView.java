@@ -69,7 +69,7 @@ public class HtmlParseWebView extends WebView {
         @Override
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
-            Log.d("onLoadResource",url);
+            //Log.d("onLoadResource",url);
         }
     }
 

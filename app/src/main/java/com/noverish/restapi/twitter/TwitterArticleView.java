@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.other.RestAPIClient;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,8 +89,7 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         contentTextTextView.setText(realText);
 
         ImageView profileImageView = (ImageView) findViewById(R.id.status_view_profile_image_view);
-        String profileImageUrl = status.getUser().getProfileImageURL();
-        profileImageView.setBackground(HttpConnectionThread.getImageDrawableFromUrl(profileImageUrl));
+        Picasso.with(context).load(status.getUser().getProfileImageURL()).into(profileImageView);
 
         TextView nameTextView = (TextView) findViewById(R.id.status_view_name_text_view);
         nameTextView.setText(status.getUser().getName());
@@ -123,11 +122,8 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         for(MediaEntity m : status.getExtendedMediaEntities()) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             ImageView mediaImageView = new ImageView(context);
-            ImageThread imageThread = new ImageThread(m.getMediaURL());
-            Bitmap bitmap = imageThread.getImage();
-
-            mediaImageView.setImageBitmap(bitmap);
             mediaImageView.setLayoutParams(layoutParams);
+            Picasso.with(context).load(m.getMediaURL()).into(mediaImageView);
 
             mediaLayout.addView(mediaImageView);
         }

@@ -28,29 +28,16 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.facebook.FacebookArticleItem;
-import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookFragment;
-import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.http.HttpConnectionThread;
-import com.noverish.restapi.kakao.KakaoArticleItem;
-import com.noverish.restapi.kakao.KakaoArticleView;
 import com.noverish.restapi.kakao.KakaoFragment;
-import com.noverish.restapi.kakao.KakaoHtmlCodeProcessor;
-import com.noverish.restapi.login.FacebookLoginWebViewActivity;
-import com.noverish.restapi.login.KakaoLoginWebViewActivity;
-import com.noverish.restapi.login.LoginDatabase;
-import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
-import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     public static ProgressDialog dialog;
+
+    private LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
 
-        HtmlParseWebView kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
+        /*HtmlParseWebView kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
         kakaoWebView.loadUrl(getString(R.string.kakao_login_url));
         kakaoWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
@@ -118,41 +107,12 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        });
-
-        HtmlParseWebView twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
+        });*/
 
 
-        HtmlParseWebView facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
-        facebookWebView.loadUrl(getString(R.string.facebook_url));
-        facebookWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
-            @Override
-            public void onHtmlLoadSuccess(String htmlCode) {
-                LoginDatabase.getInstance().setFacebookLogined(Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0);
 
-                if(LoginDatabase.getInstance().isFacebookLogined()) {
-                    ArrayList<FacebookArticleItem> items = FacebookHtmlCodeProcessor.process(htmlCode);
-                    ArrayList<FacebookArticleView> views = new ArrayList<>();
 
-                    for(FacebookArticleItem item : items) {
-                        views.add(new FacebookArticleView(MainActivity.this, item));
-                    }
 
-                    HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
-                    if(fragment.getView() != null) {
-                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
-
-                        for (FacebookArticleView view : views) {
-                            mainLayout.addView(view);
-                        }
-                    }
-                } else {
-                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
-                    startActivity(new Intent(MainActivity.this, LoginManageActivity.class));
-                    startActivity(new Intent(MainActivity.this, FacebookLoginWebViewActivity.class));
-                }
-            }
-        });
     }
 
     @Override
