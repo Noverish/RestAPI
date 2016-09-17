@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,24 +41,6 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         if(!isInEditMode()) {
             init(context);
         }
-
-        setStatus(nowSelectedStatus);
-    }
-
-    public TwitterArticleView(Context context) {
-        super(context);
-
-        if(!isInEditMode()) {
-            init(context);
-        }
-    }
-
-    public TwitterArticleView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-        if(!isInEditMode()) {
-            init(context);
-        }
     }
 
     private void init(Context context) {
@@ -69,6 +50,8 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         inflater.inflate(R.layout.status_view, this, true);
 
         setOnClickListener(this);
+
+        setStatus(status);
     }
 
     public void setStatus(Status status) {
@@ -107,7 +90,8 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
             classificationTextView.setVisibility(GONE);
         }
 
-
+        TextView timeTextView = (TextView) findViewById(R.id.status_view_time);
+        timeTextView.setText(status.getCreatedAt().toString());
 
 /*
         Pattern pattern = Pattern.compile("http[\\S]*");

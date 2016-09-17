@@ -20,6 +20,10 @@
     <string name="kakao_logout_url">https://story.kakao.com/s/logout</string>
     <string name="kakao_login_url">https://story.kakao.com/s/login</string>
 
+    <string name="status_view_name">홍길동</string>
+    <string name="status_view_screen_name">\@hong_hong</string>
+    <string name="status_view_text">띠용\n띠용</string>
+    <string name="status_view_time">1234년 5월 6일 7시 8분 9초</string>
 
     <string name="facebook_article_default_header">임꺽정님이 좋아합니다.</string>
     <string name="facebook_article_default_title">홍길동님이 무얼 했습니다.</string>
