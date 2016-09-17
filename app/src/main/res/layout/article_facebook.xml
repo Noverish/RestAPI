@@ -5,6 +5,11 @@
     android:background="@color/facebook_article_background">
 
     <TextView
+        android:id="@+id/article_facebook_classification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
         android:id="@+id/facebook_article_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
