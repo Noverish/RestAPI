@@ -3,7 +3,9 @@ package com.noverish.restapi.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
+import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
@@ -33,14 +36,17 @@ import twitter4j.Status;
  */
 public class HomeFragment extends Fragment {
     private HtmlParseWebView facebookWebView;
-    
+
+    private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
     private LinearLayout mainLayout;
     
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_home, container, false);
-        
+
+        scrollBottomDetectScrollview = (ScrollBottomDetectScrollview) view.findViewById(R.id.fragment_home_scroll_view);
+        scrollBottomDetectScrollview.setHandler(new CustomHandler());
         mainLayout = (LinearLayout) view.findViewById(R.id.fragment_home_layout_main);
         
         facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
@@ -81,5 +87,14 @@ public class HomeFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private class CustomHandler extends android.os.Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            Log.i("ScrollView","bottom");
+        }
     }
 }
