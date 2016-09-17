@@ -12,4 +12,10 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="nav_icon_size">64dp</dimen>
+
+    <dimen name="twitter_article_inside_layout_padding">4dp</dimen>
+    <dimen name="twitter_article_name_text_size">16sp</dimen>
+    <dimen name="twitter_article_screen_name_left_margin">4dp</dimen>
+    <dimen name="twitter_article_content_top_margin">8dp</dimen>
+    <dimen name="twitter_article_bottom_button_text_size">12sp</dimen>
 </resources>
