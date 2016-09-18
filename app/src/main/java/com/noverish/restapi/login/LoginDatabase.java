@@ -39,6 +39,7 @@ public class LoginDatabase {
     }
 
     public void setTwitterLogined(boolean twitterLogined) {
+        Log.i("twitter","twitter Login is " + twitterLogined);
         isTwitterLogined = twitterLogined;
     }
 

@@ -16,27 +16,26 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
+import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.login.FacebookLoginWebViewActivity;
 import com.noverish.restapi.login.LoginDatabase;
 import com.noverish.restapi.login.LoginManageActivity;
+import com.noverish.restapi.login.TwitterLoginWebViewActivity;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.twitter.TwitterArticleView;
-import com.noverish.restapi.twitter.TwitterClient;
+import com.noverish.restapi.twitter.TwitterHtmlProcessor;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import twitter4j.Status;
 
 /**
  * Created by Noverish on 2016-08-21.
  */
 public class HomeFragment extends Fragment {
     private HtmlParseWebView facebookWebView;
+    private HtmlParseWebView twitterWebView;
 
     private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
     private LinearLayout mainLayout;
@@ -82,7 +81,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Thread thread = new Thread(new Runnable() {
+        twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
+        twitterWebView.loadUrl("https://twitter.com/");
+        twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(String htmlCode) {
+                LoginDatabase.getInstance().setTwitterLogined(!HttpConnectionThread.unicodeToString(Jsoup.parse(htmlCode).title()).contains("트위터에"));
+
+                if(LoginDatabase.getInstance().isTwitterLogined()) {
+                    TwitterHtmlProcessor.process(htmlCode);
+                } else {
+                    startActivity(new Intent(getActivity(), SettingActivity.class));
+                    startActivity(new Intent(getActivity(), LoginManageActivity.class));
+                    startActivity(new Intent(getActivity(), TwitterLoginWebViewActivity.class));
+                }
+            }
+        });
+
+
+        /*Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 TwitterClient twitterClient = TwitterClient.getInstance();
@@ -99,7 +116,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        thread.start();
+        thread.start();*/
 
 
         return view;

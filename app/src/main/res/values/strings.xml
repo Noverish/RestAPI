@@ -20,6 +20,11 @@
     <string name="kakao_logout_url">https://story.kakao.com/s/logout</string>
     <string name="kakao_login_url">https://story.kakao.com/s/login</string>
 
+    <string name="twitter_url">https://mobile.twitter.com/home</string>
+    <string name="twitter_login_url">https://mobile.twitter.com/login</string>
+    <string name="twitter_logout_url">https://mobile.twitter.com/logout</string>
+
+
     <string name="twitter_article_view_name">홍길동</string>
     <string name="twitter_article_view_screen_name">\@hong_hong</string>
     <string name="twitter_article_view_text">오늘은 너무 더웠다\n더워서 짜증났다</string>
@@ -58,4 +63,6 @@
     <string name="activity_login_center_facebook_login">페이스북 로그인 되어 있음</string>
     <string name="activity_login_center_kakao">카카오 로그인</string>
     <string name="activity_login_center_kakao_login">카카오 로그인 되어 있음</string>
+    <string name="activity_login_manage_twitter">트위터 로그인</string>
+    <string name="activity_login_manage_twitter_login">트위터 로그인 되어 있음</string>
 </resources>

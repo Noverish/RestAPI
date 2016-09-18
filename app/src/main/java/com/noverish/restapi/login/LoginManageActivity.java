@@ -15,6 +15,7 @@ import com.noverish.restapi.R;
 public class LoginManageActivity extends AppCompatActivity {
     private Button facebookButton;
     private Button kakaoButton;
+    private Button twitterButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +37,14 @@ public class LoginManageActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginManageActivity.this, KakaoLoginWebViewActivity.class));
             }
         });
+
+        twitterButton = (Button) findViewById(R.id.activity_login_manage_twitter);
+        twitterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginManageActivity.this, TwitterLoginWebViewActivity.class));
+            }
+        });
     }
 
     @Override
@@ -44,16 +53,22 @@ public class LoginManageActivity extends AppCompatActivity {
 
         LoginDatabase database = LoginDatabase.getInstance();
 
-        if(database.isFacebookLogined()) {
+        if (database.isFacebookLogined()) {
             facebookButton.setText(getText(R.string.activity_login_center_facebook_login));
         } else {
             facebookButton.setText(getText(R.string.activity_login_center_facebook));
         }
 
-        if(database.isKakaoLogined()) {
+        if (database.isKakaoLogined()) {
             kakaoButton.setText(getString(R.string.activity_login_center_kakao_login));
         } else {
             kakaoButton.setText(getString(R.string.activity_login_center_kakao));
+        }
+
+        if (database.isTwitterLogined()) {
+            twitterButton.setText(getString(R.string.activity_login_manage_twitter_login));
+        } else {
+            twitterButton.setText(getString(R.string.activity_login_manage_twitter));
         }
     }
 }
