@@ -16,12 +16,13 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
-import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.login.FacebookLoginWebViewActivity;
 import com.noverish.restapi.login.LoginDatabase;
 import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.login.TwitterLoginWebViewActivity;
 import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.twitter.TwitterArticleItem;
+import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterHtmlProcessor;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
@@ -82,14 +83,28 @@ public class HomeFragment extends Fragment {
         });
 
         twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
-        twitterWebView.loadUrl("https://twitter.com/");
+        twitterWebView.loadUrl("https://mobile.twitter.com/");
         twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(String htmlCode) {
-                LoginDatabase.getInstance().setTwitterLogined(!HttpConnectionThread.unicodeToString(Jsoup.parse(htmlCode).title()).contains("트위터에"));
+                LoginDatabase.getInstance().setTwitterLogined(Jsoup.parse(htmlCode).select("span.w-button-common.w-button-default").size() == 0);
 
                 if(LoginDatabase.getInstance().isTwitterLogined()) {
-                    TwitterHtmlProcessor.process(htmlCode);
+                    ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(htmlCode);
+                    ArrayList<TwitterArticleView> views = new ArrayList<>();
+
+                    for(TwitterArticleItem item : items) {
+                        views.add(new TwitterArticleView(getActivity(), item));
+                    }
+
+                    HomeFragment fragment = (HomeFragment) getActivity().getFragmentManager().findFragmentByTag("HomeFragment");
+                    if(fragment.getView() != null) {
+                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
+
+                        for (TwitterArticleView view : views) {
+                            mainLayout.addView(view);
+                        }
+                    }
                 } else {
                     startActivity(new Intent(getActivity(), SettingActivity.class));
                     startActivity(new Intent(getActivity(), LoginManageActivity.class));

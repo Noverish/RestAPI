@@ -24,6 +24,7 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
 
     public static Status nowSelectedStatus;
     private Status status;
+    private TwitterArticleItem item;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -37,6 +38,35 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         if(!isInEditMode()) {
             init(context);
         }
+    }
+
+    public TwitterArticleView(Context context, TwitterArticleItem item) {
+        super(context);
+        this.item = item;
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.twitter_article_view, this, true);
+
+
+        TextView isRetweetedTextView = (TextView) findViewById(R.id.twitter_article_view_is_retweeted);
+        TextView contentTextTextView = (TextView) findViewById(R.id.twitter_article_view_content);
+        profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
+        TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);
+        TextView screenNameTextView = (TextView) findViewById(R.id.twitter_article_view_screen_name);
+        TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
+        TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
+        mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+
+        isRetweetedTextView.setText(item.getHeader());
+        contentTextTextView.setText(item.getContent());
+        nameTextView.setText(item.getFullName());
+        screenNameTextView.setText(item.getScreenName());
+
+        Picasso.with(context).load(item.getProfileImageUrl()).into(profileImageView);
+
+        RestAPIClient.getInstance().process(item.getContent(), classificationTextView);
+
+        timeTextView.setText(item.getTime());
     }
 
     private void init(Context context) {

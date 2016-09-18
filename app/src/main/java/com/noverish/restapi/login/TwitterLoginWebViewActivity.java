@@ -29,6 +29,7 @@ public class TwitterLoginWebViewActivity extends AppCompatActivity {
             webView.setOnPageStartedListener(new OnPageStartedListener() {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    Log.d("twitter page started",url);
                     if(url.contains("https://mobile.twitter.com/")) {
                         Log.i("twitter login successed",url);
                         LoginDatabase.getInstance().setTwitterLogined(true);
