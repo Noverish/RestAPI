@@ -48,7 +48,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/twitter_article_view_name"
                         android:textStyle="bold"
-                        android:textSize="@dimen/twitter_article_name_text_size"/>
+                        android:textSize="@dimen/twitter_article_name_text_size"
+                        android:textColor="@color/twitter"/>
                     <TextView
                         android:id="@+id/twitter_article_view_screen_name"
                         android:layout_width="wrap_content"
@@ -87,6 +88,7 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/twitter_article_view_reply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -95,6 +97,7 @@
             style="?android:attr/borderlessButtonStyle"/>
 
         <Button
+            android:id="@+id/twitter_article_view_retweet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -103,6 +106,7 @@
             style="?android:attr/borderlessButtonStyle"/>
 
         <Button
+            android:id="@+id/twitter_article_view_favorite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

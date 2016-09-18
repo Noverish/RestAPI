@@ -30,6 +30,11 @@ public class TwitterHtmlProcessor {
             Elements contentElement = article.select("div.dir-ltr");
             Elements mediaElement = article.select("a.twitter_external_link.dir-ltr.tco-link.has-expanded-path");
 
+            Elements tweetActionElement = article.select("span.tweet-actions");
+            Element replyElement = tweetActionElement.select("a").get(0);
+            Element retweetElement = tweetActionElement.select("a").get(1);
+            Element favoriteElement = tweetActionElement.select("a").get(2);
+
             /*Log.d("headerDiv",headerElement.html());
             Log.d("profileImage",profileImageElement.html());
             Log.d("timeElement",timeElement.html());
@@ -47,6 +52,10 @@ public class TwitterHtmlProcessor {
             contentElement.select("a").remove();
             String content = HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n",""));
             String media = mediaElement.html();
+
+            String replyUrl = replyElement.attr("href");
+            String retweetUrl = retweetElement.attr("href");
+            String favoriteUrl = favoriteElement.attr("href");
 /*
             Log.d("header",header);
             Log.d("profileImageUrl",profileImageUrl);
@@ -56,8 +65,11 @@ public class TwitterHtmlProcessor {
             Log.d("content",content);
             Log.d("media",media);
             Log.d("asdf","---");*/
+            Log.d("reply",replyUrl);
+            Log.d("retweet",retweetUrl);
+            Log.d("favorite",favoriteUrl);
 
-            items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media));
+            items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweetUrl, favoriteUrl));
         }
 
         String moreUrl = document.select("div.w-button-more").select("a").attr("href");

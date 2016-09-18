@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
+import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
 import twitter4j.MediaEntity;
@@ -44,7 +46,9 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         super(context);
         this.item = item;
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+
+        final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.twitter_article_view, this, true);
 
 
@@ -67,6 +71,38 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         RestAPIClient.getInstance().process(item.getContent(), classificationTextView);
 
         timeTextView.setText(item.getTime());
+
+        Button replyButton = (Button) findViewById(R.id.twitter_article_view_reply);
+        Button retweetButton = (Button) findViewById(R.id.twitter_article_view_retweet);
+        Button favoriteButton = (Button) findViewById(R.id.twitter_article_view_favorite);
+
+        replyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TwitterArticleView.this.context, WebViewActivity.class);
+                intent.putExtra("url","https://mobile.twitter.com" + TwitterArticleView.this.item.getReplyUrl());
+                TwitterArticleView.this.context.startActivity(intent);
+            }
+        });
+
+        retweetButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TwitterArticleView.this.context, WebViewActivity.class);
+                intent.putExtra("url","https://mobile.twitter.com" + TwitterArticleView.this.item.getRetweetUrl());
+                TwitterArticleView.this.context.startActivity(intent);
+            }
+        });
+
+        favoriteButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TwitterArticleView.this.context, WebViewActivity.class);
+                intent.putExtra("url","https://mobile.twitter.com" + TwitterArticleView.this.item.getFavoriteUrl());
+                TwitterArticleView.this.context.startActivity(intent);
+            }
+        });
+
     }
 
     private void init(Context context) {

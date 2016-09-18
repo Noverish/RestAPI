@@ -11,8 +11,11 @@ public class TwitterArticleItem {
     private String time;
     private String content;
     private String media;
+    private String replyUrl;
+    private String retweetUrl;
+    private String favoriteUrl;
 
-    public TwitterArticleItem(String header, String profileImageUrl, String fullName, String screenName, String time, String content, String media) {
+    public TwitterArticleItem(String header, String profileImageUrl, String fullName, String screenName, String time, String content, String media, String replyUrl, String retweetUrl, String favoriteUrl) {
         this.header = header;
         this.profileImageUrl = profileImageUrl;
         this.fullName = fullName;
@@ -20,6 +23,9 @@ public class TwitterArticleItem {
         this.time = time;
         this.content = content;
         this.media = media;
+        this.replyUrl = replyUrl;
+        this.retweetUrl = retweetUrl;
+        this.favoriteUrl = favoriteUrl;
     }
 
     public String getHeader() {
@@ -48,5 +54,17 @@ public class TwitterArticleItem {
 
     public String getMedia() {
         return media;
+    }
+
+    public String getReplyUrl() {
+        return replyUrl;
+    }
+
+    public String getRetweetUrl() {
+        return retweetUrl;
+    }
+
+    public String getFavoriteUrl() {
+        return favoriteUrl;
     }
 }

@@ -50,6 +50,7 @@
         <activity android:name=".login.FacebookLoginWebViewActivity" />
         <activity android:name=".login.KakaoLoginWebViewActivity" />
         <activity android:name=".login.TwitterLoginWebViewActivity" />
+        <activity android:name=".webview.WebViewActivity" />
     </application>
 
 </manifest>

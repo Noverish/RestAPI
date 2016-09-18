@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/facebook_article_background">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/article_facebook_classification"
@@ -47,7 +46,8 @@
                 android:layout_weight="1"
                 android:text="@string/facebook_article_default_title"
                 android:textSize="17sp"
-                android:textColor="@color/pure_dark"/>
+                android:textStyle="bold"
+                android:textColor="@color/facebook"/>
 
             <TextView
                 android:id="@+id/facebook_article_time"
