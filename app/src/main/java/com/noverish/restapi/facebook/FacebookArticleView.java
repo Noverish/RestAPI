@@ -31,7 +31,10 @@ public class FacebookArticleView extends LinearLayout {
         RestAPIClient.getInstance().process(article.content, classification);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
-        header.setText(article.header);
+        if(article.header == null || article.header.equals(""))
+            header.setVisibility(GONE);
+        else
+            header.setText(article.header);
 
         ImageView profileImg = (ImageView) findViewById(R.id.facebook_article_profile_img);
         Picasso.with(context).load(article.profileImgUrl).into(profileImg);

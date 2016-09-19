@@ -61,7 +61,11 @@ public class TwitterArticleView extends LinearLayout implements View.OnClickList
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
 
-        isRetweetedTextView.setText(item.getHeader());
+        if(item.getHeader() == null || item.getHeader().equals(""))
+            isRetweetedTextView.setVisibility(GONE);
+        else
+            isRetweetedTextView.setText(item.getHeader());
+
         contentTextTextView.setText(item.getContent());
         nameTextView.setText(item.getFullName());
         screenNameTextView.setText(item.getScreenName());

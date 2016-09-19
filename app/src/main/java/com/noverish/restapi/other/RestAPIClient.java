@@ -1,6 +1,7 @@
 package com.noverish.restapi.other;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -207,6 +208,8 @@ public class RestAPIClient extends Thread {
                     public void run() {
                         if(classification != null)
                             textView.setText(classification.classification);
+                        else
+                            textView.setVisibility(View.GONE);
                     }
                 });
             }
