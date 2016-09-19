@@ -131,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/facebook_article_default_like_button"
+            android:textSize="@dimen/article_bottom_button_text_size"
             style="?android:attr/borderlessButtonStyle"/>
 
         <Button
@@ -139,6 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/facebook_article_default_comment_button"
+            android:textSize="@dimen/article_bottom_button_text_size"
             style="?android:attr/borderlessButtonStyle"/>
 
         <Button
@@ -147,6 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/facebook_article_default_share_button"
+            android:textSize="@dimen/article_bottom_button_text_size"
             style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 

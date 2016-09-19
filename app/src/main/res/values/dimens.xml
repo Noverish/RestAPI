@@ -14,15 +14,15 @@
     <dimen name="nav_icon_size">64dp</dimen>
 
     <dimen name="article_header_vertical">8dp</dimen>
-    <dimen name="article_inside_margin">12dp</dimen>
+    <dimen name="article_inside_margin">8dp</dimen>
     <dimen name="article_profile_size">50dp</dimen>
     <dimen name="article_title_text_size">17sp</dimen>
     <dimen name="article_title_margin_left">8dp</dimen>
     <dimen name="article_content_margin_top">8dp</dimen>
+    <dimen name="article_bottom_button_text_size">12sp</dimen>
     <dimen name="article_margin_bottom">16dp</dimen>
 
     <dimen name="twitter_article_screen_name_left_margin">4dp</dimen>
     <dimen name="twitter_article_content_top_margin">8dp</dimen>
-    <dimen name="twitter_article_bottom_button_text_size">12sp</dimen>
 
 </resources>
