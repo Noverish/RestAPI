@@ -2,86 +2,121 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical"
-    android:padding="3dp">
+    android:background="@color/pure_white">
 
     <TextView
         android:id="@+id/twitter_article_view_classification"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/article_inside_margin"
+        android:gravity="end"/>
 
-    <TextView
-        android:id="@+id/twitter_article_view_is_retweeted"
+    <LinearLayout
+        android:id="@+id/twitter_article_header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/twitter_gray_text"/>
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/twitter_article_view_is_retweeted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/article_inside_margin"
+            android:text="누가 리트윗 했습니다"
+            android:textColor="@color/twitter_gray_text"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/facebook_window_background" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/article_inside_margin"
+        android:layout_marginStart="@dimen/article_inside_margin"
+        android:layout_marginEnd="@dimen/article_inside_margin"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/twitter_article_view_profile_image_view"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"/>
-
-        <LinearLayout
-            android:id="@+id/example001"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/twitter_article_inside_layout_padding">
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/twitter_article_view_profile_image_view"
+                android:layout_width="@dimen/article_profile_size"
+                android:layout_height="@dimen/article_profile_size"
+                android:layout_marginEnd="@dimen/article_title_margin_left"
+                android:background="@drawable/default_profile_image"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/twitter_article_view_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/twitter_article_view_name"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/twitter_article_name_text_size"
-                        android:textColor="@color/twitter"/>
-                    <TextView
-                        android:id="@+id/twitter_article_view_screen_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/twitter_article_screen_name_left_margin"
-                        android:text="@string/twitter_article_view_screen_name"
-                        android:textColor="@color/twitter_gray_text"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/twitter_article_view_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/twitter_article_view_time"/>
-
-                <TextView
-                    android:id="@+id/twitter_article_view_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/twitter_article_content_top_margin"
-                    android:text="@string/twitter_article_view_text"/>
+                android:layout_toEndOf="@id/twitter_article_view_profile_image_view"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/twitter_article_view_media_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/twitter_article_view_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/twitter_article_view_name"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/article_title_text_size"
+                            android:textColor="@color/twitter"/>
+
+                        <TextView
+                            android:id="@+id/twitter_article_view_screen_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/twitter_article_screen_name_left_margin"
+                            android:text="@string/twitter_article_view_screen_name"
+                            android:textColor="@color/twitter_gray_text"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/twitter_article_view_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/twitter_article_view_time"/>
+
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/twitter_article_view_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/article_content_margin_top"
+            android:text="@string/twitter_article_view_text"/>
+
+        <LinearLayout
+            android:id="@+id/twitter_article_view_media_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/article_content_margin_top"
+            android:orientation="vertical"/>
+
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/article_inside_margin"
+        android:background="@color/facebook_comment_background" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -122,10 +157,4 @@
             android:textSize="@dimen/twitter_article_bottom_button_text_size"
             style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/pure_dark"
-        android:layout_alignParentBottom="true"/>
 </LinearLayout>

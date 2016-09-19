@@ -1,7 +1,6 @@
 package com.noverish.restapi.other;
 
 import android.os.Handler;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -162,7 +161,11 @@ public class RestAPIClient extends Thread {
     }
 
     public void process(String content, final OnSemanticProcessFinishedListener listener) {
-        content = content.replaceAll("[\\s]","%20");
+        if(content == null)
+            content = "";
+        else
+            content = content.replaceAll("[\\s]","%20");
+
         final String urlStr = openWeatherURL + "?query='" + content + "'";
 
         Thread thread = new Thread(new Runnable() {
