@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/twitter_article_view_is_retweeted"
+            android:id="@+id/twitter_article_view_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/article_inside_margin"

@@ -51,23 +51,23 @@ public class TwitterHtmlProcessor {
             String screenName = screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","");
             contentElement.select("a").remove();
             String content = HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n",""));
-            String media = mediaElement.html();
+            String media = mediaElement.attr("data-url");
 
             String replyUrl = replyElement.attr("href");
             String retweetUrl = retweetElement.attr("href");
             String favoriteUrl = favoriteElement.attr("href");
-/*
-            Log.d("header",header);
+
+            /*Log.d("header",header);
             Log.d("profileImageUrl",profileImageUrl);
             Log.d("time",time);
             Log.d("name",name);
             Log.d("screenName",screenName);
             Log.d("content",content);
             Log.d("media",media);
-            Log.d("asdf","---");*/
+            Log.d("asdf","---");
             Log.d("reply",replyUrl);
             Log.d("retweet",retweetUrl);
-            Log.d("favorite",favoriteUrl);
+            Log.d("favorite",favoriteUrl);*/
 
             items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweetUrl, favoriteUrl));
         }

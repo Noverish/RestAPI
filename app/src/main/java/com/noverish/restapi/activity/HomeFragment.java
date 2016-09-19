@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
                     ArrayList<TwitterArticleView> views = new ArrayList<>();
 
                     for(TwitterArticleItem item : items) {
-                        views.add(new TwitterArticleView(getActivity(), item));
+                        views.add(new TwitterArticleView(getActivity(), item, handler));
                     }
 
                     HomeFragment fragment = (HomeFragment) getActivity().getFragmentManager().findFragmentByTag("HomeFragment");
@@ -112,27 +112,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
-
-        /*Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                TwitterClient twitterClient = TwitterClient.getInstance();
-                List<Status> statuses = twitterClient.getTimeLine(1);
-                for (Status status : statuses) {
-                    final TwitterArticleView view = new TwitterArticleView(getActivity(), status);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            view.downloadImages();
-                            mainLayout.addView(view);
-                        }
-                    });
-                }
-            }
-        });
-        thread.start();*/
-
 
         return view;
     }

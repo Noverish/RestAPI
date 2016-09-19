@@ -112,7 +112,7 @@ public class TwitterFragment extends BaseFragment {
 
         @Override
         public void run() {
-            handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
+//            handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
         }
     }
 

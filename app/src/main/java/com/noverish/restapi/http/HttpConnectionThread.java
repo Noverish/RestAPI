@@ -29,21 +29,31 @@ public class HttpConnectionThread extends Thread {
         this.requestMethod = requestMethod;
         this.htmlCode = "There is no html code";
 
-        if(urlStr.substring(0,5).matches("https")) {
+        if(urlStr == null || urlStr.equals("")) {
+            Log.e("HttpConnectionThread", "url is null or no length - " + urlStr);
+            return;
+        }
+
+        if(urlStr.length() <= 5) {
+            Log.e("HttpConnectionThread", "too short url - " + urlStr);
+            return;
+        }
+
+
+        if (urlStr.substring(0, 5).matches("https")) {
             isItHttps = true;
-        } else if(urlStr.substring(0,5).matches("http:")) {
+        } else if (urlStr.substring(0, 5).matches("http:")) {
             isItHttps = false;
         } else {
             isItHttps = false;
-            Log.e("[Log]Error", "HttpConnectionThread.constructor - I don't know it is https or http");
+            Log.e("HttpConnectionThread", "I don't know it is https or http - " + urlStr);
+            return;
         }
+
+        start();
     }
 
     public void run() {
-        request();
-    }
-
-    private void request() {
         try {
             BufferedReader reader = null;
             URL url = new URL(urlStr);
@@ -176,61 +186,11 @@ public class HttpConnectionThread extends Thread {
 
 
     public String getHtmlCode() {
-        return htmlCode;
-    }
-
-    public static String extractHtmlTag(String htmlCode, String tag, String attrs) throws NoSuchTagException {
-        htmlCode = htmlCode.replaceAll(">[\n\t ]*<", "><");
-        StringBuilder ans = new StringBuilder();
-
-        Pattern pattern = Pattern.compile("<" + tag + "[^>]*" + attrs + "[^>]*>");
-        Matcher matcher = pattern.matcher(htmlCode);
-        if(!matcher.find())
-            throw new NoSuchTagException();
-        String nowTag = matcher.group();
-        String endTag = "</" + tag + ">";
-
-        htmlCode = htmlCode.substring(htmlCode.indexOf(nowTag));
-
-        int subTagIndex = htmlCode.substring(1).indexOf("<" + tag) + 1;
-        int endTagIndex = htmlCode.indexOf(endTag);
-
-        if (subTagIndex <= 0 || subTagIndex > endTagIndex)
-            return htmlCode.substring(0, endTagIndex) + endTag;
-        else {
-            do {
-                String inFront = htmlCode.substring(0, subTagIndex);
-                ans.append(inFront);
-                htmlCode = htmlCode.replace(inFront, "");
-
-                String wholeSubTag = extractHtmlTag(htmlCode, tag, "");
-                ans.append(wholeSubTag);
-
-                htmlCode = htmlCode.substring(wholeSubTag.length());
-
-                subTagIndex = htmlCode.indexOf("<" + tag);
-                endTagIndex = htmlCode.indexOf(endTag);
-                try {
-                    if (subTagIndex < 0 || subTagIndex > endTagIndex) {
-                        ans.append(htmlCode.substring(0, endTagIndex));
-                        ans.append(endTag);
-                        break;
-                    }
-                } catch (StringIndexOutOfBoundsException ex) {
-                    ex.printStackTrace();
-                    Log.e("subTagIndex",subTagIndex + "");
-                    Log.e("subTag","<" + tag);
-                    Log.e("endTagIndex",endTagIndex + "");
-                    Log.e("endTag",endTag);
-                    Log.e("htmlCode",htmlCode);
-                }
-            } while (true);
+        try {
+            join();
+            return htmlCode;
+        } catch (Exception ex) {
+            return null;
         }
-
-        return ans.toString();
-    }
-
-    public static class NoSuchTagException extends Exception {
-
     }
 }
