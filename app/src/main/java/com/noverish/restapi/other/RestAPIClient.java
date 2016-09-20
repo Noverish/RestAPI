@@ -172,23 +172,25 @@ public class RestAPIClient extends Thread {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Document document = Jsoup.connect(urlStr).post();
-                    Element element = document.select("table[width=\"650\"]").select("tr").first();
+                synchronized (RestAPIClient.this) {
+                    try {
+                        Document document = Jsoup.connect(urlStr).post();
+                        Element element = document.select("table[width=\"650\"]").select("tr").first();
 
-                    if(element != null) {
-                        String matchCase = element.select("td[width=\"100\"]").html();
-                        String classificationStr = element.select("td[width=\"200\"]").html().replaceAll("<[^>]*>","");
-                        String percentage = element.select("td[width=\"300\"]").html();
+                        if (element != null) {
+                            String matchCase = element.select("td[width=\"100\"]").html();
+                            String classificationStr = element.select("td[width=\"200\"]").html().replaceAll("<[^>]*>", "");
+                            String percentage = element.select("td[width=\"300\"]").html();
 
-                        SemanticClassification classification = new SemanticClassification(matchCase, classificationStr, percentage);
+                            SemanticClassification classification = new SemanticClassification(matchCase, classificationStr, percentage);
 
-                        listener.onSemanticProcessFinished(classification);
-                    } else {
-                        listener.onSemanticProcessFinished(null);
+                            listener.onSemanticProcessFinished(classification);
+                        } else {
+                            listener.onSemanticProcessFinished(null);
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
                 }
             }
         });

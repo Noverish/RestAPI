@@ -35,6 +35,10 @@ import java.util.ArrayList;
  * Created by Noverish on 2016-08-21.
  */
 public class HomeFragment extends Fragment {
+    private Runnable onFirstLoadFinishedRunnable;
+    private boolean facebookFirstLoaded = false;
+    private boolean twitterFirstLoaded = false;
+
     private HtmlParseWebView facebookWebView;
     private HtmlParseWebView twitterWebView;
 
@@ -79,6 +83,10 @@ public class HomeFragment extends Fragment {
                     startActivity(new Intent(getActivity(), LoginManageActivity.class));
                     startActivity(new Intent(getActivity(), FacebookLoginWebViewActivity.class));
                 }
+
+                facebookFirstLoaded = true;
+                if(twitterFirstLoaded && onFirstLoadFinishedRunnable != null)
+                    onFirstLoadFinishedRunnable.run();
             }
         });
 
@@ -110,6 +118,10 @@ public class HomeFragment extends Fragment {
                     startActivity(new Intent(getActivity(), LoginManageActivity.class));
                     startActivity(new Intent(getActivity(), TwitterLoginWebViewActivity.class));
                 }
+
+                twitterFirstLoaded = true;
+                if(facebookFirstLoaded && onFirstLoadFinishedRunnable != null)
+                    onFirstLoadFinishedRunnable.run();
             }
         });
 
@@ -123,5 +135,9 @@ public class HomeFragment extends Fragment {
 
             Log.i("ScrollView","bottom");
         }
+    }
+
+    public void setOnFirstLoadFinishedRunnable(Runnable onFirstLoadFinishedRunnable) {
+        this.onFirstLoadFinishedRunnable = onFirstLoadFinishedRunnable;
     }
 }

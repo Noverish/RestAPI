@@ -21,14 +21,6 @@
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name=".activity.SplashActivity"
-            android:theme="@style/SplashActivityStyle">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -36,12 +28,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="@string/kakao_scheme"
                     android:host="@string/kakaostory_host" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity" />
 
         <activity android:name=".kakao.KakaoLoginActivity" />
-        <activity android:name=".activity.LoginCenterActivity" />
 
         <activity android:name=".login.LoginManageActivity" />
         <activity android:name=".activity.SettingActivity" />

@@ -22,19 +22,11 @@ public class HtmlParseWebView extends WebView {
     private String nowUrl;
     private String htmlCode;
 
-    public HtmlParseWebView(Context context) {
-        super(context);
-        init();
-    }
-
     public HtmlParseWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
 
-    public HtmlParseWebView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
+        if(!isInEditMode())
+            init();
     }
 
     private void init() {

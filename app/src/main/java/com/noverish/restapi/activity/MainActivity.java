@@ -75,43 +75,17 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
+        fab.setVisibility(View.GONE);
+        Essentials.changeFragment(this, R.id.activity_main_splash_fragment_layout, new SplashFragment());
 
-        /*HtmlParseWebView kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
-        kakaoWebView.loadUrl(getString(R.string.kakao_login_url));
-        kakaoWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+        HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setOnFirstLoadFinishedRunnable(new Runnable() {
             @Override
-            public void onHtmlLoadSuccess(String htmlCode) {
-                LoginDatabase.getInstance().setKakaoLogined(Jsoup.parse(htmlCode).select("div.login_wrap").size() == 0);
-
-                if(LoginDatabase.getInstance().isKakaoLogined()) {
-                    ArrayList<KakaoArticleItem> items = KakaoHtmlCodeProcessor.process(htmlCode);
-                    ArrayList<KakaoArticleView> views = new ArrayList<>();
-
-                    for(KakaoArticleItem item : items) {
-                        views.add(new KakaoArticleView(MainActivity.this, item));
-                    }
-
-                    HomeFragment fragment = (HomeFragment) MainActivity.this.getFragmentManager().findFragmentByTag("HomeFragment");
-                    if(fragment.getView() != null) {
-                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
-
-                        for (KakaoArticleView view : views) {
-                            mainLayout.addView(view);
-                        }
-                    }
-                } else {
-                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
-                    startActivity(new Intent(MainActivity.this, LoginManageActivity.class));
-                    startActivity(new Intent(MainActivity.this, KakaoLoginWebViewActivity.class));
-                }
-
+            public void run() {
+                MainActivity.this.findViewById(R.id.activity_main_splash_fragment_layout).setVisibility(View.GONE);
             }
-        });*/
-
-
-
-
+        });
+        Essentials.changeFragment(this, R.id.content_main_fragment_layout, homeFragment);
 
     }
 
@@ -150,7 +124,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, LoginCenterActivity.class));
+
         } else if(id == R.id.action_favorite) {
             nowFragment.onFreshButtonClicked();
         }
