@@ -12,10 +12,12 @@ public class TwitterArticleItem {
     private String content;
     private String media;
     private String replyUrl;
+    private boolean retweeted;
     private String retweetUrl;
+    private boolean favorited;
     private String favoriteUrl;
 
-    public TwitterArticleItem(String header, String profileImageUrl, String fullName, String screenName, String time, String content, String media, String replyUrl, String retweetUrl, String favoriteUrl) {
+    public TwitterArticleItem(String header, String profileImageUrl, String fullName, String screenName, String time, String content, String media, String replyUrl, boolean retweeted, String retweetUrl, boolean favorited, String favoriteUrl) {
         this.header = header;
         this.profileImageUrl = profileImageUrl;
         this.fullName = fullName;
@@ -24,7 +26,9 @@ public class TwitterArticleItem {
         this.content = content;
         this.media = media;
         this.replyUrl = replyUrl;
+        this.retweeted = retweeted;
         this.retweetUrl = retweetUrl;
+        this.favorited = favorited;
         this.favoriteUrl = favoriteUrl;
     }
 
@@ -60,8 +64,16 @@ public class TwitterArticleItem {
         return replyUrl;
     }
 
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
     public String getRetweetUrl() {
         return retweetUrl;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
     }
 
     public String getFavoriteUrl() {

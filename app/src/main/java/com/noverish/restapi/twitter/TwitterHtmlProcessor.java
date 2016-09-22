@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * Created by Noverish on 2016-09-18.
  */
 public class TwitterHtmlProcessor {
+    public static String nextPageUrl;
+
     public static ArrayList<TwitterArticleItem> process(String html) {
         ArrayList<TwitterArticleItem> items = new ArrayList<>();
 
@@ -35,15 +37,6 @@ public class TwitterHtmlProcessor {
             Element retweetElement = tweetActionElement.select("a").get(1);
             Element favoriteElement = tweetActionElement.select("a").get(2);
 
-            /*Log.d("headerDiv",headerElement.html());
-            Log.d("profileImage",profileImageElement.html());
-            Log.d("timeElement",timeElement.html());
-            Log.d("nameElement",nameElement.html());
-            Log.d("screenNameElement",screenNameElement.html());
-            Log.d("contentElement",contentElement.html());
-            Log.d("mediaElement",mediaElement.html());
-            Log.d("asdf","---");*/
-
             String header = HttpConnectionThread.unicodeToString(headerElement.html());
             String profileImageUrl = profileImageElement.attr("src");
             String time = HttpConnectionThread.unicodeToString(timeElement.html());
@@ -57,23 +50,15 @@ public class TwitterHtmlProcessor {
             String retweetUrl = retweetElement.attr("href");
             String favoriteUrl = favoriteElement.attr("href");
 
-            /*Log.d("header",header);
-            Log.d("profileImageUrl",profileImageUrl);
-            Log.d("time",time);
-            Log.d("name",name);
-            Log.d("screenName",screenName);
-            Log.d("content",content);
-            Log.d("media",media);
-            Log.d("asdf","---");
-            Log.d("reply",replyUrl);
-            Log.d("retweet",retweetUrl);
-            Log.d("favorite",favoriteUrl);*/
+            boolean retweeted = retweetElement.select("span").first().className().contains("active");
+            boolean favorited = favoriteElement.select("span").first().className().contains("active");
 
-            items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweetUrl, favoriteUrl));
+            items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweeted, retweetUrl, favorited, favoriteUrl));
         }
 
         String moreUrl = document.select("div.w-button-more").select("a").attr("href");
         Log.e("moreUrl", moreUrl);
+        nextPageUrl = moreUrl;
 
         return items;
     }

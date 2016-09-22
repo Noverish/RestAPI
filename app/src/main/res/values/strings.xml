@@ -31,7 +31,9 @@
     <string name="twitter_article_view_time">n시간</string>
     <string name="twitter_article_view_reply">답글하기</string>
     <string name="twitter_article_view_retweet">리트윗</string>
+    <string name="twitter_article_view_retweetd">리트윗 취소</string>
     <string name="twitter_article_view_like">마음</string>
+    <string name="twitter_article_view_favorited">마음 취소</string>
     <string name="twitter_article_view_more">더보기</string>
 
     <string name="facebook_article_default_header">임꺽정님이 좋아합니다.</string>

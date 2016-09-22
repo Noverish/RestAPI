@@ -2,6 +2,7 @@ package com.noverish.restapi.twitter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -87,9 +88,9 @@ public class TwitterArticleView extends LinearLayout {
         replyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TwitterArticleView.this.context, WebViewActivity.class);
-                intent.putExtra("url","https://mobile.twitter.com" + TwitterArticleView.this.item.getReplyUrl());
-                TwitterArticleView.this.context.startActivity(intent);
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("url","https://mobile.twitter.com" + item.getReplyUrl());
+                context.startActivity(intent);
             }
         });
 
@@ -97,11 +98,15 @@ public class TwitterArticleView extends LinearLayout {
         retweetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TwitterArticleView.this.context, WebViewActivity.class);
-                intent.putExtra("url","https://mobile.twitter.com" + TwitterArticleView.this.item.getRetweetUrl());
-                TwitterArticleView.this.context.startActivity(intent);
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("url","https://mobile.twitter.com" + item.getRetweetUrl());
+                context.startActivity(intent);
             }
         });
+        if(item.isRetweeted()) {
+            retweetButton.setTextColor(ContextCompat.getColor(context, R.color.twitter_retweet));
+            retweetButton.setText(R.string.twitter_article_view_retweetd);
+        }
 
         Button favoriteButton = (Button) findViewById(R.id.twitter_article_view_favorite);
         favoriteButton.setOnClickListener(new OnClickListener() {
@@ -112,5 +117,9 @@ public class TwitterArticleView extends LinearLayout {
                 TwitterArticleView.this.context.startActivity(intent);
             }
         });
+        if(item.isFavorited()) {
+            favoriteButton.setTextColor(ContextCompat.getColor(context, R.color.twitter_favorite));
+            favoriteButton.setText(R.string.twitter_article_view_favorited);
+        }
     }
 }
