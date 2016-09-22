@@ -28,6 +28,7 @@ import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 
@@ -95,33 +96,43 @@ public class HomeFragment extends Fragment {
         twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(String htmlCode) {
-                LoginDatabase.getInstance().setTwitterLogined(Jsoup.parse(htmlCode).select("span.w-button-common.w-button-default").size() == 0);
+                Document document = Jsoup.parse(htmlCode);
 
-                if(LoginDatabase.getInstance().isTwitterLogined()) {
-                    ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(htmlCode);
-                    ArrayList<TwitterArticleView> views = new ArrayList<>();
+                if(document.body().classNames().contains("AppPage-body")) {
+                    Log.i("Twitter","Newer Version");
 
-                    for(TwitterArticleItem item : items) {
-                        views.add(new TwitterArticleView(getActivity(), item, handler));
-                    }
-
-                    HomeFragment fragment = (HomeFragment) getActivity().getFragmentManager().findFragmentByTag("HomeFragment");
-                    if(fragment.getView() != null) {
-                        LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
-
-                        for (TwitterArticleView view : views) {
-                            mainLayout.addView(view);
-                        }
-                    }
+                    LoginDatabase.getInstance().setTwitterLogined(document.select("div._1eF_MiFx").size() != 0);
                 } else {
-                    startActivity(new Intent(getActivity(), SettingActivity.class));
-                    startActivity(new Intent(getActivity(), LoginManageActivity.class));
-                    startActivity(new Intent(getActivity(), TwitterLoginWebViewActivity.class));
-                }
+                    Log.i("Twitter","Older Version");
 
-                twitterFirstLoaded = true;
-                if(facebookFirstLoaded && onFirstLoadFinishedRunnable != null)
-                    onFirstLoadFinishedRunnable.run();
+                    LoginDatabase.getInstance().setTwitterLogined(document.select("table.tweet").size() != 0);
+
+                    if(LoginDatabase.getInstance().isTwitterLogined()) {
+                        ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(htmlCode);
+                        ArrayList<TwitterArticleView> views = new ArrayList<>();
+
+                        for(TwitterArticleItem item : items) {
+                            views.add(new TwitterArticleView(getActivity(), item, handler));
+                        }
+
+                        HomeFragment fragment = (HomeFragment) getActivity().getFragmentManager().findFragmentByTag("HomeFragment");
+                        if(fragment.getView() != null) {
+                            LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
+
+                            for (TwitterArticleView view : views) {
+                                mainLayout.addView(view);
+                            }
+                        }
+                    } else {
+                        startActivity(new Intent(getActivity(), SettingActivity.class));
+                        startActivity(new Intent(getActivity(), LoginManageActivity.class));
+                        startActivity(new Intent(getActivity(), TwitterLoginWebViewActivity.class));
+                    }
+
+                    twitterFirstLoaded = true;
+                    if(facebookFirstLoaded && onFirstLoadFinishedRunnable != null)
+                        onFirstLoadFinishedRunnable.run();
+                }
             }
         });
 
