@@ -62,4 +62,23 @@ public class TwitterHtmlProcessor {
 
         return items;
     }
+
+    public static ArrayList<TwitterArticleItem> processNew(String html) {
+        ArrayList<TwitterArticleItem> items = new ArrayList<>();
+
+        Document document = Jsoup.parse(html);
+        Elements articles = document.select("div._1eF_MiFx");
+
+        for(Element article : articles) {
+            Element headerElement = article.select("div[class=\"_1axCTvm5 _2rKrV7oY _3f2NsD-H\"]").first();
+            Element profileImageElement = article.select("div[class=\"_1RntlttV _1-I0zYji\"]").first();
+            Element timeElement = article.select("time").first();
+            Element nameElement = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]").first();
+            Element screenNameElement = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]").first();
+            Element contentElement = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]").first();
+            Element mediaElement = article.select("div[class=\"_2di_LxCm\"]").first();
+        }
+
+        return null;
+    };
 }
