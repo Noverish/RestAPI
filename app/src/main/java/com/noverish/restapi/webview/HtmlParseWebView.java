@@ -9,8 +9,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
-
 /**
  * Created by Noverish on 2016-09-07.
  */
@@ -53,7 +51,7 @@ public class HtmlParseWebView extends WebView {
             nowUrl = url;
 
             if(onPageFinishedListener != null)
-                onPageFinishedListener.onPageFinished();
+                onPageFinishedListener.onPageFinished(view, url);
 
             extractHtml();
         }

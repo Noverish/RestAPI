@@ -33,7 +33,7 @@ import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
-import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 

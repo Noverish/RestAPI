@@ -20,7 +20,7 @@ import com.noverish.restapi.login.FacebookLoginWebViewActivity;
 import com.noverish.restapi.login.LoginDatabase;
 import com.noverish.restapi.login.LoginManageActivity;
 import com.noverish.restapi.login.TwitterLoginWebViewActivity;
-import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterHtmlProcessor;

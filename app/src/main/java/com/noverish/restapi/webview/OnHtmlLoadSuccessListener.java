@@ -1,4 +1,4 @@
-package com.noverish.restapi.other;
+package com.noverish.restapi.webview;
 
 /**
  * Created by Noverish on 2016-08-25.

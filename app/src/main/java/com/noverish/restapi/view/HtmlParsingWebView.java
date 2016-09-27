@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
 
 import com.noverish.restapi.http.ImagePicassoThread;
 import com.noverish.restapi.kakao.ExtractHtmlThread;
-import com.noverish.restapi.other.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
 import java.util.ArrayList;
 
