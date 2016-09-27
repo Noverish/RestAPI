@@ -19,16 +19,12 @@ import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.login.FacebookLoginWebViewActivity;
 import com.noverish.restapi.login.LoginDatabase;
 import com.noverish.restapi.login.LoginManageActivity;
-import com.noverish.restapi.login.TwitterLoginWebViewActivity;
-import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.twitter.TwitterArticleItem;
-import com.noverish.restapi.twitter.TwitterArticleView;
-import com.noverish.restapi.twitter.TwitterHtmlProcessor;
+import com.noverish.restapi.twitter.TwitterWebViewClient;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
+import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 
@@ -40,8 +36,9 @@ public class HomeFragment extends Fragment {
     private boolean facebookFirstLoaded = false;
     private boolean twitterFirstLoaded = false;
 
+    private TwitterWebViewClient twitterWebViewClient;
+
     private HtmlParseWebView facebookWebView;
-    private HtmlParseWebView twitterWebView;
 
     private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
     private LinearLayout mainLayout;
@@ -91,50 +88,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
-        twitterWebView.loadUrl("https://mobile.twitter.com/");
-        twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
-            @Override
-            public void onHtmlLoadSuccess(String htmlCode) {
-                Document document = Jsoup.parse(htmlCode);
+        HtmlParseWebView twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
 
-                if(document.body().classNames().contains("AppPage-body")) {
-                    Log.i("Twitter","Newer Version");
+        twitterWebViewClient = TwitterWebViewClient.getInstance();
+        twitterWebViewClient.setData(twitterWebView, mainLayout, handler);
 
-                    LoginDatabase.getInstance().setTwitterLogined(document.select("div._1eF_MiFx").size() != 0);
-                } else {
-                    Log.i("Twitter","Older Version");
-
-                    LoginDatabase.getInstance().setTwitterLogined(document.select("table.tweet").size() != 0);
-
-                    if(LoginDatabase.getInstance().isTwitterLogined()) {
-                        ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(htmlCode);
-                        ArrayList<TwitterArticleView> views = new ArrayList<>();
-
-                        for(TwitterArticleItem item : items) {
-                            views.add(new TwitterArticleView(getActivity(), item, handler));
-                        }
-
-                        HomeFragment fragment = (HomeFragment) getActivity().getFragmentManager().findFragmentByTag("HomeFragment");
-                        if(fragment.getView() != null) {
-                            LinearLayout mainLayout = (LinearLayout) fragment.getView().findViewById(R.id.fragment_home_layout_main);
-
-                            for (TwitterArticleView view : views) {
-                                mainLayout.addView(view);
-                            }
-                        }
-                    } else {
-                        startActivity(new Intent(getActivity(), SettingActivity.class));
-                        startActivity(new Intent(getActivity(), LoginManageActivity.class));
-                        startActivity(new Intent(getActivity(), TwitterLoginWebViewActivity.class));
-                    }
-
-                    twitterFirstLoaded = true;
-                    if(facebookFirstLoaded && onFirstLoadFinishedRunnable != null)
-                        onFirstLoadFinishedRunnable.run();
-                }
-            }
-        });
+        onFirstLoadFinishedRunnable.run();
 
         return view;
     }
@@ -145,6 +104,8 @@ public class HomeFragment extends Fragment {
             super.handleMessage(msg);
 
             Log.i("ScrollView","bottom");
+
+            twitterWebViewClient.loadNextPage();
         }
     }
 
