@@ -15,14 +15,15 @@ import com.noverish.restapi.other.RestAPIClient;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
+import twitter4j.MediaEntity;
+import twitter4j.Status;
+
 /**
  * Created by Noverish on 2016-05-30.
  */
 public class TwitterArticleView extends LinearLayout {
     private Context context;
     private android.os.Handler handler;
-
-    private LinearLayout mediaLayout;
 
     private TwitterArticleItem item;
 
@@ -68,21 +69,14 @@ public class TwitterArticleView extends LinearLayout {
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(item.getTime());
 
-        /*mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
-        if(item.getMedia() != null && !item.getMedia().equals("")) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    HttpConnectionThread thread1 = new HttpConnectionThread(item.getMedia(), "", "GET");
-                    Elements imageElements = Jsoup.parse(thread1.getHtmlCode()).select("div.media").first().select("img");
-
-                    for (Element ele : imageElements) {
-                        mediaLayout.addView(new WebDownloadImageView(context, ele.attr("src"), handler));
-                    }
-                }
-            });
+        LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+        try {
+            Long tweetId = Long.parseLong(item.getMedia().split("[/]")[5]);
+            Thread thread = new Thread(new CustomRunnable(mediaLayout, tweetId));
             thread.start();
-        }*/
+        } catch (Exception ex) {
+
+        }
 
         Button replyButton = (Button) findViewById(R.id.twitter_article_view_reply);
         replyButton.setOnClickListener(new OnClickListener() {
@@ -120,6 +114,37 @@ public class TwitterArticleView extends LinearLayout {
         if(item.isFavorited()) {
             favoriteButton.setTextColor(ContextCompat.getColor(context, R.color.twitter_favorite));
             favoriteButton.setText(R.string.twitter_article_view_favorited);
+        }
+    }
+
+    class CustomRunnable implements Runnable {
+        LinearLayout mediaLayout;
+        long tweetId;
+
+        CustomRunnable(LinearLayout mediaLayout, long tweetId) {
+            this.mediaLayout = mediaLayout;
+            this.tweetId = tweetId;
+        }
+
+        @Override
+        public void run() {
+            Twitter4jClient client = Twitter4jClient.getInstance();
+
+            Status status = client.getStatusById(tweetId);
+
+            MediaEntity[] entities = status.getMediaEntities();
+            for(MediaEntity entity : entities) {
+                final String imageUrl = entity.getMediaURL();
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageView imageView = new ImageView(context);
+                        Picasso.with(context).load(imageUrl).into(imageView);
+                        mediaLayout.addView(imageView);
+                    }
+                });
+            }
         }
     }
 }

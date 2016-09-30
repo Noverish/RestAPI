@@ -101,90 +101,13 @@ public class Twitter4jClient {
         thread.start();
     }
 
-    private Status status;
-    public Status getStatusById(final long tweetId) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    status = twitter.showStatus(tweetId);
-                    if (status == null) { //
-                        // don't know if needed - T4J docs are very bad
-                    } else {
-                        System.out.println("@" + status.getUser().getScreenName()
-                                + " - " + status.getText());
-                    }
-                } catch (TwitterException e) {
-                    System.err.print("Failed to search tweets: " + e.getMessage());
-                    // e.printStackTrace();
-                    // DON'T KNOW IF THIS IS THROWN WHEN ID IS INVALID
-                }
-            }
-        });
-
+    public Status getStatusById(long tweetId) {
         try {
-            thread.start();
-            thread.join();
-        } catch (Exception ex) {
-
-        }
-
-        return status;
-    }
-
-
-
-
-
-
-
-
-/*
-    private void run() {
-        try {
-            //go();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            return twitter.showStatus(tweetId);
+        } catch (TwitterException e) {
+            Log.e("getStatusById", "Failed to search tweets: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
-
-    private void go() throws TwitterException, IOException {
-        Twitter twitter = new TwitterFactory().getInstance();
-        twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_KEY_SECRET);
-
-        RequestToken requestToken = twitter.getOAuthRequestToken();
-        System.out.println("Authorization URL: \n"
-                + requestToken.getAuthorizationURL());
-
-        AccessToken accessToken = new AccessToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-        twitter.setOAuthAccessToken(accessToken);
-
-/*
-        AccessToken accessToken = null;
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while (null == accessToken) {
-            try {
-                System.out.print("Input PIN here: ");
-                String pin = "";
-
-                accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-
-            } catch (TwitterException te) {
-
-                System.out.println("Failed to get access token, caused by: "
-                        + te.getMessage());
-
-                System.out.println("Retry input PIN");
-
-            }
-        }
-
-        System.out.println("Access Token: " + accessToken.getToken());
-        System.out.println("Access Token Secret: "
-                + accessToken.getTokenSecret());
-
-        twitter.updateStatus("Test twitter4j");
-    }
-*/
 }
