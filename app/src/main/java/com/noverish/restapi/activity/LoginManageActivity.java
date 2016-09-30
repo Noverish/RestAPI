@@ -13,7 +13,7 @@ import com.noverish.restapi.kakao.KakaoClient;
 import com.noverish.restapi.facebook.FacebookLoginWebViewActivity;
 import com.noverish.restapi.kakao.KakaoLoginWebViewActivity;
 import com.noverish.restapi.twitter.TwitterLoginWebViewActivity;
-import com.noverish.restapi.twitter.TwitterWebViewClient;
+import com.noverish.restapi.twitter.TwitterClient;
 
 /**
  * Created by Noverish on 2016-09-14.
@@ -69,7 +69,7 @@ public class LoginManageActivity extends AppCompatActivity {
             kakaoButton.setText(getString(R.string.activity_login_center_kakao));
         }
 
-        if (TwitterWebViewClient.getInstance().isLogined()) {
+        if (TwitterClient.getInstance().isLogined()) {
             twitterButton.setText(getString(R.string.activity_login_manage_twitter_login));
         } else {
             twitterButton.setText(getString(R.string.activity_login_manage_twitter));

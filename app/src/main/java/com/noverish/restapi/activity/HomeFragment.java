@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.twitter.TwitterWebViewClient;
+import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
@@ -25,7 +25,7 @@ public class HomeFragment extends Fragment {
     private boolean facebookFirstLoaded = false;
     private boolean twitterFirstLoaded = false;
 
-    private TwitterWebViewClient twitterWebViewClient;
+    private TwitterClient twitterClient;
     private FacebookClient facebookClient;
 
     private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
@@ -47,8 +47,8 @@ public class HomeFragment extends Fragment {
         facebookClient = FacebookClient.getInstance();
         facebookClient.setData(facebookWebView, mainLayout, handler);
 
-        twitterWebViewClient = TwitterWebViewClient.getInstance();
-        twitterWebViewClient.setData(twitterWebView, mainLayout, handler);
+        twitterClient = TwitterClient.getInstance();
+        twitterClient.setData(twitterWebView, mainLayout, handler);
 
         onFirstLoadFinishedRunnable.run();
 
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
 
             Log.i("ScrollView","bottom");
 
-            twitterWebViewClient.loadNextPage();
+            twitterClient.loadNextPage();
             facebookClient.loadNextPage();
         }
     }

@@ -22,7 +22,7 @@ public class TwitterLoginWebViewActivity extends AppCompatActivity {
 
         HtmlParseWebView webView = (HtmlParseWebView) findViewById(R.id.activity_facebook_login_web_view);
 
-        if(TwitterWebViewClient.getInstance().isLogined()) {
+        if(TwitterClient.getInstance().isLogined()) {
             webView.loadUrl(getString(R.string.twitter_logout_url));
         } else {
             webView.loadUrl(getString(R.string.twitter_login_url));
@@ -32,7 +32,7 @@ public class TwitterLoginWebViewActivity extends AppCompatActivity {
                     Log.d("twitter page started",url);
                     if(url.contains("https://mobile.twitter.com/")) {
                         Log.i("twitter login successed",url);
-                        TwitterWebViewClient.getInstance().setLogined(true);
+                        TwitterClient.getInstance().setLogined(true);
                         finish();
                     }
                 }

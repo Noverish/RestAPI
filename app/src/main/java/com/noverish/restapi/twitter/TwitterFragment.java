@@ -67,8 +67,8 @@ public class TwitterFragment extends BaseFragment {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                TwitterClient twitterClient = TwitterClient.getInstance();
-                List<Status> statuses = twitterClient.getTimeLine(page);
+                Twitter4jClient twitter4jClient = Twitter4jClient.getInstance();
+                List<Status> statuses = twitter4jClient.getTimeLine(page);
 
                 Log.d("loadTweets",page + " " + statuses.size());
 
@@ -125,8 +125,8 @@ public class TwitterFragment extends BaseFragment {
 
     @Override
     public void onPostButtonClicked(String content) {
-        TwitterClient twitterClient = TwitterClient.getInstance();
-        twitterClient.updateStatus(content);
+        Twitter4jClient twitter4jClient = Twitter4jClient.getInstance();
+        twitter4jClient.updateStatus(content);
         Toast.makeText(getActivity(), "트윗을 보냈습니다",Toast.LENGTH_SHORT).show();
     }
 
