@@ -1,4 +1,4 @@
-package com.noverish.restapi.login;
+package com.noverish.restapi.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookClient;
+import com.noverish.restapi.kakao.KakaoClient;
+import com.noverish.restapi.facebook.FacebookLoginWebViewActivity;
+import com.noverish.restapi.kakao.KakaoLoginWebViewActivity;
+import com.noverish.restapi.twitter.TwitterLoginWebViewActivity;
+import com.noverish.restapi.twitter.TwitterWebViewClient;
 
 /**
  * Created by Noverish on 2016-09-14.
@@ -51,21 +57,19 @@ public class LoginManageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        LoginDatabase database = LoginDatabase.getInstance();
-
-        if (database.isFacebookLogined()) {
+        if (FacebookClient.getInstance().isLogined()) {
             facebookButton.setText(getText(R.string.activity_login_center_facebook_login));
         } else {
             facebookButton.setText(getText(R.string.activity_login_center_facebook));
         }
 
-        if (database.isKakaoLogined()) {
+        if (KakaoClient.getInstance().isLogined()) {
             kakaoButton.setText(getString(R.string.activity_login_center_kakao_login));
         } else {
             kakaoButton.setText(getString(R.string.activity_login_center_kakao));
         }
 
-        if (database.isTwitterLogined()) {
+        if (TwitterWebViewClient.getInstance().isLogined()) {
             twitterButton.setText(getString(R.string.activity_login_manage_twitter_login));
         } else {
             twitterButton.setText(getString(R.string.activity_login_manage_twitter));
