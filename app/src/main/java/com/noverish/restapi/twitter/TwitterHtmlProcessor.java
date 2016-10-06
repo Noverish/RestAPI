@@ -41,7 +41,7 @@ public class TwitterHtmlProcessor {
             String profileImageUrl = profileImageElement.attr("src");
             String time = HttpConnectionThread.unicodeToString(timeElement.html());
             String name = HttpConnectionThread.unicodeToString(nameElement.html());
-            String screenName = screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","");
+            String screenName = screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim();
             contentElement.select("a").remove();
             String content = HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n",""));
             String media = mediaElement.attr("data-url");
