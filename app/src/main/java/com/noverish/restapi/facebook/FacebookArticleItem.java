@@ -13,6 +13,7 @@ public class FacebookArticleItem {
     public String location;
     public String content;
     public ArrayList<String> media;
+    public String video;
     public String sympathyNum;
     public String commentNum;
     public String sharingNum;
@@ -47,6 +48,7 @@ public class FacebookArticleItem {
                 ", location='" + location + '\'' +
                 ", content='" + content + '\'' +
                 ", media=" + "media" +
+                ", video=" + video +
                 ", sympathyNum='" + sympathyNum + '\'' +
                 ", commentNum='" + commentNum + '\'' +
                 ", sharingNum='" + sharingNum + '\'' +

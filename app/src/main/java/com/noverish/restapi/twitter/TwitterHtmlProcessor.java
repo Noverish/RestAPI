@@ -50,8 +50,15 @@ public class TwitterHtmlProcessor {
             String retweetUrl = retweetElement.attr("href");
             String favoriteUrl = favoriteElement.attr("href");
 
-            boolean retweeted = retweetElement.select("span").first().className().contains("active");
-            boolean favorited = favoriteElement.select("span").first().className().contains("active");
+            boolean retweeted = false;
+            boolean favorited = false;
+            try {
+                retweeted = retweetElement.select("span").first().className().contains("active");
+                favorited = favoriteElement.select("span").first().className().contains("active");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println(article.outerHtml());
+            }
 
             items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweeted, retweetUrl, favorited, favoriteUrl));
         }

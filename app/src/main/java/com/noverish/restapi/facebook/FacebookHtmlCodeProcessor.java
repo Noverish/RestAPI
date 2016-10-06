@@ -27,7 +27,7 @@ public class FacebookHtmlCodeProcessor {
 
     private static final String CONTENT_QUERY = "div[class=\"_5rgt _5nk5 _5msi\"]";
 
-    private static final String MEDIA_PART_QUERY = "div[class=\"_5rgu\"]";
+    private static final String MEDIA_PART_QUERY = "div._5rgu";
     private static final String MEDIA_QUERY = "i[style]";
 
 
@@ -46,7 +46,7 @@ public class FacebookHtmlCodeProcessor {
         ArrayList<FacebookArticleItem> items = new ArrayList<>();
 
         String htmlCode = htmlCodeParam;
-//        htmlCode = HttpConnectionThread.unicodeToString(htmlCode);
+        htmlCode = HttpConnectionThread.unicodeToString(htmlCode);
 
         Document document = Jsoup.parse(htmlCode);
         Elements articles = document.select("article");
@@ -181,7 +181,6 @@ public class FacebookHtmlCodeProcessor {
             Elements mediaPart = article.select(MEDIA_PART_QUERY);
             if(mediaPart != null && mediaPart.size() != 0) {
                 if(mediaPart.size() == 1) {
-
                     ArrayList<String> mediaArrayList = new ArrayList<>();
 
                     Elements medias = mediaPart.select(MEDIA_QUERY);
@@ -194,6 +193,15 @@ public class FacebookHtmlCodeProcessor {
 
                     item.media = mediaArrayList;
 
+                    item.video = mediaPart.select("div._53mw._4gbu").outerHtml();
+
+                    Log.e("find",item.video);
+                    Pattern pattern = Pattern.compile("\"src\":\"[\\s\\S]*?\"");
+                    Matcher matcher = pattern.matcher(item.video);
+
+                    if(matcher.find()) {
+                        Log.e("find",matcher.group());
+                    }
                 } else {
                     if(!hasInsideArticle) {
                         Log.e("mediaPart", "There are " + mediaPart.size() + " mediaPart");

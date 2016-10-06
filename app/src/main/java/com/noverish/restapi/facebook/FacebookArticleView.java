@@ -1,30 +1,41 @@
 package com.noverish.restapi.facebook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
+import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
 /**
  * Created by Noverish on 2016-07-17.
  */
 public class FacebookArticleView extends LinearLayout {
+    private Context context;
     private FacebookArticleItem article;
     private android.os.Handler handler;
 
-    public FacebookArticleView(Context context,FacebookArticleItem article) {
+    public FacebookArticleView(Context context, FacebookArticleItem article) {
         super(context);
-
+        this.context = context;
         this.article = article;
         handler = new Handler();
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        init();
+    }
+
+    private void init() {
+        final LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.article_facebook, this);
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
@@ -65,5 +76,22 @@ public class FacebookArticleView extends LinearLayout {
                 mediaLayout.addView(image);
             }
         }
+
+        if(article.video != null && !article.video.equals("")) {
+            Log.i("VIDEO!",article.video);
+            mediaLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    intent.putExtra("url",article.video);
+
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        Button like = (Button) findViewById(R.id.facebook_article_like_button);
+        if(Math.random() < 0.4)
+            like.setTextColor(ContextCompat.getColor(context, R.color.facebook));
     }
 }
