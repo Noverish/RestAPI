@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
         HtmlParseWebView twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
 
         facebookClient = FacebookClient.getInstance();
-        facebookClient.setData(facebookWebView, mainLayout, handler);
+        facebookClient.setData(facebookWebView);
 
         twitterClient = TwitterClient.getInstance();
         twitterClient.setData(twitterWebView, mainLayout, handler);

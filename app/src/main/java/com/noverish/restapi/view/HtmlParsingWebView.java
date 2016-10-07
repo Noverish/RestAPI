@@ -14,7 +14,6 @@ import android.webkit.WebViewClient;
 
 import com.noverish.restapi.http.ImagePicassoThread;
 import com.noverish.restapi.kakao.ExtractHtmlThread;
-import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class HtmlParsingWebView extends Fragment {
     private WebView webView;
 
     private static HtmlParsingWebView instance;
-    private OnHtmlLoadSuccessListener listener;
+    private OnHtmlParsingSuccessListener listener;
     private ArrayList<ImagePicassoThread> threads = new ArrayList<>();
     private android.os.Handler handler = new android.os.Handler();
 
@@ -100,13 +99,13 @@ public class HtmlParsingWebView extends Fragment {
                         html = html.replaceAll("(\\\\){1,2}/","/");
 
                         if(listener != null) {
-                            listener.onHtmlLoadSuccess(html);
+                            listener.onHtmlParsingSuccess(webView, html);
                         }
                     }
                 });
     }
 
-    public void setOnHtmlLoadSuccessListener(OnHtmlLoadSuccessListener listener) {
+    public void setOnHtmlParsingSuccessListener(OnHtmlParsingSuccessListener listener) {
         this.listener = listener;
     }
 
@@ -124,5 +123,9 @@ public class HtmlParsingWebView extends Fragment {
 
     public void refresh() {
         webView.loadUrl(url);
+    }
+
+    public interface OnHtmlParsingSuccessListener {
+        void onHtmlParsingSuccess(WebView webView, String html);
     }
 }

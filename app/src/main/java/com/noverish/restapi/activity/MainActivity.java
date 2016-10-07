@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -33,7 +34,6 @@ import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
-import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 
@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity
 
             HtmlParsingWebView webView = new HtmlParsingWebView();
             webView.setArguments(bundle);
-            webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+            webView.setOnHtmlParsingSuccessListener(new HtmlParsingWebView.OnHtmlParsingSuccessListener() {
                 @Override
-                public void onHtmlLoadSuccess(String htmlCode) {
+                public void onHtmlParsingSuccess(WebView webView, String htmlCode) {
                     FacebookFragment.getInstance().htmlHasChanged(htmlCode);
                 }
             });
@@ -181,9 +181,9 @@ public class MainActivity extends AppCompatActivity
 
             HtmlParsingWebView webView = new HtmlParsingWebView();
             webView.setArguments(bundle);
-            webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+            webView.setOnHtmlParsingSuccessListener(new HtmlParsingWebView.OnHtmlParsingSuccessListener() {
                 @Override
-                public void onHtmlLoadSuccess(String htmlCode) {
+                public void onHtmlParsingSuccess(WebView webView, String htmlCode) {
                     KakaoFragment kakaoFragment = KakaoFragment.getInstance();
                     String title = HttpConnectionThread.unicodeToString(Jsoup.parse(htmlCode).title());
 

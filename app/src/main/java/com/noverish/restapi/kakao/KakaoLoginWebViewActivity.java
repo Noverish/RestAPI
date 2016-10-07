@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.webkit.WebView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.webview.HtmlParseWebView;
@@ -27,7 +26,7 @@ public class KakaoLoginWebViewActivity extends AppCompatActivity{
             webView.loadUrl(getString(R.string.kakao_login_url));
             webView.setOnPageStartedListener(new OnPageStartedListener() {
                 @Override
-                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                public void onPageStarted(HtmlParseWebView view, String url, Bitmap favicon) {
                     if(url.equals(getString(R.string.kakao_url))) {
                         KakaoClient.getInstance().setLogined(true);
                         finish();

@@ -46,7 +46,7 @@ public class TwitterClient {
         webView.loadUrl("https://mobile.twitter.com/");
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
-            public void onHtmlLoadSuccess(String htmlCode) {
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 Document document = Jsoup.parse(htmlCode);
 
                 if(document.body().classNames().contains("AppPage-body")) {
@@ -84,7 +84,7 @@ public class TwitterClient {
         webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl);
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
-            public void onHtmlLoadSuccess(String htmlCode) {
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(webView.getHtmlCode());
 
                 for(TwitterArticleItem item : items) {

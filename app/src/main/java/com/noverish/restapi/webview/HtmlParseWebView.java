@@ -41,7 +41,7 @@ public class HtmlParseWebView extends WebView {
             super.onPageStarted(view, url, favicon);
 
             if(onPageStartedListener != null)
-                onPageStartedListener.onPageStarted(view, url, favicon);
+                onPageStartedListener.onPageStarted(HtmlParseWebView.this, url, favicon);
         }
 
         @Override
@@ -51,7 +51,7 @@ public class HtmlParseWebView extends WebView {
             nowUrl = url;
 
             if(onPageFinishedListener != null)
-                onPageFinishedListener.onPageFinished(view, url);
+                onPageFinishedListener.onPageFinished(HtmlParseWebView.this, url);
 
             extractHtml();
         }
@@ -82,7 +82,7 @@ public class HtmlParseWebView extends WebView {
                         htmlCode = html;
 
                         if(onHtmlLoadSuccessListener != null)
-                            onHtmlLoadSuccessListener.onHtmlLoadSuccess(html);
+                            onHtmlLoadSuccessListener.onHtmlLoadSuccess(HtmlParseWebView.this, html);
                     }
                 });
     }
