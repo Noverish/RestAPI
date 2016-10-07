@@ -39,51 +39,51 @@ public class FacebookArticleView extends LinearLayout {
         inflater.inflate(R.layout.article_facebook, this);
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIClient.getInstance().process(article.content, classification);
+        RestAPIClient.getInstance().process(article.getContent(), classification);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
-        if(article.header == null || article.header.equals(""))
+        if(article.getHeader() == null || article.getHeader().equals(""))
             header.setVisibility(GONE);
         else
-            header.setText(article.header);
+            header.setText(article.getHeader());
 
         ImageView profileImg = (ImageView) findViewById(R.id.facebook_article_profile_img);
-        Picasso.with(context).load(article.profileImgUrl).into(profileImg);
+        Picasso.with(context).load(article.getProfileImgUrl()).into(profileImg);
 
         TextView title = (TextView) findViewById(R.id.facebook_article_title);
-        title.setText(article.title);
+        title.setText(article.getTitle());
 
         TextView time = (TextView) findViewById(R.id.facebook_article_time);
-        time.setText(article.time);
+        time.setText(article.getTimeString());
 
         TextView content = (TextView) findViewById(R.id.facebook_article_content);
-        content.setText(article.content);
+        content.setText(article.getContent());
 
         TextView sympathy = (TextView) findViewById(R.id.facebook_article_sympathy);
-        sympathy.setText(article.sympathyNum);
+        sympathy.setText(article.getSympathyNum());
 
         TextView comment = (TextView) findViewById(R.id.facebook_article_comment);
-        comment.setText(article.commentNum);
+        comment.setText(article.getCommentNum());
 
         TextView sharing = (TextView) findViewById(R.id.facebook_article_sharing);
-        sharing.setText(article.sharingNum);
+        sharing.setText(article.getSharingNum());
 
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.facebook_article_media_layout);
-        if(article.media != null) {
-            for (String url : article.media) {
+        if(article.getMedia() != null) {
+            for (String url : article.getMedia()) {
                 ImageView image = new ImageView(context);
                 Picasso.with(context).load(url).into(image);
                 mediaLayout.addView(image);
             }
         }
 
-        if(article.video != null && !article.video.equals("")) {
-            Log.i("VIDEO!",article.video);
+        if(article.getVideo() != null && !article.getVideo().equals("")) {
+            Log.i("VIDEO!",article.getVideo());
             mediaLayout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, WebViewActivity.class);
-                    intent.putExtra("url",article.video);
+                    intent.putExtra("url",article.getVideo());
 
                     context.startActivity(intent);
                 }

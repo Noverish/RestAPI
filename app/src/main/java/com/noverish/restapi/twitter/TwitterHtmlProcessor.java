@@ -24,12 +24,15 @@ public class TwitterHtmlProcessor {
         Elements articles = document.select("table.tweet");
 
         for(Element article : articles) {
+            TwitterArticleItem item = new TwitterArticleItem();
+
             Elements headerElement = article.select("span.context");
             Elements profileImageElement = article.select("td.avatar").select("img");
             Elements timeElement = article.select("td.timestamp").select("a");
             Elements nameElement = article.select("strong.fullname");
             Elements screenNameElement = article.select("div.username");
             Elements contentElement = article.select("div.dir-ltr");
+            contentElement.select("a").remove();
             Elements mediaElement = article.select("a.twitter_external_link.dir-ltr.tco-link.has-expanded-path");
 
             Elements tweetActionElement = article.select("span.tweet-actions");
@@ -37,30 +40,22 @@ public class TwitterHtmlProcessor {
             Element retweetElement = tweetActionElement.select("a").get(1);
             Element favoriteElement = tweetActionElement.select("a").get(2);
 
-            String header = HttpConnectionThread.unicodeToString(headerElement.html());
-            String profileImageUrl = profileImageElement.attr("src");
-            String time = HttpConnectionThread.unicodeToString(timeElement.html());
-            String name = HttpConnectionThread.unicodeToString(nameElement.html());
-            String screenName = screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim();
-            contentElement.select("a").remove();
-            String content = HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n",""));
-            String media = mediaElement.attr("data-url");
+            item.setHeader(HttpConnectionThread.unicodeToString(headerElement.html()));
+            item.setProfileImageUrl(profileImageElement.attr("src"));
+            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
+            item.setFullName(HttpConnectionThread.unicodeToString(nameElement.html()));
+            item.setScreenName(screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim());
+            item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n","")));
+            item.setMedia(mediaElement.attr("data-url"));
 
-            String replyUrl = replyElement.attr("href");
-            String retweetUrl = retweetElement.attr("href");
-            String favoriteUrl = favoriteElement.attr("href");
+            item.setReplyUrl(replyElement.attr("href"));
+            item.setRetweetUrl(retweetElement.attr("href"));
+            item.setFavoriteUrl(favoriteElement.attr("href"));
 
-            boolean retweeted = false;
-            boolean favorited = false;
-            try {
-                retweeted = retweetElement.select("span").first().className().contains("active");
-                favorited = favoriteElement.select("span").first().className().contains("active");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.out.println(article.outerHtml());
-            }
+            item.setRetweeted(retweetElement.select("span").first().className().contains("active"));
+            item.setFavorited(favoriteElement.select("span").first().className().contains("active"));
 
-            items.add(new TwitterArticleItem(header, profileImageUrl, name, screenName, time, content, media, replyUrl, retweeted, retweetUrl, favorited, favoriteUrl));
+            items.add(item);
         }
 
         String moreUrl = document.select("div.w-button-more").select("a").attr("href");

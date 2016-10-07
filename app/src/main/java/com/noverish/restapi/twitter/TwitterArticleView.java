@@ -67,7 +67,7 @@ public class TwitterArticleView extends LinearLayout {
         screenNameTextView.setText(item.getScreenName());
 
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
-        timeTextView.setText(item.getTime());
+        timeTextView.setText(item.getTimeString());
 
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
         try {

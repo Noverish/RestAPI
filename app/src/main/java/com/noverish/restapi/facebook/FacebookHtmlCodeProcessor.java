@@ -78,8 +78,8 @@ public class FacebookHtmlCodeProcessor {
                     if(header != null && header.size() != 0) {
                         if(header.size() == 1) {
 
-                            item.header = header.outerHtml().replaceAll("<[^>]*>","");
-                            item.header = HttpConnectionThread.unicodeToString(item.header);
+                            item.setHeader(header.outerHtml().replaceAll("<[^>]*>",""));
+                            item.setHeader(HttpConnectionThread.unicodeToString(item.getHeader()));
 
                         } else {
                             Log.e("header","There are " + header.size() + " header");
@@ -102,7 +102,7 @@ public class FacebookHtmlCodeProcessor {
                     if(profileImage != null && profileImage.size() != 0) {
                         if(profileImage.size() == 1) {
 
-                            item.profileImgUrl = findOriginOfJsoupBuggedUrl(profileImage.outerHtml(), htmlCode);
+                            item.setProfileImgUrl(findOriginOfJsoupBuggedUrl(profileImage.outerHtml(), htmlCode));
 
                         } else {
                             Log.e("profileImage", "There are " + profileImage.size() + " profileImage");
@@ -113,8 +113,7 @@ public class FacebookHtmlCodeProcessor {
                     if(title != null && title.size() != 0) {
                         if(title.size() == 1) {
 
-                            item.title = title.outerHtml().replaceAll("<[^>]*>","");
-                            item.title = HttpConnectionThread.unicodeToString(item.title);
+                            item.setTitle(HttpConnectionThread.unicodeToString(title.outerHtml().replaceAll("<[^>]*>","")));
 
                         } else {
                             Log.e("title", "There are " + title.size() + " title");
@@ -128,14 +127,12 @@ public class FacebookHtmlCodeProcessor {
                             Elements timeLocation = timeLocationPart.first().getElementsByTag("a");
                             if(timeLocation.size() >= 1) {
 
-                                item.time = timeLocation.get(0).outerHtml().replaceAll("<[^>]*>","");
-                                item.time = HttpConnectionThread.unicodeToString(item.time);
+                                item.setTimeString(HttpConnectionThread.unicodeToString(timeLocation.get(0).outerHtml().replaceAll("<[^>]*>","")));
 
                             }
                             if(timeLocation.size() >= 2) {
 
-                                item.location = timeLocation.get(1).outerHtml().replaceAll("<[^>]*>","");
-                                item.location = HttpConnectionThread.unicodeToString(item.location);
+                                item.setLocation(HttpConnectionThread.unicodeToString(timeLocation.get(1).outerHtml().replaceAll("<[^>]*>","")));
 
                             }
                             if(timeLocation.size() >= 3) {
@@ -165,8 +162,7 @@ public class FacebookHtmlCodeProcessor {
             if(content != null && content.size() != 0) {
                 if(content.size() == 1) {
 
-                    item.content = content.outerHtml().replaceAll("<[^>]*>","");
-                    item.content = HttpConnectionThread.unicodeToString(item.content.trim());
+                    item.setContent(HttpConnectionThread.unicodeToString(content.outerHtml().replaceAll("<[^>]*>","").trim()));
 
                 } else {
                     if(!hasInsideArticle) {
@@ -191,13 +187,12 @@ public class FacebookHtmlCodeProcessor {
                     }
 
 
-                    item.media = mediaArrayList;
+                    item.setMedia(mediaArrayList);
 
-                    item.video = mediaPart.select("div._53mw._4gbu").outerHtml();
+                    item.setVideo(mediaPart.select("div._53mw._4gbu").outerHtml());
 
-                    Log.e("find",item.video);
                     Pattern pattern = Pattern.compile("\"src\":\"[\\s\\S]*?\"");
-                    Matcher matcher = pattern.matcher(item.video);
+                    Matcher matcher = pattern.matcher(item.getVideo());
 
                     if(matcher.find()) {
                         Log.e("find",matcher.group());
@@ -212,15 +207,15 @@ public class FacebookHtmlCodeProcessor {
                 }
             }
 
-            if(item.profileImgUrl == null || item.title == null || item.time == null) {
-                if(item.profileImgUrl == null)
+            if(item.getProfileImgUrl() == null || item.getTitle() == null || item.getTimeString() == null) {
+                if(item.getProfileImgUrl() == null)
                     Log.w("null","profile is null");
 
-                if(item.title == null)
+                if(item.getTitle() == null)
                     Log.w("null","title is null");
 
-                if(item.time == null)
-                    Log.w("null","time is null");
+                if(item.getTimeString() == null)
+                    Log.w("null","timeString is null");
 
                 Log.w("null",article.outerHtml());
             } else {
