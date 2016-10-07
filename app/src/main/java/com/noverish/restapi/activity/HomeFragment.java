@@ -12,10 +12,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookArticleItem;
+import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -46,6 +50,14 @@ public class HomeFragment extends Fragment {
 
         facebookClient = FacebookClient.getInstance();
         facebookClient.setData(facebookWebView);
+        facebookClient.setOnFacebookLoadedListener(new FacebookClient.OnFacebookLoadedListener() {
+            @Override
+            public void onFacebookLoaded(ArrayList<FacebookArticleItem> items) {
+                for(FacebookArticleItem item : items) {
+                    mainLayout.addView(new FacebookArticleView(getActivity(), item));
+                }
+            }
+        });
 
         twitterClient = TwitterClient.getInstance();
         twitterClient.setData(twitterWebView, mainLayout, handler);

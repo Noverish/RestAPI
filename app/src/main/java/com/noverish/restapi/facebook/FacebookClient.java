@@ -13,7 +13,6 @@ import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Noverish on 2016-09-27.
@@ -22,6 +21,8 @@ public class FacebookClient {
     private Context context;
     private HtmlParseWebView webView;
     private boolean isLogined;
+
+    private OnFacebookLoadedListener onFacebookLoadedListener;
 
     private ArrayList<FacebookArticleItem> items;
     
@@ -48,6 +49,8 @@ public class FacebookClient {
 
                 if (isLogined) {
                     items = FacebookHtmlCodeProcessor.process(webView.getHtmlCode());
+                    if(onFacebookLoadedListener != null)
+                        onFacebookLoadedListener.onFacebookLoaded(items);
                 } else {
                     context.startActivity(new Intent(context, SettingActivity.class));
                     context.startActivity(new Intent(context, LoginManageActivity.class));
@@ -58,28 +61,31 @@ public class FacebookClient {
 
     }
 
-    private void loadFirstPage() {
-
-    }
-
     public void loadNextPage() {
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getHtmlCode());
 
-                Iterator<FacebookArticleItem> iterator = newItems.iterator();
-                while(iterator.hasNext()) {
-                    FacebookArticleItem item = iterator.next();
+                for(int i = 0;i<newItems.size();i++) {
+                    FacebookArticleItem item = newItems.get(i);
                     if (items.contains(item)) {
-                        iterator.remove();
+                        newItems.remove(i);
+                        i--;
                     } else {
                         items.add(item);
                     }
                 }
+
+                if(onFacebookLoadedListener != null)
+                    onFacebookLoadedListener.onFacebookLoaded(newItems);
             }
         });
         webView.scrollBottom();
+    }
+
+    public void setOnFacebookLoadedListener(OnFacebookLoadedListener onFacebookLoadedListener) {
+        this.onFacebookLoadedListener = onFacebookLoadedListener;
     }
 
     public boolean isLogined() {
@@ -90,7 +96,7 @@ public class FacebookClient {
         isLogined = logined;
     }
 
-    public interface onFacebookLoadedListener {
+    public interface OnFacebookLoadedListener {
         void onFacebookLoaded(ArrayList<FacebookArticleItem> items);
     }
 }
