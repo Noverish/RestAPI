@@ -39,7 +39,9 @@ public class TwitterClient {
     public void setData(HtmlParseWebView webView) {
         this.webView = webView;
         this.context = webView.getContext();
+    }
 
+    public void reload() {
         webView.loadUrl("https://mobile.twitter.com/");
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override

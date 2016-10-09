@@ -63,6 +63,11 @@ public class HomeFragment extends Fragment {
                 for(FacebookArticleItem item : items) {
                     mainLayout.addView(new FacebookArticleView(getActivity(), item));
                 }
+
+                if(twitterFirstLoaded)
+                    onFirstLoadFinishedRunnable.run();
+                else
+                    facebookFirstLoaded = true;
             }
         });
         facebookClient.reload();
@@ -75,10 +80,14 @@ public class HomeFragment extends Fragment {
                 for(TwitterArticleItem item : items) {
                     mainLayout.addView(new TwitterArticleView(getActivity(), item, handler));
                 }
+
+                if(facebookFirstLoaded)
+                    onFirstLoadFinishedRunnable.run();
+                else
+                    twitterFirstLoaded = true;
             }
         });
-
-        onFirstLoadFinishedRunnable.run();
+        twitterClient.reload();
 
         return view;
     }

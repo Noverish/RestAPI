@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 MainActivity.this.findViewById(R.id.activity_main_splash_fragment_layout).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.fab).setVisibility(View.VISIBLE);
             }
         });
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, homeFragment);
