@@ -15,6 +15,8 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
+import com.noverish.restapi.twitter.TwitterArticleItem;
+import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
@@ -60,7 +62,15 @@ public class HomeFragment extends Fragment {
         });
 
         twitterClient = TwitterClient.getInstance();
-        twitterClient.setData(twitterWebView, mainLayout, handler);
+        twitterClient.setData(twitterWebView);
+        twitterClient.setOnTwitterLoadedListener(new TwitterClient.OnTwitterLoadedListener() {
+            @Override
+            public void onTwitterLoaded(ArrayList<TwitterArticleItem> items) {
+                for(TwitterArticleItem item : items) {
+                    mainLayout.addView(new TwitterArticleView(getActivity(), item, handler));
+                }
+            }
+        });
 
         onFirstLoadFinishedRunnable.run();
 

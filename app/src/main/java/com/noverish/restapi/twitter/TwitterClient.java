@@ -3,10 +3,9 @@ package com.noverish.restapi.twitter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.LinearLayout;
 
-import com.noverish.restapi.activity.SettingActivity;
 import com.noverish.restapi.activity.LoginManageActivity;
+import com.noverish.restapi.activity.SettingActivity;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
@@ -20,9 +19,9 @@ import java.util.ArrayList;
  */
 public class TwitterClient {
     private Context context;
-    private android.os.Handler handler;
     private HtmlParseWebView webView;
-    private LinearLayout layout;
+
+    private OnTwitterLoadedListener onTwitterLoadedListener;
 
     private boolean isNewerVersion;
     private boolean isLogined;
@@ -37,11 +36,9 @@ public class TwitterClient {
 
     private TwitterClient() {}
 
-    public void setData(HtmlParseWebView webView, LinearLayout layout, android.os.Handler handler) {
+    public void setData(HtmlParseWebView webView) {
         this.webView = webView;
         this.context = webView.getContext();
-        this.layout = layout;
-        this.handler = handler;
 
         webView.loadUrl("https://mobile.twitter.com/");
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
@@ -62,7 +59,8 @@ public class TwitterClient {
                 }
 
                 if(isLogined) {
-                    loadFirstPage();
+                    if(onTwitterLoadedListener != null)
+                        onTwitterLoadedListener.onTwitterLoaded(TwitterHtmlProcessor.process(webView.getHtmlCode()));
                 } else {
                     context.startActivity(new Intent(context, SettingActivity.class));
                     context.startActivity(new Intent(context, LoginManageActivity.class));
@@ -72,12 +70,8 @@ public class TwitterClient {
         });
     }
 
-    private void loadFirstPage() {
-        ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(webView.getHtmlCode());
-
-        for(TwitterArticleItem item : items) {
-            layout.addView(new TwitterArticleView(context, item, handler));
-        }
+    public void setOnTwitterLoadedListener(OnTwitterLoadedListener onTwitterLoadedListener) {
+        this.onTwitterLoadedListener = onTwitterLoadedListener;
     }
 
     public void loadNextPage() {
@@ -85,11 +79,8 @@ public class TwitterClient {
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<TwitterArticleItem> items = TwitterHtmlProcessor.process(webView.getHtmlCode());
-
-                for(TwitterArticleItem item : items) {
-                    layout.addView(new TwitterArticleView(context, item, handler));
-                }
+                if(onTwitterLoadedListener != null)
+                    onTwitterLoadedListener.onTwitterLoaded(TwitterHtmlProcessor.process(webView.getHtmlCode()));
             }
         });
     }
@@ -100,5 +91,9 @@ public class TwitterClient {
 
     public void setLogined(boolean logined) {
         isLogined = logined;
+    }
+
+    public interface OnTwitterLoadedListener {
+        void onTwitterLoaded(ArrayList<TwitterArticleItem> items);
     }
 }
