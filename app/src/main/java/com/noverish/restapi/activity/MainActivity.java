@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fab.setVisibility(View.GONE);
         Essentials.changeFragment(this, R.id.activity_main_splash_fragment_layout, new SplashFragment());
 
         HomeFragment homeFragment = new HomeFragment();
@@ -110,19 +109,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
         } else if(id == R.id.action_favorite) {
@@ -139,26 +133,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_facebook) {
-            isInHomefragment = false;
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.facebook));
-
-            Bundle bundle = new Bundle();
-            bundle.putString("url","https://m.facebook.com/?_rdr");
-
-            HtmlParsingWebView webView = new HtmlParsingWebView();
-            webView.setArguments(bundle);
-            webView.setOnHtmlParsingSuccessListener(new HtmlParsingWebView.OnHtmlParsingSuccessListener() {
-                @Override
-                public void onHtmlParsingSuccess(WebView webView, String htmlCode) {
-                    FacebookFragment.getInstance().htmlHasChanged(htmlCode);
-                }
-            });
-
             FacebookFragment fragment = new FacebookFragment();
-            fragment.setWebView(webView);
             nowFragment = fragment;
-
-            Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_twitter) {
             isInHomefragment = false;

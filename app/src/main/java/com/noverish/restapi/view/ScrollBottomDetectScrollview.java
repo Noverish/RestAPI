@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.ScrollView;
 
 public class ScrollBottomDetectScrollview extends ScrollView {
     /// 스크롤 맨 아래까지 되면 처리할 이벤트 전달용 핸들
-    Handler m_hd = null;
+    Runnable runnable;
     /// 스크롤뷰 영역 체크하려고 두는 변수에용
     Rect m_rect;
 
@@ -65,9 +64,9 @@ public class ScrollBottomDetectScrollview extends ScrollView {
 
 
                 /// 핸들러가 처음에는 널인데 사용자가 셋팅해주면 그 핸들러로 메세지 날립니다.
-                if (m_hd != null) {
+                if (runnable != null) {
                     /// 핸들러에 이벤트 날리면 끗납니다.
-                    m_hd.sendEmptyMessage(1);
+                    runnable.run();
                 }
 
                 startLoading();
@@ -76,8 +75,8 @@ public class ScrollBottomDetectScrollview extends ScrollView {
     }
 
     /// 맨 아래까지 갔을때 처리하기 위해 있는 녀석입니다.
-    public void setHandler(Handler hd) {
-        m_hd = hd;
+    public void setRunnable(Runnable runnable) {
+        this.runnable = runnable;
     }
 
     public void stopLoading() {

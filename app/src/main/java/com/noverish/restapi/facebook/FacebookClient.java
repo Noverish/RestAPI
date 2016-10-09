@@ -39,7 +39,9 @@ public class FacebookClient {
     public void setData(HtmlParseWebView webView) {
         this.webView = webView;
         this.context = webView.getContext();
+    }
 
+    public void reload() {
         webView.loadUrl(context.getString(R.string.facebook_url));
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
@@ -58,7 +60,6 @@ public class FacebookClient {
                 }
             }
         });
-
     }
 
     public void loadNextPage() {

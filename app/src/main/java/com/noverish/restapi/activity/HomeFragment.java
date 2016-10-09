@@ -3,9 +3,7 @@ package com.noverish.restapi.activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +42,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home, container, false);
 
         scrollBottomDetectScrollview = (ScrollBottomDetectScrollview) view.findViewById(R.id.fragment_home_scroll_view);
-        scrollBottomDetectScrollview.setHandler(new CustomHandler());
+        scrollBottomDetectScrollview.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                twitterClient.loadNextPage();
+                facebookClient.loadNextPage();
+            }
+        });
+
         mainLayout = (LinearLayout) view.findViewById(R.id.fragment_home_layout_main);
         
         HtmlParseWebView facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
@@ -60,6 +65,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+        facebookClient.reload();
 
         twitterClient = TwitterClient.getInstance();
         twitterClient.setData(twitterWebView);
@@ -75,18 +81,6 @@ public class HomeFragment extends Fragment {
         onFirstLoadFinishedRunnable.run();
 
         return view;
-    }
-
-    private class CustomHandler extends android.os.Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            Log.i("ScrollView","bottom");
-
-            twitterClient.loadNextPage();
-            facebookClient.loadNextPage();
-        }
     }
 
     public void setOnFirstLoadFinishedRunnable(Runnable onFirstLoadFinishedRunnable) {

@@ -3,7 +3,6 @@ package com.noverish.restapi.twitter;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +56,12 @@ public class TwitterFragment extends BaseFragment {
         if (getView() != null) {
             textViewList = (LinearLayout) getView().findViewById(R.id.activity_main_text_view_list);
             scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_twitter_scroll_view);
-            scrollView.setHandler(new ScrollBottomHandler());
+            scrollView.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    loadTweets(++nowPage);
+                }
+            });
         }
 
         loadTweets(nowPage);
@@ -113,13 +117,6 @@ public class TwitterFragment extends BaseFragment {
         @Override
         public void run() {
 //            handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
-        }
-    }
-
-    private class ScrollBottomHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            loadTweets(++nowPage);
         }
     }
 

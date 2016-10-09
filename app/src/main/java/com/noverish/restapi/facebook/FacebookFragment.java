@@ -2,8 +2,6 @@ package com.noverish.restapi.facebook;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,95 +17,48 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
-import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Noverish on 2016-08-21.
  */
 public class FacebookFragment extends BaseFragment {
+    private FacebookClient client;
+
+    private ScrollBottomDetectScrollview scrollView;
     private LinearLayout list;
-
-    private ArrayList<FacebookArticleItem> items = new ArrayList<>();
-    private ArrayList<FacebookArticleView> views = new ArrayList<>();
-    ScrollBottomDetectScrollview scrollView;
-    private static FacebookFragment instance;
-
-    private HtmlParsingWebView webView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_facebook, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_facebook, container, false);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        list = (LinearLayout) view.findViewById(R.id.activity_facebook_text_view_list);
 
-        instance = this;
-
-        if(getView() != null) {
-            list = (LinearLayout) getView().findViewById(R.id.activity_facebook_text_view_list);
-
-            scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_facebook_scroll_view);
-            scrollView.setHandler(new ScrollBottomHandler());
-        } else {
-            Log.e("ERROR!","view is null");
-        }
-
-
-
-    }
-    private static class ScrollBottomHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            HtmlParsingWebView.getInstance().scrollBottom();
-        }
-    }
-
-
-    public static FacebookFragment getInstance() {
-        return instance;
-    }
-
-    public void htmlHasChanged(String html) {
-        ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(html);
-
-        Iterator<FacebookArticleItem> iterator = newItems.iterator();
-        while(iterator.hasNext()) {
-            FacebookArticleItem item = iterator.next();
-            if (items.contains(item)) {
-                iterator.remove();
-            } else {
-                items.add(item);
+        scrollView = (ScrollBottomDetectScrollview) view.findViewById(R.id.fragment_facebook_scroll_view);
+        scrollView.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                client.loadNextPage();
             }
-        }
+        });
+        scrollView.startLoading();
 
+        client = FacebookClient.getInstance();
+        client.setOnFacebookLoadedListener(new FacebookClient.OnFacebookLoadedListener() {
+            @Override
+            public void onFacebookLoaded(ArrayList<FacebookArticleItem> items) {
+                for(FacebookArticleItem item : items) {
+                    list.addView(new FacebookArticleView(getActivity(), item));
+                }
+                scrollView.stopLoading();
+            }
+        });
+        client.reload();
 
-        for (FacebookArticleItem item : newItems) {
-            Log.d("facebook",item.toString());
-
-            FacebookArticleView view = new FacebookArticleView(getActivity(), item);
-
-            views.add(view);
-
-            if(list != null)
-                list.addView(view);
-            else
-                Log.e("ERROR","list is null");
-        }
-
-        if(scrollView != null)
-            scrollView.stopLoading();
-    }
-
-    public void startLoading() {
-        if(scrollView != null)
-            scrollView.startLoading();
+        return view;
     }
 
     @Override
@@ -141,38 +92,11 @@ public class FacebookFragment extends BaseFragment {
 
             shareDialog.show(linkContent);
         }
-
-        /*Bundle params = new Bundle();
-        params.putString("message", content);
-        *//* make the API call *//*
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/me/feed",
-                params,
-                HttpMethod.POST,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-            *//* handle the result *//*
-                        Log.d("onPostButtonClicked","onCompleted - " + response.toString());
-                    }
-                }
-        ).executeAsync();*/
-
     }
 
     @Override
     public void onFreshButtonClicked() {
         list.removeAllViews();
-
-        if(webView != null)
-            webView.refresh();
-
-        if(scrollView != null)
-            scrollView.startLoading();
-    }
-
-
-    public void setWebView(HtmlParsingWebView webView) {
-        this.webView = webView;
+        client.reload();
     }
 }

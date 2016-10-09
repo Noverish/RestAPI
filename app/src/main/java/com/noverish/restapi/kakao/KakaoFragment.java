@@ -1,8 +1,6 @@
 package com.noverish.restapi.kakao;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,20 +53,18 @@ public class KakaoFragment extends BaseFragment {
             list = (LinearLayout) getView().findViewById(R.id.activity_kakao_text_view_list);
 
             scrollView = (ScrollBottomDetectScrollview) getView().findViewById(R.id.fragment_kakao_scroll_view);
-            scrollView.setHandler(new ScrollBottomHandler());
+            scrollView.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    HtmlParsingWebView.getInstance().scrollBottom();
+                }
+            });
         } else {
             Log.e("ERROR!","view is null");
         }
 
 
 
-    }
-
-    private static class ScrollBottomHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            HtmlParsingWebView.getInstance().scrollBottom();
-        }
     }
 
     public static KakaoFragment getInstance() {
