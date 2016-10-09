@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-
+            startActivity(new Intent(this, SettingActivity.class));
         } else if(id == R.id.action_favorite) {
             nowFragment.onFreshButtonClicked();
         }
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
             Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_share) {
-            startActivity(new Intent(this, SettingActivity.class));
+
         } else if (id == R.id.nav_send) {
 
         }
