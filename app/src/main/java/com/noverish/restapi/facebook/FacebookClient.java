@@ -1,12 +1,9 @@
 package com.noverish.restapi.facebook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.activity.LoginManageActivity;
-import com.noverish.restapi.activity.SettingActivity;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
@@ -22,7 +19,7 @@ public class FacebookClient {
     private HtmlParseWebView webView;
     private boolean isLogined;
 
-    private OnFacebookLoadedListener onFacebookLoadedListener;
+    private FacebookClientCallback facebookClientCallback;
 
     private ArrayList<FacebookArticleItem> items;
     
@@ -51,12 +48,11 @@ public class FacebookClient {
 
                 if (isLogined) {
                     items = FacebookHtmlCodeProcessor.process(webView.getHtmlCode());
-                    if(onFacebookLoadedListener != null)
-                        onFacebookLoadedListener.onFacebookLoaded(items);
+                    if(facebookClientCallback != null)
+                        facebookClientCallback.onSuccess(items);
                 } else {
-                    context.startActivity(new Intent(context, SettingActivity.class));
-                    context.startActivity(new Intent(context, LoginManageActivity.class));
-                    context.startActivity(new Intent(context, FacebookLoginWebViewActivity.class));
+                    if(facebookClientCallback != null)
+                        facebookClientCallback.onNotLogin();
                 }
             }
         });
@@ -78,15 +74,15 @@ public class FacebookClient {
                     }
                 }
 
-                if(onFacebookLoadedListener != null)
-                    onFacebookLoadedListener.onFacebookLoaded(newItems);
+                if(facebookClientCallback != null)
+                    facebookClientCallback.onSuccess(newItems);
             }
         });
         webView.scrollBottom();
     }
 
-    public void setOnFacebookLoadedListener(OnFacebookLoadedListener onFacebookLoadedListener) {
-        this.onFacebookLoadedListener = onFacebookLoadedListener;
+    public void setFacebookClientCallback(FacebookClientCallback facebookClientCallback) {
+        this.facebookClientCallback = facebookClientCallback;
     }
 
     public boolean isLogined() {
@@ -97,7 +93,11 @@ public class FacebookClient {
         isLogined = logined;
     }
 
-    public interface OnFacebookLoadedListener {
-        void onFacebookLoaded(ArrayList<FacebookArticleItem> items);
+    public interface FacebookClientCallback {
+        void onSuccess(ArrayList<FacebookArticleItem> items);
+
+        void onNotLogin();
+
+        void onFailure();
     }
 }

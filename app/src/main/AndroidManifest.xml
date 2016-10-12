@@ -36,8 +36,6 @@
 
         <activity android:name=".kakao.KakaoLoginActivity" />
 
-        <activity android:name=".activity.LoginManageActivity" />
-        <activity android:name=".activity.SettingActivity" />
         <activity android:name=".facebook.FacebookLoginWebViewActivity" />
         <activity android:name=".kakao.KakaoLoginWebViewActivity" />
         <activity android:name=".twitter.TwitterLoginWebViewActivity" />

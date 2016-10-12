@@ -1,60 +1,78 @@
 package com.noverish.restapi.activity;
 
-import android.content.Intent;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.kakao.KakaoClient;
-import com.noverish.restapi.facebook.FacebookLoginWebViewActivity;
-import com.noverish.restapi.kakao.KakaoLoginWebViewActivity;
-import com.noverish.restapi.twitter.TwitterLoginWebViewActivity;
 import com.noverish.restapi.twitter.TwitterClient;
 
 /**
  * Created by Noverish on 2016-09-14.
  */
-public class LoginManageActivity extends AppCompatActivity {
+public class LoginManageActivity extends Fragment {
     private Button facebookButton;
     private Button kakaoButton;
     private Button twitterButton;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_manage);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_login_manage, container, false);
 
-        facebookButton = (Button) findViewById(R.id.activity_login_manage_facebook);
+        facebookButton = (Button) view.findViewById(R.id.activity_login_manage_facebook);
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginManageActivity.this, FacebookLoginWebViewActivity.class));
+                View level2 = getActivity().findViewById(R.id.content_main_fragment_level_2);
+                View level1 = getActivity().findViewById(R.id.content_main_fragment_level_1);
+                View main = getActivity().findViewById(R.id.content_main_fragment_layout);
+                View back = getActivity().findViewById(R.id.content_main_background_layout);
+
+                level2.setVisibility(View.INVISIBLE);
+                level1.setVisibility(View.INVISIBLE);
+                main.setVisibility(View.INVISIBLE);
+                back.setVisibility(View.INVISIBLE);
             }
         });
 
-        kakaoButton = (Button) findViewById(R.id.activity_login_manage_kakao);
+        kakaoButton = (Button) view.findViewById(R.id.activity_login_manage_kakao);
         kakaoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginManageActivity.this, KakaoLoginWebViewActivity.class));
+
             }
         });
 
-        twitterButton = (Button) findViewById(R.id.activity_login_manage_twitter);
+        twitterButton = (Button) view.findViewById(R.id.activity_login_manage_twitter);
         twitterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginManageActivity.this, TwitterLoginWebViewActivity.class));
+                View level2 = getActivity().findViewById(R.id.content_main_fragment_level_2);
+                View level1 = getActivity().findViewById(R.id.content_main_fragment_level_1);
+                View main = getActivity().findViewById(R.id.content_main_fragment_layout);
+                View back = getActivity().findViewById(R.id.content_main_background_layout);
+                View facebook = getActivity().findViewById(R.id.activity_main_facebook_web_view);
+
+                level2.setVisibility(View.INVISIBLE);
+                level1.setVisibility(View.INVISIBLE);
+                main.setVisibility(View.INVISIBLE);
+                back.setVisibility(View.INVISIBLE);
+                facebook.setVisibility(View.INVISIBLE);
             }
         });
+
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         if (FacebookClient.getInstance().isLogined()) {

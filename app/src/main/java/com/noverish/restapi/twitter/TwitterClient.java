@@ -1,11 +1,8 @@
 package com.noverish.restapi.twitter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.noverish.restapi.activity.LoginManageActivity;
-import com.noverish.restapi.activity.SettingActivity;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
@@ -21,7 +18,7 @@ public class TwitterClient {
     private Context context;
     private HtmlParseWebView webView;
 
-    private OnTwitterLoadedListener onTwitterLoadedListener;
+    private TwitterClientCallback twitterClientCallback;
 
     private boolean isNewerVersion;
     private boolean isLogined;
@@ -60,20 +57,21 @@ public class TwitterClient {
                     isLogined = document.select("table.tweet").size() != 0;
                 }
 
+                Log.i("Twitter","isLogined - " + isLogined);
+
                 if(isLogined) {
-                    if(onTwitterLoadedListener != null)
-                        onTwitterLoadedListener.onTwitterLoaded(TwitterHtmlProcessor.process(webView.getHtmlCode()));
+                    if(twitterClientCallback != null)
+                        twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
                 } else {
-                    context.startActivity(new Intent(context, SettingActivity.class));
-                    context.startActivity(new Intent(context, LoginManageActivity.class));
-                    context.startActivity(new Intent(context, TwitterLoginWebViewActivity.class));
+                    if(twitterClientCallback != null)
+                        twitterClientCallback.onNotLogin();
                 }
             }
         });
     }
 
-    public void setOnTwitterLoadedListener(OnTwitterLoadedListener onTwitterLoadedListener) {
-        this.onTwitterLoadedListener = onTwitterLoadedListener;
+    public void setTwitterClientCallback(TwitterClientCallback twitterClientCallback) {
+        this.twitterClientCallback = twitterClientCallback;
     }
 
     public void loadNextPage() {
@@ -81,8 +79,8 @@ public class TwitterClient {
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                if(onTwitterLoadedListener != null)
-                    onTwitterLoadedListener.onTwitterLoaded(TwitterHtmlProcessor.process(webView.getHtmlCode()));
+                if(twitterClientCallback != null)
+                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
             }
         });
     }
@@ -95,7 +93,11 @@ public class TwitterClient {
         isLogined = logined;
     }
 
-    public interface OnTwitterLoadedListener {
-        void onTwitterLoaded(ArrayList<TwitterArticleItem> items);
+    public interface TwitterClientCallback {
+        void onSuccess(ArrayList<TwitterArticleItem> items);
+
+        void onNotLogin();
+
+        void onFailure();
     }
 }

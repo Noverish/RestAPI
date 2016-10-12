@@ -16,7 +16,10 @@ import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.noverish.restapi.R;
+import com.noverish.restapi.activity.LoginManageActivity;
+import com.noverish.restapi.activity.SettingActivity;
 import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
@@ -47,13 +50,24 @@ public class FacebookFragment extends BaseFragment {
         scrollView.startLoading();
 
         client = FacebookClient.getInstance();
-        client.setOnFacebookLoadedListener(new FacebookClient.OnFacebookLoadedListener() {
+        client.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
             @Override
-            public void onFacebookLoaded(ArrayList<FacebookArticleItem> items) {
+            public void onSuccess(ArrayList<FacebookArticleItem> items) {
                 for(FacebookArticleItem item : items) {
                     list.addView(new FacebookArticleView(getActivity(), item));
                 }
                 scrollView.stopLoading();
+            }
+
+            @Override
+            public void onNotLogin() {
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
         client.reload();

@@ -13,6 +13,7 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
+import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -57,9 +58,9 @@ public class HomeFragment extends Fragment {
 
         facebookClient = FacebookClient.getInstance();
         facebookClient.setData(facebookWebView);
-        facebookClient.setOnFacebookLoadedListener(new FacebookClient.OnFacebookLoadedListener() {
+        facebookClient.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
             @Override
-            public void onFacebookLoaded(ArrayList<FacebookArticleItem> items) {
+            public void onSuccess(ArrayList<FacebookArticleItem> items) {
                 for(FacebookArticleItem item : items) {
                     mainLayout.addView(new FacebookArticleView(getActivity(), item));
                 }
@@ -69,14 +70,30 @@ public class HomeFragment extends Fragment {
                 else
                     facebookFirstLoaded = true;
             }
+
+            @Override
+            public void onNotLogin() {
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+
+                if(twitterFirstLoaded)
+                    onFirstLoadFinishedRunnable.run();
+                else
+                    facebookFirstLoaded = true;
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
         });
         facebookClient.reload();
 
         twitterClient = TwitterClient.getInstance();
         twitterClient.setData(twitterWebView);
-        twitterClient.setOnTwitterLoadedListener(new TwitterClient.OnTwitterLoadedListener() {
+        twitterClient.setTwitterClientCallback(new TwitterClient.TwitterClientCallback() {
             @Override
-            public void onTwitterLoaded(ArrayList<TwitterArticleItem> items) {
+            public void onSuccess(ArrayList<TwitterArticleItem> items) {
                 for(TwitterArticleItem item : items) {
                     mainLayout.addView(new TwitterArticleView(getActivity(), item, handler));
                 }
@@ -85,6 +102,22 @@ public class HomeFragment extends Fragment {
                     onFirstLoadFinishedRunnable.run();
                 else
                     twitterFirstLoaded = true;
+            }
+
+            @Override
+            public void onNotLogin() {
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+
+                if(facebookFirstLoaded)
+                    onFirstLoadFinishedRunnable.run();
+                else
+                    twitterFirstLoaded = true;
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
         twitterClient.reload();

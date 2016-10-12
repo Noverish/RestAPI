@@ -2,7 +2,6 @@ package com.noverish.restapi.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingActivity.class));
+            Essentials.changeFragment(this, R.id.content_main_fragment_level_1, new SettingActivity());
         } else if(id == R.id.action_favorite) {
             nowFragment.onFreshButtonClicked();
         }
