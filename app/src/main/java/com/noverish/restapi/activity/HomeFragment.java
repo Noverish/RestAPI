@@ -1,6 +1,5 @@
 package com.noverish.restapi.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,6 +12,7 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
+import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Noverish on 2016-08-21.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
     private Runnable onFirstLoadFinishedRunnable;
     private boolean facebookFirstLoaded = false;
     private boolean twitterFirstLoaded = false;
@@ -120,5 +120,17 @@ public class HomeFragment extends Fragment {
 
     public void setOnFirstLoadFinishedRunnable(Runnable onFirstLoadFinishedRunnable) {
         this.onFirstLoadFinishedRunnable = onFirstLoadFinishedRunnable;
+    }
+
+    @Override
+    public void onPostButtonClicked(String content) {
+
+    }
+
+    @Override
+    public void onFreshButtonClicked() {
+        mainLayout.removeAllViews();
+        facebookClient.reload();
+        twitterClient.reload();
     }
 }

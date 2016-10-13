@@ -1,6 +1,5 @@
 package com.noverish.restapi.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
@@ -35,15 +33,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private BaseFragment nowFragment;
-
     private Toolbar toolbar;
-
-    public static ProgressDialog dialog;
-
-    private LinearLayout mainLayout;
-
     private FrameLayout main, level1, level2, level3;
-
     private FloatingActionButton fab;
 
     @Override
@@ -57,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onPostButtonClicked();
+//                makePostPopup();
             }
         });
 
@@ -85,6 +76,7 @@ public class MainActivity extends AppCompatActivity
                 fab.setVisibility(View.VISIBLE);
             }
         });
+        nowFragment = homeFragment;
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, homeFragment);
 
     }
@@ -95,27 +87,21 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(nowFragment != null) {
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
-            nowFragment = null;
         } else if(main.getVisibility() == View.INVISIBLE) {
             main.setVisibility(View.VISIBLE);
-
-            if(level1.getChildCount() > 0)
-                level1.setVisibility(View.VISIBLE);
-            if(level2.getChildCount() > 0)
-                level2.setVisibility(View.VISIBLE);
-            if(level3.getChildCount() > 0)
-                level3.setVisibility(View.VISIBLE);
+            level1.setVisibility(View.VISIBLE);
+            level2.setVisibility(View.VISIBLE);
+            level3.setVisibility(View.VISIBLE);
+        } else if(level3.getChildCount() > 0) {
+            level3.removeAllViews();
+        } else if(level2.getChildCount() > 0) {
+            level2.removeAllViews();
+        } else if(level1.getChildCount() > 0) {
+            level1.removeAllViews();
+        } else if(!nowFragment.getClass().getSimpleName().equals("HomeFragment")) {
+            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
         } else {
-            if(level3.getChildCount() > 0)
-                level3.removeAllViews();
-            else if(level2.getChildCount() > 0)
-                level2.removeAllViews();
-            else if(level1.getChildCount() > 0)
-                level1.removeAllViews();
-            else
-                super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -132,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             Essentials.changeFragment(this, R.id.content_main_fragment_level_1, new SettingActivity());
             fab.setVisibility(View.GONE);
-        } else if(id == R.id.action_favorite) {
+        } else if(id == R.id.action_refresh) {
             nowFragment.onFreshButtonClicked();
         }
 
@@ -168,15 +154,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void onPostButtonClicked() {
-        if(nowFragment == null)
-            return;
-
-        if(nowFragment.getClass().getSimpleName().equals("FacebookFragment")) {
-            nowFragment.onPostButtonClicked("");
-            return;
-        }
-
+    private void makePostPopup() {
         RelativeLayout layout = (RelativeLayout) MainActivity.this.findViewById(R.id.activity_main_layout);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.article_add, null);
