@@ -1,6 +1,6 @@
 package com.noverish.restapi.activity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +21,7 @@ import com.noverish.restapi.webview.OnPageStartedListener;
 /**
  * Created by Noverish on 2016-09-14.
  */
-public class LoginManageActivity extends Fragment {
+public class LoginManageFragment extends Fragment {
     private HtmlParseWebView facebookWebView;
     private HtmlParseWebView twitterWebView;
     private FrameLayout main, level1, level2;
@@ -30,6 +30,8 @@ public class LoginManageActivity extends Fragment {
     private Button kakaoButton;
     private Button twitterButton;
 
+    private boolean loginStatusChanged = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,9 +39,9 @@ public class LoginManageActivity extends Fragment {
 
         facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
         twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
-        main = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_layout);
-        level1 = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_level_1);
-        level2 = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_level_2);
+        main = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_main);
+        level1 = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_level_1);
+        level2 = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_level_2);
 
 
         facebookButton = (Button) view.findViewById(R.id.activity_login_manage_facebook);
@@ -63,6 +65,8 @@ public class LoginManageActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 if(TwitterClient.getInstance().isLogined()) {
+                    loginStatusChanged = true;
+
                     twitterWebView.loadUrl("https://mobile.twitter.com/logout");
                     twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
                         @Override
@@ -104,6 +108,8 @@ public class LoginManageActivity extends Fragment {
                         @Override
                         public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
                             if(url.equals("https://mobile.twitter.com/")) {
+                                loginStatusChanged = true;
+
                                 TwitterClient.getInstance().setLogined(true);
                                 getActivity().onBackPressed();
 
@@ -142,5 +148,7 @@ public class LoginManageActivity extends Fragment {
         }
     }
 
-
+    public boolean isLoginStatusChanged() {
+        return loginStatusChanged;
+    }
 }

@@ -56,29 +56,29 @@
                 android:layout_height="match_parent"/>
 
             <FrameLayout
-                android:id="@+id/content_main_fragment_layout"
+                android:id="@+id/activity_main_fragment_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <FrameLayout
-                android:id="@+id/content_main_fragment_level_1"
+                android:id="@+id/activity_main_fragment_level_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <FrameLayout
-                android:id="@+id/content_main_fragment_level_2"
+                android:id="@+id/activity_main_fragment_level_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <FrameLayout
-                android:id="@+id/content_main_fragment_level_3"
+                android:id="@+id/activity_main_fragment_level_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </RelativeLayout>
 
         <FrameLayout
-            android:id="@+id/activity_main_splash_fragment_layout"
+            android:id="@+id/activity_main_fragment_splash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

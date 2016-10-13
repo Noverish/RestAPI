@@ -16,8 +16,8 @@ import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.noverish.restapi.R;
-import com.noverish.restapi.activity.LoginManageActivity;
-import com.noverish.restapi.activity.SettingActivity;
+import com.noverish.restapi.activity.LoginManageFragment;
+import com.noverish.restapi.activity.SettingFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
@@ -61,8 +61,8 @@ public class FacebookFragment extends BaseFragment {
 
             @Override
             public void onNotLogin() {
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+                Essentials.changeFragment(getActivity(), R.id.activity_main_fragment_level_1, new SettingFragment());
+                Essentials.changeFragment(getActivity(), R.id.activity_main_fragment_level_2, new LoginManageFragment());
             }
 
             @Override

@@ -1,6 +1,8 @@
 package com.noverish.restapi.other;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+
+;
 
 /**
  * Created by Noverish on 2016-08-29.

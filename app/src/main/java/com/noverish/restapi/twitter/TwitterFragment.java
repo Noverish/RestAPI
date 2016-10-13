@@ -50,8 +50,8 @@ public class TwitterFragment extends BaseFragment {
 
             @Override
             public void onNotLogin() {
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+                Essentials.changeFragment(getActivity(), R.id.activity_main_fragment_level_1, new SettingFragment());
+                Essentials.changeFragment(getActivity(), R.id.activity_main_fragment_level_2, new LoginManageFragment());
             }
 
             @Override

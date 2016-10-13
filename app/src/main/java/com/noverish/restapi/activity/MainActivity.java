@@ -61,23 +61,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        main = (FrameLayout) findViewById(R.id.content_main_fragment_layout);
-        level1 = (FrameLayout) findViewById(R.id.content_main_fragment_level_1);
-        level2 = (FrameLayout) findViewById(R.id.content_main_fragment_level_2);
-        level3 = (FrameLayout) findViewById(R.id.content_main_fragment_level_3);
+        main = (FrameLayout) findViewById(R.id.activity_main_fragment_main);
+        level1 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_1);
+        level2 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_2);
+        level3 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_3);
 
-        Essentials.changeFragment(this, R.id.activity_main_splash_fragment_layout, new SplashFragment());
+        Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
 
         HomeFragment homeFragment = new HomeFragment();
         homeFragment.setOnFirstLoadFinishedRunnable(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.findViewById(R.id.activity_main_splash_fragment_layout).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.activity_main_fragment_splash).setVisibility(View.GONE);
                 fab.setVisibility(View.VISIBLE);
             }
         });
         nowFragment = homeFragment;
-        Essentials.changeFragment(this, R.id.content_main_fragment_layout, homeFragment);
+        Essentials.changeFragment(this, R.id.activity_main_fragment_main, homeFragment);
 
     }
 
@@ -96,10 +96,18 @@ public class MainActivity extends AppCompatActivity
             level3.removeAllViews();
         } else if(level2.getChildCount() > 0) {
             level2.removeAllViews();
+
+            try {
+                LoginManageFragment loginManageFragment = (LoginManageFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_2);
+                if(loginManageFragment.isLoginStatusChanged())
+                    refresh();
+            } catch (Exception ex) {
+
+            }
         } else if(level1.getChildCount() > 0) {
             level1.removeAllViews();
         } else if(!nowFragment.getClass().getSimpleName().equals("HomeFragment")) {
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
+            Essentials.changeFragment(this, R.id.activity_main_fragment_main, new HomeFragment());
         } else {
             super.onBackPressed();
         }
@@ -116,10 +124,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Essentials.changeFragment(this, R.id.content_main_fragment_level_1, new SettingActivity());
+            Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new SettingFragment());
             fab.setVisibility(View.GONE);
         } else if(id == R.id.action_refresh) {
-            nowFragment.onFreshButtonClicked();
+            refresh();
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,15 +142,15 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_facebook) {
             FacebookFragment fragment = new FacebookFragment();
             nowFragment = fragment;
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
+            Essentials.changeFragment(this, R.id.activity_main_fragment_main, fragment);
         } else if (id == R.id.nav_twitter) {
             TwitterFragment fragment = new TwitterFragment();
             nowFragment = fragment;
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
+            Essentials.changeFragment(this, R.id.activity_main_fragment_main, fragment);
         } else if (id == R.id.nav_kakao) {
             KakaoFragment fragment = new KakaoFragment();
             nowFragment = fragment;
-            Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
+            Essentials.changeFragment(this, R.id.activity_main_fragment_main, fragment);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -195,5 +203,9 @@ public class MainActivity extends AppCompatActivity
 
         popupWindow.setFocusable(true);
         popupWindow.update();
+    }
+
+    public void refresh() {
+        nowFragment.onFreshButtonClicked();
     }
 }
