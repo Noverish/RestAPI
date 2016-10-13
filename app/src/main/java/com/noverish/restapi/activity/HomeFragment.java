@@ -13,7 +13,6 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -73,9 +72,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onNotLogin() {
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
-
                 if(twitterFirstLoaded)
                     onFirstLoadFinishedRunnable.run();
                 else
@@ -106,9 +102,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onNotLogin() {
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
-                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
-
                 if(facebookFirstLoaded)
                     onFirstLoadFinishedRunnable.run();
                 else
