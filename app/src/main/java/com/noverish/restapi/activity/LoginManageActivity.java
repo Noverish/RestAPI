@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.kakao.KakaoClient;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.webview.HtmlParseWebView;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 import com.noverish.restapi.webview.OnPageStartedListener;
 
 /**
@@ -22,6 +24,7 @@ import com.noverish.restapi.webview.OnPageStartedListener;
 public class LoginManageActivity extends Fragment {
     private HtmlParseWebView facebookWebView;
     private HtmlParseWebView twitterWebView;
+    private FrameLayout main, level1, level2;
 
     private Button facebookButton;
     private Button kakaoButton;
@@ -34,18 +37,16 @@ public class LoginManageActivity extends Fragment {
 
         facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
         twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
+        main = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_layout);
+        level1 = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_level_1);
+        level2 = (FrameLayout) getActivity().findViewById(R.id.content_main_fragment_level_2);
+
 
         facebookButton = (Button) view.findViewById(R.id.activity_login_manage_facebook);
         facebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View level2 = getActivity().findViewById(R.id.content_main_fragment_level_2);
-                View level1 = getActivity().findViewById(R.id.content_main_fragment_level_1);
-                View main = getActivity().findViewById(R.id.content_main_fragment_layout);
 
-                level2.setVisibility(View.INVISIBLE);
-                level1.setVisibility(View.INVISIBLE);
-                main.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -61,29 +62,57 @@ public class LoginManageActivity extends Fragment {
         twitterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View level2 = getActivity().findViewById(R.id.content_main_fragment_level_2);
-                View level1 = getActivity().findViewById(R.id.content_main_fragment_level_1);
-                View main = getActivity().findViewById(R.id.content_main_fragment_layout);
+                if(TwitterClient.getInstance().isLogined()) {
+                    twitterWebView.loadUrl("https://mobile.twitter.com/logout");
+                    twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
+                        @Override
+                        public void onPageFinished(HtmlParseWebView webView, String url) {
+                            System.out.println("twitterWebView - onPageFinished" + url);
+                            if(url.equals("https://mobile.twitter.com/logout")) {
+                                webView.loadUrl("javascript:(function(){" +
+                                        "l=document.getElementById('logout_button');" +
+                                        "e=document.createEvent('HTMLEvents');" +
+                                        "e.initEvent('click',true,true);" +
+                                        "l.dispatchEvent(e);" +
+                                        "})()");
+                            } else if(url.equals("https://mobile.twitter.com/login")) {
+                                level2.setVisibility(View.INVISIBLE);
+                                level1.setVisibility(View.INVISIBLE);
+                                main.setVisibility(View.INVISIBLE);
+                                facebookWebView.setVisibility(View.INVISIBLE);
 
-                level2.setVisibility(View.INVISIBLE);
-                level1.setVisibility(View.INVISIBLE);
-                main.setVisibility(View.INVISIBLE);
-                facebookWebView.setVisibility(View.INVISIBLE);
-
-                twitterWebView.setOnPageStartedListener(new OnPageStartedListener() {
-                    @Override
-                    public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
-                        if(url.equals("https://mobile.twitter.com/")) {
-                            TwitterClient.getInstance().setLogined(true);
-                            getActivity().onBackPressed();
-                            onResume();
-                        } else if (url.equals("https://mobile.twitter.com/sessions")){
-
-                        } else {
-                            System.out.println("ERROR - " + url);
+                                onResume();
+                                webView.setOnPageFinishedListener(null);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    twitterWebView.loadUrl("https://mobile.twitter.com/login");
+                    twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
+                        @Override
+                        public void onPageFinished(HtmlParseWebView webView, String url) {
+                            if(url.equals("https://mobile.twitter.com/login")) {
+                                level2.setVisibility(View.INVISIBLE);
+                                level1.setVisibility(View.INVISIBLE);
+                                main.setVisibility(View.INVISIBLE);
+                                facebookWebView.setVisibility(View.INVISIBLE);
+                                webView.setOnPageFinishedListener(null);
+                            }
+                        }
+                    });
+                    twitterWebView.setOnPageStartedListener(new OnPageStartedListener() {
+                        @Override
+                        public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
+                            if(url.equals("https://mobile.twitter.com/")) {
+                                TwitterClient.getInstance().setLogined(true);
+                                getActivity().onBackPressed();
+
+                                onResume();
+                                webView.setOnPageStartedListener(null);
+                            }
+                        }
+                    });
+                }
             }
         });
 
