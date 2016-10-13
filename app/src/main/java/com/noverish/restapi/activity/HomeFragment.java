@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.article.ArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
@@ -20,6 +21,7 @@ import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -36,6 +38,8 @@ public class HomeFragment extends BaseFragment {
     private LinearLayout mainLayout;
 
     private android.os.Handler handler = new Handler();
+
+    private ArrayList<ArticleItem> articleItems = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,22 +64,20 @@ public class HomeFragment extends BaseFragment {
         facebookClient.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
             @Override
             public void onSuccess(ArrayList<FacebookArticleItem> items) {
-                for(FacebookArticleItem item : items) {
-                    mainLayout.addView(new FacebookArticleView(getActivity(), item));
-                }
+                articleItems.addAll(items);
+
+                facebookFirstLoaded = true;
 
                 if(twitterFirstLoaded)
-                    onFirstLoadFinishedRunnable.run();
-                else
-                    facebookFirstLoaded = true;
+                    allLoaded();
             }
 
             @Override
             public void onNotLogin() {
+                facebookFirstLoaded = true;
+
                 if(twitterFirstLoaded)
-                    onFirstLoadFinishedRunnable.run();
-                else
-                    facebookFirstLoaded = true;
+                    allLoaded();
             }
 
             @Override
@@ -90,22 +92,20 @@ public class HomeFragment extends BaseFragment {
         twitterClient.setTwitterClientCallback(new TwitterClient.TwitterClientCallback() {
             @Override
             public void onSuccess(ArrayList<TwitterArticleItem> items) {
-                for(TwitterArticleItem item : items) {
-                    mainLayout.addView(new TwitterArticleView(getActivity(), item, handler));
-                }
+                articleItems.addAll(items);
+
+                twitterFirstLoaded = true;
 
                 if(facebookFirstLoaded)
-                    onFirstLoadFinishedRunnable.run();
-                else
-                    twitterFirstLoaded = true;
+                    allLoaded();
             }
 
             @Override
             public void onNotLogin() {
+                twitterFirstLoaded = true;
+
                 if(facebookFirstLoaded)
-                    onFirstLoadFinishedRunnable.run();
-                else
-                    twitterFirstLoaded = true;
+                    allLoaded();
             }
 
             @Override
@@ -120,6 +120,37 @@ public class HomeFragment extends BaseFragment {
 
     public void setOnFirstLoadFinishedRunnable(Runnable onFirstLoadFinishedRunnable) {
         this.onFirstLoadFinishedRunnable = onFirstLoadFinishedRunnable;
+    }
+
+    public void allLoaded() {
+        try {
+            int[] asdf = {1, 2, 3, 4};
+            System.out.println(asdf[100]);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        System.out.println("allLoaded");
+
+        onFirstLoadFinishedRunnable.run();
+
+        Collections.sort(articleItems, ArticleItem.comparator);
+
+        for(ArticleItem item : articleItems) {
+            try {
+                FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
+                mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
+            } catch (Exception ex) {
+
+            }
+
+            try {
+                TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
+                mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem, handler));
+            } catch (Exception ex) {
+
+            }
+        }
     }
 
     @Override

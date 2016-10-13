@@ -3,6 +3,7 @@ package com.noverish.restapi.facebook;
 import android.util.Log;
 
 import com.noverish.restapi.http.HttpConnectionThread;
+import com.noverish.restapi.other.Essentials;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -128,7 +129,7 @@ public class FacebookHtmlCodeProcessor {
                             if(timeLocation.size() >= 1) {
 
                                 item.setTimeString(HttpConnectionThread.unicodeToString(timeLocation.get(0).outerHtml().replaceAll("<[^>]*>","")));
-
+                                item.setTimeMillis(Essentials.stringToMillisInFacebook(item.getTimeString()));
                             }
                             if(timeLocation.size() >= 2) {
 

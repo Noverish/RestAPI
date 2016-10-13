@@ -5,7 +5,8 @@ import com.noverish.restapi.article.ArticleItem;
 /**
  * Created by Noverish on 2016-09-18.
  */
-public class TwitterArticleItem extends ArticleItem{
+public class TwitterArticleItem extends ArticleItem {
+    private long tweetId;
     private String header = "";
     private String profileImageUrl = "";
     private String fullName = "";
@@ -18,50 +19,58 @@ public class TwitterArticleItem extends ArticleItem{
     private boolean favorited = false;
     private String favoriteUrl = "";
 
-    public void setHeader(String header) {
+    void setTweetId(long tweetId) {
+        System.out.println(tweetId);
+    }
+
+    void setHeader(String header) {
         this.header = header;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
+    void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public void setFullName(String fullName) {
+    void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    public void setScreenName(String screenName) {
+    void setScreenName(String screenName) {
         this.screenName = screenName;
     }
 
-    public void setContent(String content) {
+    void setContent(String content) {
         this.content = content;
     }
 
-    public void setMedia(String media) {
+    void setMedia(String media) {
         this.media = media;
     }
 
-    public void setReplyUrl(String replyUrl) {
+    void setReplyUrl(String replyUrl) {
         this.replyUrl = replyUrl;
     }
 
-    public void setRetweeted(boolean retweeted) {
+    void setRetweeted(boolean retweeted) {
         this.retweeted = retweeted;
     }
 
-    public void setRetweetUrl(String retweetUrl) {
+    void setRetweetUrl(String retweetUrl) {
         this.retweetUrl = retweetUrl;
     }
 
-    public void setFavorited(boolean favorited) {
+    void setFavorited(boolean favorited) {
         this.favorited = favorited;
     }
 
-    public void setFavoriteUrl(String favoriteUrl) {
+    void setFavoriteUrl(String favoriteUrl) {
         this.favoriteUrl = favoriteUrl;
     }
 
+
+    public long getTweetId() {
+        return tweetId;
+    }
 
     public String getHeader() {
         return header;

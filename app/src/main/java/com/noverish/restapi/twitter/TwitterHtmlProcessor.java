@@ -3,6 +3,7 @@ package com.noverish.restapi.twitter;
 import android.util.Log;
 
 import com.noverish.restapi.http.HttpConnectionThread;
+import com.noverish.restapi.other.Essentials;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,9 +41,11 @@ public class TwitterHtmlProcessor {
             Element retweetElement = tweetActionElement.select("a").get(1);
             Element favoriteElement = tweetActionElement.select("a").get(2);
 
+            item.setTweetId(Long.parseLong(article.attr("href").split("/")[3].replaceAll("\\D","")));
             item.setHeader(HttpConnectionThread.unicodeToString(headerElement.html()));
             item.setProfileImageUrl(profileImageElement.attr("src"));
             item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
+            item.setTimeMillis(Essentials.stringToMillisInTwitter(item.getTimeString()));
             item.setFullName(HttpConnectionThread.unicodeToString(nameElement.html()));
             item.setScreenName(screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim());
             item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n","")));

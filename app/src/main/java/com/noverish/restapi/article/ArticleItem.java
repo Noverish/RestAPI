@@ -1,5 +1,7 @@
 package com.noverish.restapi.article;
 
+import java.util.Comparator;
+
 /**
  * Created by Noverish on 2016-10-06.
  */
@@ -24,4 +26,11 @@ public class ArticleItem {
     public String getTimeString() {
         return timeString;
     }
+
+    public static Comparator<ArticleItem> comparator = new Comparator<ArticleItem>() {
+        @Override
+        public int compare(ArticleItem item1, ArticleItem item2) {
+            return (int)(item2.timeMillis - item1.timeMillis);
+        }
+    };
 }
