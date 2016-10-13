@@ -11,15 +11,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -29,26 +26,25 @@ import android.widget.RelativeLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
-import com.noverish.restapi.http.HttpConnectionThread;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterFragment;
-import com.noverish.restapi.view.HtmlParsingWebView;
-
-import org.jsoup.Jsoup;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private BaseFragment nowFragment;
-    private boolean isInHomefragment = true;
 
     private Toolbar toolbar;
 
     public static ProgressDialog dialog;
 
     private LinearLayout mainLayout;
+
+    private FrameLayout main, level1, level2, level3;
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +70,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        main = (FrameLayout) findViewById(R.id.content_main_fragment_layout);
+        level1 = (FrameLayout) findViewById(R.id.content_main_fragment_level_1);
+        level2 = (FrameLayout) findViewById(R.id.content_main_fragment_level_2);
+        level3 = (FrameLayout) findViewById(R.id.content_main_fragment_level_3);
+
         Essentials.changeFragment(this, R.id.activity_main_splash_fragment_layout, new SplashFragment());
 
         HomeFragment homeFragment = new HomeFragment();
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 MainActivity.this.findViewById(R.id.activity_main_splash_fragment_layout).setVisibility(View.GONE);
-                MainActivity.this.findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                fab.setVisibility(View.VISIBLE);
             }
         });
         Essentials.changeFragment(this, R.id.content_main_fragment_layout, homeFragment);
@@ -91,19 +92,30 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        FrameLayout layout = (FrameLayout) findViewById(R.id.content_main_fragment_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(!isInHomefragment){
-            layout.removeAllViews();
-            FrameLayout back = (FrameLayout) findViewById(R.id.content_main_background_layout);
-            back.removeAllViews();
+        } else if(nowFragment != null) {
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, new HomeFragment());
-            isInHomefragment = true;
+            nowFragment = null;
+        } else if(main.getVisibility() == View.INVISIBLE) {
+            main.setVisibility(View.VISIBLE);
+
+            if(level1.getChildCount() > 0)
+                level1.setVisibility(View.VISIBLE);
+            if(level2.getChildCount() > 0)
+                level2.setVisibility(View.VISIBLE);
+            if(level3.getChildCount() > 0)
+                level3.setVisibility(View.VISIBLE);
         } else {
-            Log.d("back","super");
-            super.onBackPressed();
+            if(level3.getChildCount() > 0)
+                level3.removeAllViews();
+            else if(level2.getChildCount() > 0)
+                level2.removeAllViews();
+            else if(level1.getChildCount() > 0)
+                level1.removeAllViews();
+            else
+                super.onBackPressed();
         }
     }
 
@@ -119,6 +131,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_settings) {
             Essentials.changeFragment(this, R.id.content_main_fragment_level_1, new SettingActivity());
+            fab.setVisibility(View.GONE);
         } else if(id == R.id.action_favorite) {
             nowFragment.onFreshButtonClicked();
         }
@@ -137,53 +150,12 @@ public class MainActivity extends AppCompatActivity
             nowFragment = fragment;
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_twitter) {
-            isInHomefragment = false;
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.twitter));
-
-            ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_main_background_layout);
-            viewGroup.removeAllViews();
-
             TwitterFragment fragment = new TwitterFragment();
             nowFragment = fragment;
-
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_kakao) {
-
-            isInHomefragment = false;
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.kakao));
-
-            Bundle bundle = new Bundle();
-            bundle.putString("url","https://story.kakao.com/s/login");
-
-            HtmlParsingWebView webView = new HtmlParsingWebView();
-            webView.setArguments(bundle);
-            webView.setOnHtmlParsingSuccessListener(new HtmlParsingWebView.OnHtmlParsingSuccessListener() {
-                @Override
-                public void onHtmlParsingSuccess(WebView webView, String htmlCode) {
-                    KakaoFragment kakaoFragment = KakaoFragment.getInstance();
-                    String title = HttpConnectionThread.unicodeToString(Jsoup.parse(htmlCode).title());
-
-                    if(kakaoFragment.getView() != null) {
-                        if (title.contains("로그인")) {
-                            kakaoFragment.getView().setVisibility(View.GONE);
-                        } else {
-                            kakaoFragment.getView().setVisibility(View.VISIBLE);
-                            KakaoFragment.getInstance().htmlHasChanged(htmlCode);
-                        }
-                    } else {
-                        Log.e("ERROR", "kakaoFragment.getView() is null");
-                    }
-
-                }
-            });
-
             KakaoFragment fragment = new KakaoFragment();
-            fragment.setWebView(webView);
             nowFragment = fragment;
-
-            dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
-
-            Essentials.changeFragment(this, R.id.content_main_background_layout, webView);
             Essentials.changeFragment(this, R.id.content_main_fragment_layout, fragment);
         } else if (id == R.id.nav_share) {
 
@@ -197,7 +169,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onPostButtonClicked() {
-        if(isInHomefragment)
+        if(nowFragment == null)
             return;
 
         if(nowFragment.getClass().getSimpleName().equals("FacebookFragment")) {

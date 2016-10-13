@@ -1,29 +1,23 @@
 package com.noverish.restapi.twitter;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
-
-import java.util.List;
-
-import twitter4j.Status;
 
 public class TwitterFragment extends BaseFragment {
     private LinearLayout textViewList;
     private android.os.Handler handler = new Handler();
     private ScrollBottomDetectScrollview scrollView;
 
+    private LinearLayout list;
     private int nowPage;
 
     private final String TAG = getClass().getSimpleName();
@@ -33,20 +27,44 @@ public class TwitterFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_twitter, container, false);
 
-        //editText = (EditText) findViewById(R.id.activity_main_edit_text);
+        /*list = (LinearLayout) view.findViewById(R.id.activity_facebook_text_view_list);
 
-        /*Button semanticButton = (Button) findViewById(R.id.activity_main_button);
-        semanticButton.setOnClickListener(new View.OnClickListener() {
+        scrollView = (ScrollBottomDetectScrollview) view.findViewById(R.id.fragment_facebook_scroll_view);
+        scrollView.setRunnable(new Runnable() {
             @Override
-            public void onClick(View v) {
-                semanticOnClick(v);
+            public void run() {
+                client.loadNextPage();
             }
-        });*/
+        });
+        scrollView.startLoading();
+
+        client = FacebookClient.getInstance();
+        client.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
+            @Override
+            public void onSuccess(ArrayList<FacebookArticleItem> items) {
+                for(FacebookArticleItem item : items) {
+                    list.addView(new FacebookArticleView(getActivity(), item));
+                }
+                scrollView.stopLoading();
+            }
+
+            @Override
+            public void onNotLogin() {
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_1, new SettingActivity());
+                Essentials.changeFragment(getActivity(), R.id.content_main_fragment_level_2, new LoginManageActivity());
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+        client.reload();*/
 
 
         return view;
     }
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -118,19 +136,19 @@ public class TwitterFragment extends BaseFragment {
         public void run() {
 //            handler.post(new AddViewRunnable(textViewList, new TwitterArticleView(getActivity(), status)));
         }
-    }
+    }*/
 
     @Override
     public void onPostButtonClicked(String content) {
-        Twitter4jClient twitter4jClient = Twitter4jClient.getInstance();
+        /*Twitter4jClient twitter4jClient = Twitter4jClient.getInstance();
         twitter4jClient.updateStatus(content);
-        Toast.makeText(getActivity(), "트윗을 보냈습니다",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "트윗을 보냈습니다",Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
     public void onFreshButtonClicked() {
-        textViewList.removeAllViews();
+        /*textViewList.removeAllViews();
         nowPage = 1;
-        loadTweets(nowPage);
+        loadTweets(nowPage);*/
     }
 }

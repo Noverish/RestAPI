@@ -2,22 +2,17 @@ package com.noverish.restapi.kakao;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
-import com.kakao.util.KakaoParameterException;
 import com.noverish.restapi.R;
-import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Noverish on 2016-08-24.
@@ -42,7 +37,7 @@ public class KakaoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_kakao, container, false);
     }
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -120,21 +115,21 @@ public class KakaoFragment extends BaseFragment {
             Log.d("mainActivity","dialog dismiss");
             MainActivity.dialog.dismiss();
         }
-    }
+    }*/
 
     @Override
     public void onPostButtonClicked(String content) {
-        KakaoLoginClient client = KakaoLoginClient.getInstance(getActivity());
+        /*KakaoLoginClient client = KakaoLoginClient.getInstance(getActivity());
         try {
             client.requestPostArticle(content);
         } catch (KakaoParameterException ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
 
     @Override
     public void onFreshButtonClicked() {
-        init = true;
+        /*init = true;
         list.removeAllViews();
 
         if(webView != null)
@@ -142,9 +137,10 @@ public class KakaoFragment extends BaseFragment {
 
         if(scrollView != null) {
             scrollView.startLoading();
-        }
+        }*/
 
     }
+/*
 
     private boolean canScroll(ScrollView scrollView) {
         View child = (View) scrollView.getChildAt(0);
@@ -158,6 +154,7 @@ public class KakaoFragment extends BaseFragment {
     public void setWebView(HtmlParsingWebView webView) {
         this.webView = webView;
     }
+*/
 
     /*private String execParam = "";
     private String marketParam = "";
