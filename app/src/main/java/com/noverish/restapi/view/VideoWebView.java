@@ -2,10 +2,8 @@ package com.noverish.restapi.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -27,20 +25,18 @@ public class VideoWebView extends FrameLayout implements View.OnClickListener{
         this.context = context;
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
+
+        init();
     }
 
     private void init() {
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.view_web_video, this);
 
-        ImageView imageView = new ImageView(context);
+        ImageView imageView = (ImageView) findViewById(R.id.view_web_video_src);
         Picasso.with(context).load(imageUrl).into(imageView);
-        addView(imageView);
 
-        ImageView playButton = new ImageView(context);
-        playButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.play_button));
-        playButton.setLayoutParams(params);
-        addView(playButton);
+        setOnClickListener(this);
     }
 
     @Override

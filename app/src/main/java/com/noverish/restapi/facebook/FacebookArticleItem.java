@@ -121,7 +121,7 @@ public class FacebookArticleItem extends ArticleItem {
                 ", location='" + location + '\'' +
                 ", content='" + content + '\'' +
                 ", imageUrls=" + "imageUrls" +
-                ", video=" + video +
+                ", video=" + ((video == null) ? "null" : (video.first + ", " + video.second)) +
                 ", sympathyNum='" + sympathyNum + '\'' +
                 ", commentNum='" + commentNum + '\'' +
                 ", sharingNum='" + sharingNum + '\'' +

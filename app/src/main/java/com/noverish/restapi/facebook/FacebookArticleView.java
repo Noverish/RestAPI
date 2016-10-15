@@ -32,7 +32,7 @@ public class FacebookArticleView extends LinearLayout {
     }
 
     private void init() {
-        final LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.article_facebook, this);
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
@@ -76,7 +76,7 @@ public class FacebookArticleView extends LinearLayout {
 
         if(article.getVideo() != null) {
             VideoWebView videoWebView = new VideoWebView(context, article.getVideo().first, article.getVideo().second);
-            addView(videoWebView);
+            mediaLayout.addView(videoWebView);
         }
 
         Button like = (Button) findViewById(R.id.facebook_article_like_button);
