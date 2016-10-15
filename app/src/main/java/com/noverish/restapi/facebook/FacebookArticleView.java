@@ -1,12 +1,9 @@
 package com.noverish.restapi.facebook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,7 +11,7 @@ import android.widget.TextView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
-import com.noverish.restapi.webview.WebViewActivity;
+import com.noverish.restapi.view.VideoWebView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -69,25 +66,17 @@ public class FacebookArticleView extends LinearLayout {
         sharing.setText(article.getSharingNum());
 
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.facebook_article_media_layout);
-        if(article.getMedia() != null) {
-            for (String url : article.getMedia()) {
+        if(article.getImageUrls() != null) {
+            for (String url : article.getImageUrls()) {
                 ImageView image = new ImageView(context);
                 Picasso.with(context).load(url).into(image);
                 mediaLayout.addView(image);
             }
         }
 
-        if(article.getVideo() != null && !article.getVideo().equals("")) {
-            Log.i("VIDEO!",article.getVideo());
-            mediaLayout.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, WebViewActivity.class);
-                    intent.putExtra("url",article.getVideo());
-
-                    context.startActivity(intent);
-                }
-            });
+        if(article.getVideo() != null) {
+            VideoWebView videoWebView = new VideoWebView(context, article.getVideo().first, article.getVideo().second);
+            addView(videoWebView);
         }
 
         Button like = (Button) findViewById(R.id.facebook_article_like_button);

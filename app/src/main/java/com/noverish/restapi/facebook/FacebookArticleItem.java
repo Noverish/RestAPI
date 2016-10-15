@@ -1,5 +1,7 @@
 package com.noverish.restapi.facebook;
 
+import android.util.Pair;
+
 import com.noverish.restapi.article.ArticleItem;
 
 import java.util.ArrayList;
@@ -13,8 +15,8 @@ public class FacebookArticleItem extends ArticleItem {
     private String title;
     private String location;
     private String content;
-    private ArrayList<String> media;
-    private String video;
+    private ArrayList<String> imageUrls;
+    private Pair<String, String> video = null;
     private String sympathyNum;
     private String commentNum;
     private String sharingNum;
@@ -40,11 +42,11 @@ public class FacebookArticleItem extends ArticleItem {
         this.content = content;
     }
 
-    public void setMedia(ArrayList<String> media) {
-        this.media = media;
+    public void setImageUrls(ArrayList<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
-    public void setVideo(String video) {
+    public void setVideo(Pair<String, String> video) {
         this.video = video;
     }
 
@@ -81,11 +83,11 @@ public class FacebookArticleItem extends ArticleItem {
         return content;
     }
 
-    public ArrayList<String> getMedia() {
-        return media;
+    public ArrayList<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public String getVideo() {
+    public Pair<String, String> getVideo() {
         return video;
     }
 
@@ -106,20 +108,7 @@ public class FacebookArticleItem extends ArticleItem {
     public boolean equals(Object obj) {
         FacebookArticleItem item = (FacebookArticleItem) obj;
 
-        if(item.profileImgUrl.equals(profileImgUrl)) {
-            if (item.title.equals(title)) {
-                if (item.timeString.equals(timeString)) {
-                    return true;
-                }/* else {
-                    Log.w("equal", item.toString());
-                    Log.w("equal", this.toString());
-                    Log.w("equal", "프로필과 제목은 같은데 시간이 다름");
-                    return true;
-                }*/
-            }
-        }
-
-        return false;
+        return getArticleId().equals(item.getArticleId());
     }
 
     @Override
@@ -131,7 +120,7 @@ public class FacebookArticleItem extends ArticleItem {
                 ", timeString='" + timeString + '\'' +
                 ", location='" + location + '\'' +
                 ", content='" + content + '\'' +
-                ", media=" + "media" +
+                ", imageUrls=" + "imageUrls" +
                 ", video=" + video +
                 ", sympathyNum='" + sympathyNum + '\'' +
                 ", commentNum='" + commentNum + '\'' +
