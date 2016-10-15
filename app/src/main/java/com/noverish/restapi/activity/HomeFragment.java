@@ -39,7 +39,7 @@ public class HomeFragment extends BaseFragment {
 
     private android.os.Handler handler = new Handler();
 
-    private ArrayList<ArticleItem> articleItems = new ArrayList<>();
+    private ArrayList<ArticleItem> newArticleItems = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class HomeFragment extends BaseFragment {
         facebookClient.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
             @Override
             public void onSuccess(ArrayList<FacebookArticleItem> items) {
-                articleItems.addAll(items);
+                newArticleItems.addAll(items);
 
                 facebookFirstLoaded = true;
 
@@ -92,7 +92,7 @@ public class HomeFragment extends BaseFragment {
         twitterClient.setTwitterClientCallback(new TwitterClient.TwitterClientCallback() {
             @Override
             public void onSuccess(ArrayList<TwitterArticleItem> items) {
-                articleItems.addAll(items);
+                newArticleItems.addAll(items);
 
                 twitterFirstLoaded = true;
 
@@ -125,9 +125,9 @@ public class HomeFragment extends BaseFragment {
     public void allLoaded() {
         onFirstLoadFinishedRunnable.run();
 
-        Collections.sort(articleItems, ArticleItem.comparator);
+        Collections.sort(newArticleItems, ArticleItem.comparator);
 
-        for(ArticleItem item : articleItems) {
+        for(ArticleItem item : newArticleItems) {
             try {
                 FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
                 mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
@@ -145,6 +145,7 @@ public class HomeFragment extends BaseFragment {
 
         twitterFirstLoaded = false;
         facebookFirstLoaded = false;
+        newArticleItems.clear();
     }
 
     @Override

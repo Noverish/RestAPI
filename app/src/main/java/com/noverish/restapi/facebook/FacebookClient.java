@@ -64,22 +64,14 @@ public class FacebookClient {
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getHtmlCode());
 
-                for(FacebookArticleItem item : items) {
-                    System.out.println("exist Item : " + item.getArticleId() + " " + item.getTitle());
-                }
-
                 for(int i = 0;i<newItems.size();i++) {
                     FacebookArticleItem item = newItems.get(i);
-
-                    System.out.println("new Item : " + item.getArticleId() + " " + item.getTitle());
 
                     if (items.contains(item)) {
                         newItems.remove(i);
                         i--;
-                        System.out.println("contain");
                     } else {
                         items.add(item);
-                        System.out.println("not contain");
                     }
                 }
 
