@@ -29,6 +29,9 @@ import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterFragment;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private FrameLayout main, level1, level2, level3;
     private FloatingActionButton fab;
+
+    private int debugStatus = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +77,8 @@ public class MainActivity extends AppCompatActivity
         homeFragment.setOnFirstLoadFinishedRunnable(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.findViewById(R.id.activity_main_fragment_splash).setVisibility(View.GONE);
-                fab.setVisibility(View.VISIBLE);
+                MainActivity.this.findViewById(R.id.activity_main_fragment_splash).setVisibility(GONE);
+                fab.setVisibility(VISIBLE);
             }
         });
         nowFragment = homeFragment;
@@ -88,10 +93,10 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(main.getVisibility() == View.INVISIBLE) {
-            main.setVisibility(View.VISIBLE);
-            level1.setVisibility(View.VISIBLE);
-            level2.setVisibility(View.VISIBLE);
-            level3.setVisibility(View.VISIBLE);
+            main.setVisibility(VISIBLE);
+            level1.setVisibility(VISIBLE);
+            level2.setVisibility(VISIBLE);
+            level3.setVisibility(VISIBLE);
         } else if(level3.getChildCount() > 0) {
             level3.removeAllViews();
         } else if(level2.getChildCount() > 0) {
@@ -125,9 +130,30 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_settings) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new SettingFragment());
-            fab.setVisibility(View.GONE);
+            fab.setVisibility(GONE);
         } else if(id == R.id.action_refresh) {
             refresh();
+        } else if(id == R.id.action_debug) {
+            if(debugStatus == 0) {
+                main.setVisibility(GONE);
+                level1.setVisibility(GONE);
+                level2.setVisibility(GONE);
+                level3.setVisibility(GONE);
+
+                debugStatus = 1;
+            } else if(debugStatus == 1) {
+                findViewById(R.id.activity_main_facebook_web_view).setVisibility(GONE);
+
+                debugStatus = 2;
+            } else if(debugStatus == 2) {
+                main.setVisibility(VISIBLE);
+                level1.setVisibility(VISIBLE);
+                level2.setVisibility(VISIBLE);
+                level3.setVisibility(VISIBLE);
+                findViewById(R.id.activity_main_facebook_web_view).setVisibility(VISIBLE);
+
+                debugStatus = 0;
+            }
         }
 
         return super.onOptionsItemSelected(item);
