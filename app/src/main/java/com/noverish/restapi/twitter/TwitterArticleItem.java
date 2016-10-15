@@ -6,7 +6,6 @@ import com.noverish.restapi.article.ArticleItem;
  * Created by Noverish on 2016-09-18.
  */
 public class TwitterArticleItem extends ArticleItem {
-    private long tweetId;
     private String header = "";
     private String profileImageUrl = "";
     private String fullName = "";
@@ -18,10 +17,6 @@ public class TwitterArticleItem extends ArticleItem {
     private String retweetUrl = "";
     private boolean favorited = false;
     private String favoriteUrl = "";
-
-    void setTweetId(long tweetId) {
-        this.tweetId = tweetId;
-    }
 
     void setHeader(String header) {
         this.header = header;
@@ -67,10 +62,6 @@ public class TwitterArticleItem extends ArticleItem {
         this.favoriteUrl = favoriteUrl;
     }
 
-
-    public long getTweetId() {
-        return tweetId;
-    }
 
     public String getHeader() {
         return header;

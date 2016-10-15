@@ -7,8 +7,13 @@ import java.util.Comparator;
  */
 
 public class ArticleItem {
+    protected String articleId;
     protected long timeMillis;
     protected String timeString;
+
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
 
     public void setTimeMillis(long timeMillis) {
         this.timeMillis = timeMillis;
@@ -19,6 +24,10 @@ public class ArticleItem {
     }
 
 
+    public String getArticleId() {
+        return articleId;
+    }
+
     public long getTimeMillis() {
         return timeMillis;
     }
@@ -26,6 +35,7 @@ public class ArticleItem {
     public String getTimeString() {
         return timeString;
     }
+
 
     public static Comparator<ArticleItem> comparator = new Comparator<ArticleItem>() {
         @Override

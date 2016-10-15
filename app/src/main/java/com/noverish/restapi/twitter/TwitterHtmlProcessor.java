@@ -41,7 +41,7 @@ public class TwitterHtmlProcessor {
             Element retweetElement = tweetActionElement.select("a").get(1);
             Element favoriteElement = tweetActionElement.select("a").get(2);
 
-            item.setTweetId(Long.parseLong(article.attr("href").split("/")[3].replaceAll("\\D","")));
+            item.setArticleId(article.attr("href").split("/")[3].replaceAll("\\D",""));
             item.setHeader(HttpConnectionThread.unicodeToString(headerElement.html()));
             item.setProfileImageUrl(profileImageElement.attr("src"));
             item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
