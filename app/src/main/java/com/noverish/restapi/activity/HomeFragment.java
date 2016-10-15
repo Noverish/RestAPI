@@ -146,6 +146,7 @@ public class HomeFragment extends BaseFragment {
         twitterFirstLoaded = false;
         facebookFirstLoaded = false;
         newArticleItems.clear();
+        scrollBottomDetectScrollview.stopLoading();
     }
 
     @Override

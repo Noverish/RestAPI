@@ -6,6 +6,7 @@ import android.util.Log;
 import com.noverish.restapi.R;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 
@@ -39,7 +40,6 @@ public class FacebookClient {
     }
 
     public void reload() {
-        webView.loadUrl(context.getString(R.string.facebook_url));
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
@@ -54,8 +54,18 @@ public class FacebookClient {
                     if(facebookClientCallback != null)
                         facebookClientCallback.onNotLogin();
                 }
+
+                webView.setOnPageFinishedListener(null);
+                webView.scrollBottom();
             }
         });
+        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                webView.extractHtml();
+            }
+        });
+        webView.loadUrl(context.getString(R.string.facebook_url));
     }
 
     public void loadNextPage() {
@@ -80,6 +90,7 @@ public class FacebookClient {
             }
         });
         webView.scrollBottom();
+        webView.extractHtml();
     }
 
     public void setFacebookClientCallback(FacebookClientCallback facebookClientCallback) {

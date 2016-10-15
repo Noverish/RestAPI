@@ -41,11 +41,11 @@ public class FacebookHtmlCodeProcessor {
 //            Log.d("article",article.classNames().toString());
             if(article.classNames().contains("_35au"))
                 continue;
-            if(article.select("header[class=\"_5rgs _5sg5\"]").size() > 0) //recommended video
+            if(article.select("header[class=\"_5rgs _5sg5\"]").size() > 0) //추천 게시물
                 continue;
-            if(article.classNames().contains("fullwidth"))
+            if(article.classNames().contains("fullwidth")) // 누가 좋아합니다 하고 좌우로 스크롤 할 수 있는 페이지 추천 글 _57_6 fullwidth carded _58vs _5o5d _5o5c _t26 _45js _29d0 _51s _55wr acw apm
                 continue;
-            if(article.classNames().contains("_d2r"))
+            if(article.classNames().contains("_d2r")) //보이지 않는 무언가
                 continue;
             if(article.classNames().containsAll(Arrays.asList("_56be", "_4hkg", "_5rgr", "_5s1m", "async_like"))) //내부 아티클 _56be _4hkg _5rgr _5s1m async_like
                 continue;

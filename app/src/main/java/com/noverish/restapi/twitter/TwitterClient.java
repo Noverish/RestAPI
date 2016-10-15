@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,7 +40,6 @@ public class TwitterClient {
     }
 
     public void reload() {
-        webView.loadUrl("https://mobile.twitter.com/");
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
@@ -68,6 +68,13 @@ public class TwitterClient {
                 }
             }
         });
+        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                webView.extractHtml();
+            }
+        });
+        webView.loadUrl("https://mobile.twitter.com/");
     }
 
     public void setTwitterClientCallback(TwitterClientCallback twitterClientCallback) {
@@ -75,7 +82,6 @@ public class TwitterClient {
     }
 
     public void loadNextPage() {
-        webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl);
         webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
@@ -83,6 +89,13 @@ public class TwitterClient {
                     twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
             }
         });
+        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                webView.extractHtml();
+            }
+        });
+        webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl);
     }
 
     public boolean isLogined() {

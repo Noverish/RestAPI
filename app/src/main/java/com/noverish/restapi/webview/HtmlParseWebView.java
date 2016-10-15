@@ -52,8 +52,6 @@ public class HtmlParseWebView extends WebView {
 
             if(onPageFinishedListener != null)
                 onPageFinishedListener.onPageFinished(HtmlParseWebView.this, url);
-
-            extractHtml();
         }
 
         @Override
@@ -114,7 +112,7 @@ public class HtmlParseWebView extends WebView {
     }
 
     public void scrollBottom() {
-        scrollBy(0, 10000);
+        scrollTo(0, computeVerticalScrollRange());
     }
 
     public void refresh() {

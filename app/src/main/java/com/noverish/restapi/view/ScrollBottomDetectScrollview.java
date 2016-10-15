@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -80,18 +79,16 @@ public class ScrollBottomDetectScrollview extends ScrollView {
     }
 
     public void stopLoading() {
-        try {
-            if(dialog != null) {
-                dialog.dismiss();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if(dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 
     public void startLoading() {
-        Log.d("start","loading");
-        dialog = ProgressDialog.show(context, "", "Loading. Please wait...", true);
-        dialog.setCancelable(true);
+        if(dialog == null) {
+            dialog = ProgressDialog.show(context, "", "Loading. Please wait...", true);
+            dialog.setCancelable(false);
+        }
     }
 }
