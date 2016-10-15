@@ -123,15 +123,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void allLoaded() {
-        try {
-            int[] asdf = {1, 2, 3, 4};
-            System.out.println(asdf[100]);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        System.out.println("allLoaded");
-
         onFirstLoadFinishedRunnable.run();
 
         Collections.sort(articleItems, ArticleItem.comparator);
@@ -151,6 +142,9 @@ public class HomeFragment extends BaseFragment {
 
             }
         }
+
+        twitterFirstLoaded = false;
+        facebookFirstLoaded = false;
     }
 
     @Override
