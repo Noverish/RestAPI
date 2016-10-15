@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -28,37 +29,27 @@ public class Essentials {
 
     public static long stringToMillisInTwitter(String str) {
         Calendar calendar = Calendar.getInstance();
+        String tmp;
 
-        if(str.contains("초")) {
-            str = str.replaceAll("\\D","");
-            calendar.add(Calendar.SECOND, -Integer.parseInt(str));
-        } else if(str.contains("분")) {
-            str = str.replaceAll("\\D","");
-            calendar.add(Calendar.MINUTE, -Integer.parseInt(str));
-        } else if(str.contains("시간")) {
-            str = str.replaceAll("\\D","");
-            calendar.add(Calendar.HOUR, -Integer.parseInt(str));
-        } else if(str.contains("월") && str.contains("일")) {
-            if(str.contains("년")) {
-                String year = str.split("[\\D]+")[0];
-                String month = str.split("[\\D]+")[1];
-                String day = str.split("[\\D]+")[2];
+        if((tmp = getMatches("[\\d]+초",str)) != null)
+            calendar.add(Calendar.SECOND, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
 
-                if(day.length() <= 2)
-                    day = "20" + day;
+        if((tmp = getMatches("[\\d]+분",str)) != null)
+            calendar.add(Calendar.MINUTE, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
 
-                calendar.set(Calendar.YEAR, Integer.parseInt(year));
-                calendar.set(Calendar.MONTH, Integer.parseInt(month));
-                calendar.set(Calendar.DATE, Integer.parseInt(day));
-            } else {
-                String month = str.split("[\\D]+")[0];
-                String day = str.split("[\\D]+")[1];
+        if((tmp = getMatches("[\\d]+시간",str)) != null)
+            calendar.add(Calendar.HOUR, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
 
-                calendar.set(Calendar.MONTH, Integer.parseInt(month));
-                calendar.set(Calendar.DATE, Integer.parseInt(day));
-            }
-        } else {
-            Log.e("ERROR!","stringToMillisInTwitter - " + str);
+        if((tmp = getMatches("[\\d]+일", str)) != null)
+            calendar.set(Calendar.DATE, Integer.parseInt(tmp.replaceAll("[\\D]","")));
+
+        if((tmp = getMatches("[\\d]+월", str)) != null)
+            calendar.set(Calendar.MONTH, Integer.parseInt(tmp.replaceAll("[\\D]","")));
+
+        if((tmp = getMatches("[\\d]+년", str)) != null) {
+            if((tmp = tmp.replaceAll("[\\D]", "")).length() <= 2)
+                tmp = "20" + tmp;
+            calendar.set(Calendar.YEAR, Integer.parseInt(tmp));
         }
 
         return calendar.getTimeInMillis();
@@ -66,69 +57,46 @@ public class Essentials {
 
     public static long stringToMillisInFacebook(String str) {
         Calendar calendar = Calendar.getInstance();
+        String tmp;
 
-        if(str.contains("분")) {
-            str = str.replaceAll("\\D","");
-            calendar.add(Calendar.MINUTE, -Integer.parseInt(str));
-        } else if(str.contains("시간")) {
-            str = str.replaceAll("\\D","");
-            calendar.add(Calendar.HOUR, -Integer.parseInt(str));
-        } else if(str.contains("어제")) {
-            if(str.contains("오전")) {
-                calendar.set(Calendar.AM_PM, Calendar.AM);
-            } else if(str.contains("오후")) {
-                calendar.set(Calendar.AM_PM, Calendar.PM);
-            } else {
-                Log.e("ERROR!","stringToMillisInFacebook - " + str);
-            }
+        if((tmp = getMatches("[\\d]+분",str)) != null)
+            calendar.add(Calendar.MINUTE, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
 
-            String hour = str.split("[\\D]+")[0];
-            String minute = str.split("[\\D]+")[1];
+        if((tmp = getMatches("[\\d]+시간",str)) != null)
+            calendar.add(Calendar.HOUR, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
 
-            calendar.set(Calendar.HOUR, Integer.parseInt(hour));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
-        } else if(str.contains("년")) {
-            if(str.contains("오전")) {
-                calendar.set(Calendar.AM_PM, Calendar.AM);
-            } else if(str.contains("오후")) {
-                calendar.set(Calendar.AM_PM, Calendar.PM);
-            } else {
-                Log.e("ERROR!","stringToMillisInFacebook - " + str);
-            }
+        if(str.contains("어제"))
+            calendar.add(Calendar.DATE, -1);
 
-            String year = str.split("[\\D]+")[0];
-            String month = str.split("[\\D]+")[1];
-            String day = str.split("[\\D]+")[2];
-            String hour = str.split("[\\D]+")[3];
-            String minute = str.split("[\\D]+")[4];
+        if(str.contains("오전"))
+            calendar.set(Calendar.AM_PM, Calendar.AM);
+        else if(str.contains("오후"))
+            calendar.set(Calendar.AM_PM, Calendar.PM);
 
-            calendar.set(Calendar.YEAR, Integer.parseInt(year));
-            calendar.set(Calendar.MONTH, Integer.parseInt(month));
-            calendar.set(Calendar.DATE, Integer.parseInt(day));
-            calendar.set(Calendar.HOUR, Integer.parseInt(hour));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
-        } else if(str.contains("월")) {
-            if(str.contains("오전")) {
-                calendar.set(Calendar.AM_PM, Calendar.AM);
-            } else if(str.contains("오후")) {
-                calendar.set(Calendar.AM_PM, Calendar.PM);
-            } else {
-                Log.e("ERROR!","stringToMillisInFacebook - " + str);
-            }
-
-            String month = str.split("[\\D]+")[0];
-            String day = str.split("[\\D]+")[1];
-            String hour = str.split("[\\D]+")[2];
-            String minute = str.split("[\\D]+")[3];
-
-            calendar.set(Calendar.MONTH, Integer.parseInt(month));
-            calendar.set(Calendar.DATE, Integer.parseInt(day));
-            calendar.set(Calendar.HOUR, Integer.parseInt(hour));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
-        } else {
-            Log.e("ERROR!","stringToMillisInFacebook - " + str);
+        if((tmp = getMatches("[\\d]+:[\\d]+", str)) != null) {
+            calendar.set(Calendar.HOUR, Integer.parseInt(tmp.split(":")[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(tmp.split(":")[1]));
         }
 
+        if((tmp = getMatches("[\\d]+일", str)) != null)
+            calendar.set(Calendar.DATE, Integer.parseInt(tmp.replaceAll("[\\D]","")));
+
+        if((tmp = getMatches("[\\d]+월", str)) != null)
+            calendar.set(Calendar.MONTH, Integer.parseInt(tmp.replaceAll("[\\D]","")));
+
+        if((tmp = getMatches("[\\d]+년", str)) != null)
+           calendar.set(Calendar.YEAR, Integer.parseInt(tmp.replaceAll("[\\D]","")));
+
         return calendar.getTimeInMillis();
+    }
+
+    public static String getMatches(String regex, String input) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        if(matcher.find())
+            return matcher.group();
+        else
+            return null;
     }
 }
