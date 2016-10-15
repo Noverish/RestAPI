@@ -20,7 +20,7 @@ public class TwitterArticleItem extends ArticleItem {
     private String favoriteUrl = "";
 
     void setTweetId(long tweetId) {
-        System.out.println(tweetId);
+        this.tweetId = tweetId;
     }
 
     void setHeader(String header) {
