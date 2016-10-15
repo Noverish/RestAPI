@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.BaseFragment;
-import com.noverish.restapi.view.HtmlParsingWebView;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class KakaoFragment extends BaseFragment {
     private ArrayList<KakaoArticleItem> items = new ArrayList<>();
     private ArrayList<KakaoArticleView> views = new ArrayList<>();
 
-    private HtmlParsingWebView webView;
 
     private static KakaoFragment instance;
 
