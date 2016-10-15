@@ -20,7 +20,7 @@
     <dimen name="article_title_text_size">17sp</dimen>
     <dimen name="article_title_margin_left">8dp</dimen>
     <dimen name="article_content_margin_top">8dp</dimen>
-    <dimen name="article_bottom_button_text_size">12sp</dimen>
+    <dimen name="article_bottom_button_text_size">14sp</dimen>
     <dimen name="article_margin_bottom">16dp</dimen>
 
     <dimen name="twitter_article_screen_name_left_margin">4dp</dimen>

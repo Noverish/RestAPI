@@ -49,6 +49,8 @@ public class FacebookHtmlCodeProcessor {
                 continue;
             if(article.classNames().containsAll(Arrays.asList("_56be", "_4hkg", "_5rgr", "_5s1m", "async_like"))) //내부 아티클 _56be _4hkg _5rgr _5s1m async_like
                 continue;
+            if(article.classNames().containsAll(Arrays.asList("_2hrn", "_5t8z", "acw", "apm"))) //보이지 않는 무언가의 내부 아티클 (누가 무슨 페이지를 좋아합니다 인 듯하다) _2hrn _5t8z acw apm
+                continue;
 
             item.setArticleId(Essentials.getMatches("mf_story_key[.][-]?[\\d]*", article.attributes().toString()).replaceAll("[^-0-9]", ""));
             if(item.getArticleId().equals(""))
@@ -111,8 +113,12 @@ public class FacebookHtmlCodeProcessor {
                 System.out.println(videoElements.outerHtml());
             }
 
-            if(item.getTimeString() == null)
-                continue;
+            Elements likeButton = article.select("a._15ko._5a-2.touchable");
+            item.setLiked(Boolean.parseBoolean(likeButton.attr("aria-pressed")));
+            item.setLikeUrl(likeButton.attr("data-uri"));
+
+            if(item.getTitle().equals(""))
+                System.out.println(article.outerHtml());
 
             items.add(item);
         }

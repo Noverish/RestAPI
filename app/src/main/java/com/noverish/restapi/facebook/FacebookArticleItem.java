@@ -21,6 +21,9 @@ public class FacebookArticleItem extends ArticleItem {
     private String commentNum;
     private String sharingNum;
 
+    private String likeUrl;
+    private boolean isLiked = false;
+
 
     public void setHeader(String header) {
         this.header = header;
@@ -62,6 +65,14 @@ public class FacebookArticleItem extends ArticleItem {
         this.sharingNum = sharingNum;
     }
 
+    public void setLikeUrl(String likeUrl) {
+        this.likeUrl = likeUrl;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
 
     public String getHeader() {
         return header;
@@ -101,6 +112,14 @@ public class FacebookArticleItem extends ArticleItem {
 
     public String getSharingNum() {
         return sharingNum;
+    }
+
+    public String getLikeUrl() {
+        return likeUrl;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
     }
 
 

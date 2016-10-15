@@ -3,16 +3,22 @@ package com.noverish.restapi.facebook;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
 import com.noverish.restapi.view.VideoWebView;
 import com.squareup.picasso.Picasso;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Created by Noverish on 2016-07-17.
@@ -80,7 +86,36 @@ public class FacebookArticleView extends LinearLayout {
         }
 
         Button like = (Button) findViewById(R.id.facebook_article_like_button);
-        if(Math.random() < 0.4)
-            like.setTextColor(ContextCompat.getColor(context, R.color.facebook));
+        like.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(article.isLiked()) {
+                    Toast.makeText(context, "좋아요 취소는 아직 지원하지 않습니다", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    System.out.println(article.getLikeUrl());
+                    try {
+                        Document document = Jsoup.connect(article.getLikeUrl()).get();
+                        Log.i("Document",document.outerHtml());
+                        article.setLiked(true);
+                        makeButtonLiked();
+                    } catch (Exception ex) {
+                        Toast.makeText(context, "연결에 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        if(article.isLiked()) {
+            makeButtonLiked();
+        }
+    }
+
+    private void makeButtonLiked() {
+        ImageView likeIcon = (ImageView) findViewById(R.id.article_facebook_like_icon);
+        TextView likeText = (TextView) findViewById(R.id.article_facebook_like_text);
+
+        likeIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_facebook_like_true));
+        likeText.setTextColor(ContextCompat.getColor(context, R.color.facebook));
     }
 }

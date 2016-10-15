@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pure_white"
-    android:layout_marginBottom="@dimen/article_margin_bottom">
+    android:layout_marginBottom="@dimen/article_margin_bottom"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/article_facebook_classification"
@@ -123,17 +124,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/facebook_article_like_button"
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/facebook_article_default_like_button"
-            android:textSize="@dimen/article_bottom_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/article_facebook_like_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/icon_facebook_like_false"/>
+
+                <TextView
+                    android:id="@+id/article_facebook_like_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/facebook_article_default_like_button"
+                    android:textSize="@dimen/article_bottom_button_text_size"
+                    android:textColor="@color/pure_dark"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/facebook_article_like_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"/>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/facebook_article_comment_button"
