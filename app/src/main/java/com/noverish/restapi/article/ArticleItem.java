@@ -7,9 +7,10 @@ import java.util.Comparator;
  */
 
 public class ArticleItem {
-    protected String articleId;
-    protected long timeMillis;
-    protected String timeString;
+    private String articleId;
+    private long timeMillis;
+    private String timeString;
+    private String posterUrl;
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
@@ -21,6 +22,10 @@ public class ArticleItem {
 
     public void setTimeString(String timeString) {
         this.timeString = timeString;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
     }
 
 
@@ -36,6 +41,10 @@ public class ArticleItem {
         return timeString;
     }
 
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
 
     public static Comparator<ArticleItem> comparator = new Comparator<ArticleItem>() {
         @Override
@@ -43,4 +52,14 @@ public class ArticleItem {
             return (int)(item2.timeMillis - item1.timeMillis);
         }
     };
+
+    @Override
+    public String toString() {
+        return "ArticleItem{" +
+                "articleId='" + articleId + '\'' +
+                ", timeMillis=" + timeMillis +
+                ", timeString='" + timeString + '\'' +
+                ", posterUrl='" + posterUrl + '\'' +
+                '}';
+    }
 }

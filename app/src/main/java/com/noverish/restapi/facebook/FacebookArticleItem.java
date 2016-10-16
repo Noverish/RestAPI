@@ -134,16 +134,17 @@ public class FacebookArticleItem extends ArticleItem {
     public String toString() {
         return "FacebookArticleItem{" +
                 "header='" + header + '\'' +
-                ", profileImgUrl='" + "url" + '\'' +
+                ", profileImgUrl='" + profileImgUrl + '\'' +
                 ", title='" + title + '\'' +
-                ", timeString='" + timeString + '\'' +
                 ", location='" + location + '\'' +
                 ", content='" + content + '\'' +
-                ", imageUrls=" + "imageUrls" +
-                ", video=" + ((video == null) ? "null" : (video.first + ", " + video.second)) +
+                ", imageUrls=" + imageUrls +
+                ", video=" + video +
                 ", sympathyNum='" + sympathyNum + '\'' +
                 ", commentNum='" + commentNum + '\'' +
                 ", sharingNum='" + sharingNum + '\'' +
-                '}';
+                ", likeUrl='" + likeUrl + '\'' +
+                ", isLiked=" + isLiked +
+                "} " + super.toString();
     }
 }

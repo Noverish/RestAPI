@@ -47,6 +47,7 @@ public class TwitterHtmlProcessor {
             item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
             item.setTimeMillis(Essentials.stringToMillisInTwitter(item.getTimeString()));
             item.setFullName(HttpConnectionThread.unicodeToString(nameElement.html()));
+            item.setPosterUrl("https://mobile.twitter.com" + nameElement.parents().attr("href"));
             item.setScreenName(screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim());
             item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n","")));
             item.setMedia(mediaElement.attr("data-url"));

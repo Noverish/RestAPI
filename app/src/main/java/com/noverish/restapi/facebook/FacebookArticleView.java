@@ -1,6 +1,7 @@
 package com.noverish.restapi.facebook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
 import com.noverish.restapi.view.VideoWebView;
+import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -41,6 +43,15 @@ public class FacebookArticleView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.article_facebook, this);
 
+        OnClickListener goToPoster = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("url",article.getPosterUrl());
+                context.startActivity(intent);
+            }
+        };
+
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
         RestAPIClient.getInstance().process(article.getContent(), classification);
 
@@ -52,9 +63,11 @@ public class FacebookArticleView extends LinearLayout {
 
         ImageView profileImg = (ImageView) findViewById(R.id.facebook_article_profile_img);
         Picasso.with(context).load(article.getProfileImgUrl()).into(profileImg);
+        profileImg.setOnClickListener(goToPoster);
 
         TextView title = (TextView) findViewById(R.id.facebook_article_title);
         title.setText(article.getTitle());
+        title.setOnClickListener(goToPoster);
 
         TextView time = (TextView) findViewById(R.id.facebook_article_time);
         time.setText(article.getTimeString());

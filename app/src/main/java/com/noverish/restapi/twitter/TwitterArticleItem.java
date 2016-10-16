@@ -106,4 +106,21 @@ public class TwitterArticleItem extends ArticleItem {
     public String getFavoriteUrl() {
         return favoriteUrl;
     }
+
+    @Override
+    public String toString() {
+        return "TwitterArticleItem{" +
+                "header='" + header + '\'' +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", screenName='" + screenName + '\'' +
+                ", content='" + content + '\'' +
+                ", media='" + media + '\'' +
+                ", replyUrl='" + replyUrl + '\'' +
+                ", retweeted=" + retweeted +
+                ", retweetUrl='" + retweetUrl + '\'' +
+                ", favorited=" + favorited +
+                ", favoriteUrl='" + favoriteUrl + '\'' +
+                "} " + super.toString();
+    }
 }

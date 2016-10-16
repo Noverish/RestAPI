@@ -42,6 +42,14 @@ public class TwitterArticleView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.article_twitter, this, true);
 
+        OnClickListener goToPoster = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("url",item.getPosterUrl());
+                context.startActivity(intent);
+            }
+        };
 
         TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
         RestAPIClient.getInstance().process(item.getContent(), classificationTextView);
@@ -59,12 +67,15 @@ public class TwitterArticleView extends LinearLayout {
 
         ImageView profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
         Picasso.with(context).load(item.getProfileImageUrl()).into(profileImageView);
+        profileImageView.setOnClickListener(goToPoster);
 
         TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);
         nameTextView.setText(item.getFullName());
+        nameTextView.setOnClickListener(goToPoster);
 
         TextView screenNameTextView = (TextView) findViewById(R.id.twitter_article_view_screen_name);
         screenNameTextView.setText(item.getScreenName());
+        screenNameTextView.setOnClickListener(goToPoster);
 
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(item.getTimeString());
