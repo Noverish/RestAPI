@@ -4,10 +4,55 @@
     android:layout_height="match_parent"
     android:background="@color/pure_white">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_setting_big_cate_margin"
+        android:text="페이스북"
+        android:textSize="@dimen/activity_setting_big_cate_text_size"/>
+
     <Button
-        android:id="@+id/activity_setting_login"
+        android:id="@+id/activity_setting_facebook_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/activity_setting_login"/>
+        android:text="@string/activity_setting_facebook_login"/>
 
+    <Button
+        android:id="@+id/activity_setting_facebook_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_facebook_profile"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_setting_big_cate_margin"
+        android:text="트위터"
+        android:textSize="@dimen/activity_setting_big_cate_text_size"/>
+
+    <Button
+        android:id="@+id/activity_setting_twitter_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_twitter_login"/>
+
+    <Button
+        android:id="@+id/activity_setting_twitter_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_twitter_profile"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_setting_big_cate_margin"
+        android:text="카카오스토리"
+        android:textSize="@dimen/activity_setting_big_cate_text_size"/>
+
+    <Button
+        android:id="@+id/activity_setting_kakao_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_kakao_login"/>
 </LinearLayout>

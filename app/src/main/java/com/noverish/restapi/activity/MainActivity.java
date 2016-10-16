@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity
             level2Frame.removeAllViews();
 
             try {
-                LoginManageFragment loginManageFragment = (LoginManageFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_2);
-                if(loginManageFragment.isLoginStatusChanged())
+                SettingFragment settingFragment = (SettingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_2);
+                if(settingFragment.isLoginStatusChanged())
                     refresh();
             } catch (Exception ex) {
 
