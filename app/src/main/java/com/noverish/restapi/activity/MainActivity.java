@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                 changeVisibleLevel(LEVEL_TWITTER);
                 debugStatus = 2;
             } else if(debugStatus == 2) {
-                changeVisibleLevel(LEVEL_MAIN);
+                changeVisibleLevel(LEVEL_3);
                 debugStatus = 0;
             }
         }
