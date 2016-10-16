@@ -28,6 +28,7 @@ import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterFragment;
+import com.noverish.restapi.webview.HtmlParseWebView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -36,8 +37,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private BaseFragment nowFragment;
-    private Toolbar toolbar;
-    private FrameLayout main, level1, level2, level3;
+
+    private HtmlParseWebView anotherWebView, kakaoWebView, twitterWebView, facebookWebView;
+    private FrameLayout mainFrame, level1Frame, level2Frame, level3Frame;
+
     private FloatingActionButton fab;
 
     private int debugStatus = 0;
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -66,10 +69,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        main = (FrameLayout) findViewById(R.id.activity_main_fragment_main);
-        level1 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_1);
-        level2 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_2);
-        level3 = (FrameLayout) findViewById(R.id.activity_main_fragment_level_3);
+        mainFrame = (FrameLayout) findViewById(R.id.activity_main_fragment_main);
+        level1Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_1);
+        level2Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_2);
+        level3Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_3);
+
+        anotherWebView = (HtmlParseWebView) findViewById(R.id.activity_main_another_web_view);
+        kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
+        twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
+        facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
 
         Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
 
@@ -92,15 +100,12 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(main.getVisibility() == View.INVISIBLE) {
-            main.setVisibility(VISIBLE);
-            level1.setVisibility(VISIBLE);
-            level2.setVisibility(VISIBLE);
-            level3.setVisibility(VISIBLE);
-        } else if(level3.getChildCount() > 0) {
-            level3.removeAllViews();
-        } else if(level2.getChildCount() > 0) {
-            level2.removeAllViews();
+        } else if(mainFrame.getVisibility() == View.INVISIBLE) {
+           changeVisibleLevel(LEVEL_3);
+        } else if(level3Frame.getChildCount() > 0) {
+            level3Frame.removeAllViews();
+        } else if(level2Frame.getChildCount() > 0) {
+            level2Frame.removeAllViews();
 
             try {
                 LoginManageFragment loginManageFragment = (LoginManageFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_2);
@@ -109,8 +114,8 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception ex) {
 
             }
-        } else if(level1.getChildCount() > 0) {
-            level1.removeAllViews();
+        } else if(level1Frame.getChildCount() > 0) {
+            level1Frame.removeAllViews();
         } else if(!nowFragment.getClass().getSimpleName().equals("HomeFragment")) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_main, new HomeFragment());
         } else {
@@ -135,23 +140,13 @@ public class MainActivity extends AppCompatActivity
             refresh();
         } else if(id == R.id.action_debug) {
             if(debugStatus == 0) {
-                main.setVisibility(GONE);
-                level1.setVisibility(GONE);
-                level2.setVisibility(GONE);
-                level3.setVisibility(GONE);
-
+                changeVisibleLevel(LEVEL_FACEBOOK);
                 debugStatus = 1;
             } else if(debugStatus == 1) {
-                findViewById(R.id.activity_main_facebook_web_view).setVisibility(GONE);
-
+                changeVisibleLevel(LEVEL_TWITTER);
                 debugStatus = 2;
             } else if(debugStatus == 2) {
-                main.setVisibility(VISIBLE);
-                level1.setVisibility(VISIBLE);
-                level2.setVisibility(VISIBLE);
-                level3.setVisibility(VISIBLE);
-                findViewById(R.id.activity_main_facebook_web_view).setVisibility(VISIBLE);
-
+                changeVisibleLevel(LEVEL_MAIN);
                 debugStatus = 0;
             }
         }
@@ -233,5 +228,26 @@ public class MainActivity extends AppCompatActivity
 
     public void refresh() {
         nowFragment.onFreshButtonClicked();
+    }
+
+    public static final int LEVEL_ANOTHER = 0;
+    public static final int LEVEL_KAKAO = 1;
+    public static final int LEVEL_TWITTER = 2;
+    public static final int LEVEL_FACEBOOK = 3;
+    public static final int LEVEL_MAIN = 4;
+    public static final int LEVEL_1 = 5;
+    public static final int LEVEL_2 = 6;
+    public static final int LEVEL_3 = 7;
+
+    public void changeVisibleLevel(int level) {
+        View[] views = {anotherWebView, kakaoWebView, twitterWebView, facebookWebView, mainFrame, level1Frame, level2Frame, level3Frame};
+
+        int i = 0;
+        for (; i <= level; i++) {
+            views[i].setVisibility(VISIBLE);
+        }
+        for (; i < 7; i++) {
+            views[i].setVisibility(GONE);
+        }
     }
 }

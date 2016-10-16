@@ -1,14 +1,13 @@
 package com.noverish.restapi.activity;
 
-import android.support.v4.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
@@ -24,7 +23,6 @@ import com.noverish.restapi.webview.OnPageStartedListener;
 public class LoginManageFragment extends Fragment {
     private HtmlParseWebView facebookWebView;
     private HtmlParseWebView twitterWebView;
-    private FrameLayout main, level1, level2;
 
     private Button facebookButton;
     private Button kakaoButton;
@@ -39,10 +37,6 @@ public class LoginManageFragment extends Fragment {
 
         facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
         twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
-        main = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_main);
-        level1 = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_level_1);
-        level2 = (FrameLayout) getActivity().findViewById(R.id.activity_main_fragment_level_2);
-
 
         facebookButton = (Button) view.findViewById(R.id.activity_login_manage_facebook);
         facebookButton.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +74,7 @@ public class LoginManageFragment extends Fragment {
                                         "l.dispatchEvent(e);" +
                                         "})()");
                             } else if(url.equals("https://mobile.twitter.com/login")) {
-                                level2.setVisibility(View.INVISIBLE);
-                                level1.setVisibility(View.INVISIBLE);
-                                main.setVisibility(View.INVISIBLE);
-                                facebookWebView.setVisibility(View.INVISIBLE);
-
+                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
                                 onResume();
                                 webView.setOnPageFinishedListener(null);
                             }
@@ -96,10 +86,7 @@ public class LoginManageFragment extends Fragment {
                         @Override
                         public void onPageFinished(HtmlParseWebView webView, String url) {
                             if(url.equals("https://mobile.twitter.com/login")) {
-                                level2.setVisibility(View.INVISIBLE);
-                                level1.setVisibility(View.INVISIBLE);
-                                main.setVisibility(View.INVISIBLE);
-                                facebookWebView.setVisibility(View.INVISIBLE);
+                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
                                 webView.setOnPageFinishedListener(null);
                             }
                         }

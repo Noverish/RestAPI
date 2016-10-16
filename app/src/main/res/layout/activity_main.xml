@@ -43,6 +43,10 @@
             tools:showIn="@layout/activity_main">
 
             <com.noverish.restapi.webview.HtmlParseWebView
+                android:id="@+id/activity_main_another_web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <com.noverish.restapi.webview.HtmlParseWebView
                 android:id="@+id/activity_main_kakao_web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
