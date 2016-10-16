@@ -33,12 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".kakao.KakaoLoginActivity" />
-
-        <activity android:name=".facebook.FacebookLoginWebViewActivity" />
-        <activity android:name=".kakao.KakaoLoginWebViewActivity" />
-        <activity android:name=".twitter.TwitterLoginWebViewActivity" />
         <activity android:name=".webview.WebViewActivity" />
     </application>
 

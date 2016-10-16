@@ -13,9 +13,9 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_facebook_login_web_view);
+        setContentView(R.layout.activity_web_view);
 
-        HtmlParseWebView webView = (HtmlParseWebView) findViewById(R.id.activity_facebook_login_web_view);
+        HtmlParseWebView webView = (HtmlParseWebView) findViewById(R.id.activity_web_view);
         webView.loadUrl(getIntent().getStringExtra("url"));
     }
 }

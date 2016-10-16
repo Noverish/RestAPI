@@ -40,7 +40,7 @@ public class TwitterArticleView extends LinearLayout {
 
     private void init() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.twitter_article_view, this, true);
+        inflater.inflate(R.layout.article_twitter, this, true);
 
 
         TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
