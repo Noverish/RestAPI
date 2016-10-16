@@ -21,12 +21,15 @@ import com.noverish.restapi.webview.OnPageStartedListener;
  * Created by Noverish on 2016-09-14.
  */
 public class SettingFragment extends Fragment {
+    private HtmlParseWebView anotherWebView;
     private HtmlParseWebView facebookWebView;
     private HtmlParseWebView twitterWebView;
 
-    private Button facebookButton;
-    private Button kakaoButton;
-    private Button twitterButton;
+    private Button facebookLoginButton;
+    private Button twitterLoginButton;
+    private Button kakaoLoginButton;
+    private Button facebookProfileButton;
+    private Button twitterProfileButton;
 
     private boolean loginStatusChanged = false;
 
@@ -35,27 +38,20 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_setting, container, false);
 
+        anotherWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_another_web_view);
         facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
         twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
 
-        facebookButton = (Button) view.findViewById(R.id.activity_setting_facebook_login);
-        facebookButton.setOnClickListener(new View.OnClickListener() {
+        facebookLoginButton = (Button) view.findViewById(R.id.activity_setting_facebook_login);
+        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        kakaoButton = (Button) view.findViewById(R.id.activity_login_manage_kakao);
-        kakaoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        twitterButton = (Button) view.findViewById(R.id.activity_login_manage_twitter);
-        twitterButton.setOnClickListener(new View.OnClickListener() {
+        twitterLoginButton = (Button) view.findViewById(R.id.activity_setting_twitter_login);
+        twitterLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(TwitterClient.getInstance().isLogined()) {
@@ -109,6 +105,32 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        kakaoLoginButton = (Button) view.findViewById(R.id.activity_setting_kakao_login);
+        kakaoLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        facebookProfileButton = (Button) view.findViewById(R.id.activity_setting_facebook_profile);
+        facebookProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                anotherWebView.loadUrl("https://m.facebook.com/profile.php?ref=bookmarks");
+                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+            }
+        });
+
+        twitterProfileButton = (Button) view.findViewById(R.id.activity_setting_twitter_profile);
+        twitterProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                anotherWebView.loadUrl("https://mobile.twitter.com/settings");
+                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+            }
+        });
+
         return view;
     }
 
@@ -117,21 +139,21 @@ public class SettingFragment extends Fragment {
         super.onResume();
 
         if (FacebookClient.getInstance().isLogined()) {
-            facebookButton.setText(getText(R.string.activity_setting_facebook_logout));
+            facebookLoginButton.setText(getText(R.string.activity_setting_facebook_logout));
         } else {
-            facebookButton.setText(getText(R.string.activity_setting_facebook_login));
+            facebookLoginButton.setText(getText(R.string.activity_setting_facebook_login));
         }
 
         if (KakaoClient.getInstance().isLogined()) {
-            kakaoButton.setText(getString(R.string.activity_setting_kakao_logout));
+            kakaoLoginButton.setText(getString(R.string.activity_setting_kakao_logout));
         } else {
-            kakaoButton.setText(getString(R.string.activity_setting_kakao_login));
+            kakaoLoginButton.setText(getString(R.string.activity_setting_kakao_login));
         }
 
         if (TwitterClient.getInstance().isLogined()) {
-            twitterButton.setText(getString(R.string.activity_setting_twitter_logout));
+            twitterLoginButton.setText(getString(R.string.activity_setting_twitter_logout));
         } else {
-            twitterButton.setText(getString(R.string.activity_setting_twitter_login));
+            twitterLoginButton.setText(getString(R.string.activity_setting_twitter_login));
         }
     }
 

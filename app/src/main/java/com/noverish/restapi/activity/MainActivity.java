@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(mainFrame.getVisibility() == View.INVISIBLE) {
+        } else if(mainFrame.getVisibility() == View.GONE) {
+            System.out.println("MAINFRAME - INVISIBLE");
            changeVisibleLevel(LEVEL_3);
         } else if(level3Frame.getChildCount() > 0) {
             level3Frame.removeAllViews();
