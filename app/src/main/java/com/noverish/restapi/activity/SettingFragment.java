@@ -124,6 +124,15 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        Button facebookFriendsButton = (Button) view.findViewById(R.id.activity_setting_facebook_friends);
+        facebookFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                anotherWebView.loadUrl("https://m.facebook.com/friends/center/friends/?fb_ref=fbm&ref=bookmarks&app_id=2356318349");
+                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+            }
+        });
+
         Button twitterProfileButton = (Button) view.findViewById(R.id.activity_setting_twitter_profile);
         twitterProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override

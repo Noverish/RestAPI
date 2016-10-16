@@ -64,6 +64,7 @@
     <string name="activity_setting_facebook_login">페이스북 로그인</string>
     <string name="activity_setting_facebook_logout">페이스북 로그아웃</string>
     <string name="activity_setting_facebook_profile">페이스북 프로필</string>
+    <string name="activity_setting_facebook_friends">페이스북 친구</string>
     <string name="activity_setting_twitter_login">트위터 로그인</string>
     <string name="activity_setting_twitter_logout">트위터 로그아웃</string>
     <string name="activity_setting_twitter_profile">트위터 프로필</string>
