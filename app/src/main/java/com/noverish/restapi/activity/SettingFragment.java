@@ -58,7 +58,7 @@ public class SettingFragment extends Fragment {
                     loginStatusChanged = true;
 
                     twitterWebView.loadUrl("https://mobile.twitter.com/logout");
-                    twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
+                    twitterWebView.setOnPageFinishedListener(false, new OnPageFinishedListener() {
                         @Override
                         public void onPageFinished(HtmlParseWebView webView, String url) {
                             System.out.println("twitterWebView - onPageFinished" + url);
@@ -70,34 +70,36 @@ public class SettingFragment extends Fragment {
                                         "l.dispatchEvent(e);" +
                                         "})()");
                             } else if(url.equals("https://mobile.twitter.com/login")) {
+                                TwitterClient.getInstance().setLogined(false);
                                 ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
                                 onResume();
-                                webView.setOnPageFinishedListener(null);
+                                webView.setOnPageFinishedListener(false, null);
                             }
                         }
                     });
                 } else {
                     twitterWebView.loadUrl("https://mobile.twitter.com/login");
-                    twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
+                    twitterWebView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
                         @Override
                         public void onPageFinished(HtmlParseWebView webView, String url) {
                             if(url.equals("https://mobile.twitter.com/login")) {
                                 ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
-                                webView.setOnPageFinishedListener(null);
-                            }
-                        }
-                    });
-                    twitterWebView.setOnPageStartedListener(new OnPageStartedListener() {
-                        @Override
-                        public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
-                            if(url.equals("https://mobile.twitter.com/")) {
-                                loginStatusChanged = true;
 
-                                TwitterClient.getInstance().setLogined(true);
-                                getActivity().onBackPressed();
+                                twitterWebView.setOnPageStartedListener(false, new OnPageStartedListener() {
+                                    @Override
+                                    public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
+                                        if(url.equals("https://mobile.twitter.com/")) {
+                                            webView.setOnPageStartedListener(false, null);
 
-                                onResume();
-                                webView.setOnPageStartedListener(null);
+                                            loginStatusChanged = true;
+
+                                            TwitterClient.getInstance().setLogined(true);
+                                            ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_3);
+
+                                            onResume();
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
@@ -135,7 +137,7 @@ public class SettingFragment extends Fragment {
         twitterFollowingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
                     @Override
                     public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                         String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
@@ -143,12 +145,7 @@ public class SettingFragment extends Fragment {
                         ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 });
-                twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
-                    @Override
-                    public void onPageFinished(HtmlParseWebView webView, String url) {
-                        webView.extractHtml();
-                    }
-                });
+                twitterWebView.setExtractHtmlWhenPageFinished(true);
                 twitterWebView.loadUrl("https://mobile.twitter.com/account");
             }
         });
@@ -157,7 +154,7 @@ public class SettingFragment extends Fragment {
         twitterFollowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                twitterWebView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
                     @Override
                     public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                         String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
@@ -166,12 +163,7 @@ public class SettingFragment extends Fragment {
                         TwitterClient.getInstance().setUserScreenName(userScreenName);
                     }
                 });
-                twitterWebView.setOnPageFinishedListener(new OnPageFinishedListener() {
-                    @Override
-                    public void onPageFinished(HtmlParseWebView webView, String url) {
-                        webView.extractHtml();
-                    }
-                });
+                twitterWebView.setExtractHtmlWhenPageFinished(true);
                 twitterWebView.loadUrl("https://mobile.twitter.com/account");
             }
         });
@@ -182,6 +174,8 @@ public class SettingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        System.out.println("onResume");
 
         if (FacebookClient.getInstance().isLogined()) {
             facebookLoginButton.setText(getText(R.string.activity_setting_facebook_logout));

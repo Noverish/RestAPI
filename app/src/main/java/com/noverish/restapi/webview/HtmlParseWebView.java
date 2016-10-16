@@ -16,9 +16,12 @@ public class HtmlParseWebView extends WebView {
     private OnHtmlLoadSuccessListener onHtmlLoadSuccessListener;
     private OnPageFinishedListener onPageFinishedListener;
     private OnPageStartedListener onPageStartedListener;
-    private String originUrl;
-    private String nowUrl;
     private String htmlCode;
+
+    private boolean extractHtmlWhenPageFinished = false;
+    private boolean htmlLoadOnce = false;
+    private boolean pageFinishedOnce = false;
+    private boolean pageStartedOnce = false;
 
     public HtmlParseWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,18 +43,29 @@ public class HtmlParseWebView extends WebView {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 
-            if(onPageStartedListener != null)
+            if(onPageStartedListener != null) {
                 onPageStartedListener.onPageStarted(HtmlParseWebView.this, url, favicon);
+                if(pageStartedOnce) {
+                    pageStartedOnce = false;
+                    onPageStartedListener = null;
+                }
+            }
         }
 
         @Override
         public void onPageFinished(final WebView view, String url) {
             Log.d("onPageFinished",url);
 
-            nowUrl = url;
-
-            if(onPageFinishedListener != null)
+            if(onPageFinishedListener != null) {
                 onPageFinishedListener.onPageFinished(HtmlParseWebView.this, url);
+                if(pageFinishedOnce) {
+                    pageFinishedOnce = false;
+                    onPageFinishedListener = null;
+                }
+            }
+
+            if(extractHtmlWhenPageFinished)
+                extractHtml();
         }
 
         @Override
@@ -79,8 +93,13 @@ public class HtmlParseWebView extends WebView {
 
                         htmlCode = html;
 
-                        if(onHtmlLoadSuccessListener != null)
+                        if(onHtmlLoadSuccessListener != null) {
                             onHtmlLoadSuccessListener.onHtmlLoadSuccess(HtmlParseWebView.this, html);
+                            if(htmlLoadOnce) {
+                                htmlLoadOnce = false;
+                                onHtmlLoadSuccessListener = null;
+                            }
+                        }
                     }
                 });
     }
@@ -88,34 +107,32 @@ public class HtmlParseWebView extends WebView {
     @Override
     public void loadUrl(String url) {
         super.loadUrl(url);
-        this.originUrl = url;
     }
 
-    public void setOnHtmlLoadSuccessListener(OnHtmlLoadSuccessListener listener) {
+    public void setOnHtmlLoadSuccessListener(boolean once, OnHtmlLoadSuccessListener listener) {
+        this.htmlLoadOnce = once;
         this.onHtmlLoadSuccessListener = listener;
     }
 
-    public void setOnPageFinishedListener(OnPageFinishedListener listener) {
+    public void setOnPageFinishedListener(boolean once, OnPageFinishedListener listener) {
+        this.pageFinishedOnce = once;
         this.onPageFinishedListener = listener;
     }
 
-    public void setOnPageStartedListener(OnPageStartedListener listener) {
+    public void setOnPageStartedListener(boolean once, OnPageStartedListener listener) {
+        this.pageStartedOnce = once;
         this.onPageStartedListener = listener;
+    }
+
+    public void setExtractHtmlWhenPageFinished(boolean extractHtmlWhenPageFinished) {
+        this.extractHtmlWhenPageFinished = extractHtmlWhenPageFinished;
     }
 
     public String getHtmlCode() {
         return htmlCode;
     }
 
-    public String getNowUrl() {
-        return nowUrl;
-    }
-
     public void scrollBottom() {
         scrollTo(0, computeVerticalScrollRange());
-    }
-
-    public void refresh() {
-        loadUrl(originUrl);
     }
 }

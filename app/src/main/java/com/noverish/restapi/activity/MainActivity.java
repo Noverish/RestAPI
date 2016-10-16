@@ -108,16 +108,16 @@ public class MainActivity extends AppCompatActivity
             level3Frame.removeAllViews();
         } else if(level2Frame.getChildCount() > 0) {
             level2Frame.removeAllViews();
+        } else if(level1Frame.getChildCount() > 0) {
+            level1Frame.removeAllViews();
 
             try {
-                SettingFragment settingFragment = (SettingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_2);
+                SettingFragment settingFragment = (SettingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_1);
                 if(settingFragment.isLoginStatusChanged())
                     refresh();
             } catch (Exception ex) {
 
             }
-        } else if(level1Frame.getChildCount() > 0) {
-            level1Frame.removeAllViews();
         } else if(!nowFragment.getClass().getSimpleName().equals("HomeFragment")) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_main, new HomeFragment());
         } else {

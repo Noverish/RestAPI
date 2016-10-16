@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,7 +40,7 @@ public class TwitterClient {
     }
 
     public void reload() {
-        webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 Document document = Jsoup.parse(htmlCode);
@@ -69,12 +68,7 @@ public class TwitterClient {
                 }
             }
         });
-        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
-            @Override
-            public void onPageFinished(HtmlParseWebView webView, String url) {
-                webView.extractHtml();
-            }
-        });
+        webView.setExtractHtmlWhenPageFinished(true);
         webView.loadUrl("https://mobile.twitter.com/");
     }
 
@@ -83,19 +77,14 @@ public class TwitterClient {
     }
 
     public void loadNextPage() {
-        webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 if(twitterClientCallback != null)
                     twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
             }
         });
-        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
-            @Override
-            public void onPageFinished(HtmlParseWebView webView, String url) {
-                webView.extractHtml();
-            }
-        });
+        webView.setExtractHtmlWhenPageFinished(true);
         webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl);
     }
 

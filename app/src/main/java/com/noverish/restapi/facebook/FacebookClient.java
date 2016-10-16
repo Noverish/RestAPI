@@ -6,7 +6,6 @@ import android.util.Log;
 import com.noverish.restapi.R;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 
@@ -40,7 +39,7 @@ public class FacebookClient {
     }
 
     public void reload() {
-        webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 isLogined = Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0;
@@ -55,21 +54,16 @@ public class FacebookClient {
                         facebookClientCallback.onNotLogin();
                 }
 
-                webView.setOnPageFinishedListener(null);
+                webView.setOnPageFinishedListener(false, null);
                 webView.scrollBottom();
             }
         });
-        webView.setOnPageFinishedListener(new OnPageFinishedListener() {
-            @Override
-            public void onPageFinished(HtmlParseWebView webView, String url) {
-                webView.extractHtml();
-            }
-        });
+        webView.setExtractHtmlWhenPageFinished(true);
         webView.loadUrl(context.getString(R.string.facebook_url));
     }
 
     public void loadNextPage() {
-        webView.setOnHtmlLoadSuccessListener(new OnHtmlLoadSuccessListener() {
+        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getHtmlCode());
