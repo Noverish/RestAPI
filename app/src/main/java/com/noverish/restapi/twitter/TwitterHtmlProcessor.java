@@ -85,5 +85,9 @@ public class TwitterHtmlProcessor {
         }
 
         return null;
-    };
+    }
+
+    public static String getUserScreenName(String html) {
+        return Jsoup.parse(html).select("span.screen-name").html();
+    }
 }

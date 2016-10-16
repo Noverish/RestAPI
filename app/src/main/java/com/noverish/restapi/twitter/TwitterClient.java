@@ -23,6 +23,7 @@ public class TwitterClient {
 
     private boolean isNewerVersion;
     private boolean isLogined;
+    private String userScreenName;
 
     private static TwitterClient instance;
     public static TwitterClient getInstance() {
@@ -112,5 +113,13 @@ public class TwitterClient {
         void onNotLogin();
 
         void onFailure();
+    }
+
+    public String getUserScreenName() {
+        return userScreenName;
+    }
+
+    public void setUserScreenName(String userScreenName) {
+        this.userScreenName = userScreenName;
     }
 }

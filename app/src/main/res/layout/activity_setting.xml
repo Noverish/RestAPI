@@ -42,6 +42,20 @@
         android:layout_height="wrap_content"
         android:text="@string/activity_setting_twitter_profile"/>
 
+    <Button
+        android:id="@+id/activity_setting_twitter_following"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_twitter_following"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/activity_setting_twitter_follower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_setting_twitter_follower"
+        android:textAllCaps="false"/>
+
 
     <TextView
         android:layout_width="wrap_content"
