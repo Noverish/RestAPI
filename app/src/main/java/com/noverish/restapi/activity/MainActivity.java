@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity
                 changeVisibleLevel(LEVEL_3);
                 debugStatus = 0;
             }
-        } else if(id == R.id.action_social) {
+        } else if(id == R.id.action_notifications) {
 
         }
 

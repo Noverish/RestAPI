@@ -9,8 +9,8 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_social"
-        android:icon="@drawable/ic_menu_social"
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/ic_menu_notifications"
         android:title="debug"
         app:showAsAction="always"/>
 
