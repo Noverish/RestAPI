@@ -152,7 +152,9 @@ public class MainActivity extends AppCompatActivity
                 debugStatus = 0;
             }
         } else if(id == R.id.action_notifications) {
-
+            System.out.println("Notification Button pressed");
+            Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new NotificationFragment());
+            fab.setVisibility(GONE);
         }
 
         return super.onOptionsItemSelected(item);

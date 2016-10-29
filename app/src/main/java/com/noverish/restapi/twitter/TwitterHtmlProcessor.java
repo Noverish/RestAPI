@@ -88,6 +88,58 @@ public class TwitterHtmlProcessor {
         return null;
     }
 
+    public static ArrayList<TwitterNotificationItem> processNotification(String html) {
+        ArrayList<TwitterNotificationItem> items = new ArrayList<>();
+
+        Document document = Jsoup.parse(html);
+        Elements notifications = document.select("table.activity, table.tweet");
+
+        System.out.println("notification number - " + notifications.size());
+
+        for(Element notification : notifications) {
+            TwitterNotificationItem item = new TwitterNotificationItem();
+
+            if(notification.classNames().contains("activity")) {
+                Elements activityTypeElement = notification.select("div.activity-icon");
+                Elements contentElement = notification.select("td.user-info");
+                Elements timeElement = notification.select("td.timestamp");
+
+                item.setType(TwitterNotificationItem.ACTIVITY);
+                item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
+                item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
+
+                if(activityTypeElement.html().contains("follow")) {
+                    item.setActivityType(TwitterNotificationItem.FOLLOW);
+                } else if(activityTypeElement.html().contains("rt")) {
+                    item.setActivityType(TwitterNotificationItem.RETWEET);
+                } else if(activityTypeElement.html().contains("heart")) {
+                    item.setActivityType(TwitterNotificationItem.FAVORITE);
+                } else {
+                    item.setActivityType(0);
+                }
+            }
+
+            if(notification.classNames().contains("tweet")) {
+                Elements profileImageElement = notification.select("td.avatar").select("img");
+                Elements nameElement = notification.select("strong.fullname");
+                Elements screenNameElement = notification.select("div.username");
+                Elements timeElement = notification.select("td.timestamp").select("a");
+                Elements contentElement = notification.select("div.dir-ltr");
+
+                item.setType(TwitterNotificationItem.TWEET);
+                item.setProfileImageUrl(profileImageElement.attr("src"));
+                item.setName(HttpConnectionThread.unicodeToString(nameElement.html()));
+                item.setScreenName(screenNameElement.html().replaceAll("(<[^>]*>|\\\\n)",""));
+                item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
+                item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
+            }
+
+            items.add(item);
+        }
+
+        return items;
+    }
+
     public static String getUserScreenName(String html) {
         return Jsoup.parse(html).select("span.screen-name").html();
     }

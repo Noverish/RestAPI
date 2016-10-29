@@ -96,6 +96,12 @@ public class TwitterClient {
         isLogined = logined;
     }
 
+    public void getNotification(OnHtmlLoadSuccessListener listener) {
+        webView.setOnHtmlLoadSuccessListener(true, listener);
+        webView.setExtractHtmlWhenPageFinished(true);
+        webView.loadUrl("https://mobile.twitter.com/i/connect");
+    }
+
     public interface TwitterClientCallback {
         void onSuccess(ArrayList<TwitterArticleItem> items);
 
