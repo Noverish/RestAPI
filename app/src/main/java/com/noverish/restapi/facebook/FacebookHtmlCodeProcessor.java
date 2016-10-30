@@ -13,8 +13,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -63,7 +61,7 @@ public class FacebookHtmlCodeProcessor {
             Elements titlePart = article.select("header[class=\"_4g33 _5qc1\"]");
 
             Elements profileImage = titlePart.select("i.img.profpic");
-            item.setProfileImgUrl(findOriginOfJsoupBuggedUrl(profileImage.outerHtml(), htmlCode));
+            item.setProfileImgUrl(restoreImageUrl(profileImage, htmlCode));
 
             Elements title = titlePart.select("h3._52jd._52jb._5qc3"); //제목에 행동이 있는 경우 _52jd _52jb _52jg _5qc3 이고 이름만 있는 경우 _52jd _52jb _52jh _5qc3 이다.
             item.setTitle(HttpConnectionThread.unicodeToString(title.outerHtml().replaceAll("<[^>]*>","")));
@@ -85,31 +83,18 @@ public class FacebookHtmlCodeProcessor {
             ArrayList<String> imageUrls = new ArrayList<>();
             Elements imageElements = mediaPart.select("a._39pi, a._26ih");
             for(Element imageElement : imageElements) {
+                String imageUrl = restoreImageUrl(imageElement.select("i"), htmlCode);
 
-                String key = Essentials.getMatches("oh=[0-9a-z]+",imageElement.select("i").outerHtml());
-                if(key.equals(""))
-                    key = Essentials.getMatches("[\\d]+_[\\d]+_[\\d]+",imageElement.select("i").outerHtml());
-
-                String value = Essentials.getMatches("https[^\"]*" + key + "[^\"]*",htmlCode);
-
-                imageUrls.add(value);
+                imageUrls.add(imageUrl);
             }
             item.setImageUrls(imageUrls);
 
             Elements videoElements;
             if((videoElements = mediaPart.select("div._53mw._4gbu")).size() > 0) { //동영상만 올라옴
+                String videoUrl = restoreImageUrl(videoElements, htmlCode);
+                String imageUrl = restoreImageUrl(videoElements.select("i"), htmlCode);
 
-                String videoKey = Essentials.getMatches("oh=[0-9a-z]+",videoElements.outerHtml());
-
-                String videoValue = Essentials.getMatches("https[^\"]*" + videoKey +"[^\"]*",htmlCode);
-
-                String imageKey = Essentials.getMatches("oh=[0-9a-z]+",videoElements.select("i").outerHtml());
-                if(imageKey.equals(""))
-                    imageKey = Essentials.getMatches("[\\d]+_[\\d]+_[\\d]+",videoElements.select("i").outerHtml());
-
-                String imageValue = Essentials.getMatches("https[^\"]*" + imageKey + "[^\"]*",htmlCode);
-
-                item.setVideo(new Pair<>(imageValue, videoValue));
+                item.setVideo(new Pair<>(imageUrl, videoUrl));
             } else if((videoElements = mediaPart.select("div._53mw")).size() > 0) { //동영상과 사진 같이 올라움
                 System.out.println(videoElements.outerHtml());
             }
@@ -127,21 +112,69 @@ public class FacebookHtmlCodeProcessor {
         return items;
     }
 
-    private static String findOriginOfJsoupBuggedUrl(String buggedHtml, String htmlCode) {
-        Pattern pattern1 = Pattern.compile("[\\d_]*[\\S][.]jpg");
-        Matcher matcher1 = pattern1.matcher(buggedHtml);
+    public static ArrayList<FacebookNotificationItem> processNotification(String htmlCode) {
+        ArrayList<FacebookNotificationItem> items = new ArrayList<>();
 
-        if(matcher1.find()) {
-            Pattern pattern2 = Pattern.compile("https[^>]*" + matcher1.group() + "[^>]*?\"");
-            Matcher matcher2 = pattern2.matcher(htmlCode);
+        Document document = Jsoup.parse(htmlCode);
+        Elements notifications = document.select("div._55x2").select("div.aclb, div.acw");
 
-            if(matcher2.find()) {
-                return matcher2.group().replace("\"","");
-            } else {
-                return "matcher2 is empty";
+        for(Element notification : notifications) {
+            FacebookNotificationItem item = new FacebookNotificationItem();
+
+            Elements profileImageElement = notification.select("i.img.l.profpic");
+
+            Elements timeElement = notification.select("span.mfss.fcg"); // Important Order!!
+            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","").trim()));
+
+            Elements contentElement = notification.select("div.c");
+            contentElement.select("span.mfss.fcg").remove();
+            Element typeElement = contentElement.select("i.img").first();
+            Elements extensionElement = notification.select("div.ext");
+
+            item.setProfileImageUrl(restoreImageUrl(profileImageElement, htmlCode));
+            item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|&nbsp;|\\\\n)","").replaceAll("\\s+"," ").trim()));
+            item.setExtensionUrl(extensionElement.select("img").attr("src"));
+
+            if(typeElement.classNames().contains("sx_4ae08a"))
+                item.setType(FacebookNotificationItem.COMMENT);
+            else if(typeElement.classNames().contains("sx_acc618"))
+                item.setType(FacebookNotificationItem.FACEBOOK);
+            else if(typeElement.classNames().contains("sx_129ee6"))
+                item.setType(FacebookNotificationItem.DOYOUKNOW);
+            else if(typeElement.classNames().contains("sx_a7249c"))
+                item.setType(FacebookNotificationItem.LIKE);
+            else if(typeElement.classNames().contains("sx_380594"))
+                item.setType(FacebookNotificationItem.AMAZING);
+            else if(typeElement.classNames().contains("sx_565471"))
+                item.setType(FacebookNotificationItem.STATUS);
+            else if(typeElement.classNames().contains("sx_9e4ae5"))
+                item.setType(FacebookNotificationItem.PICTURE);
+            else if(typeElement.classNames().contains("sx_28ef4b"))
+                item.setType(FacebookNotificationItem.GROUP);
+            else if(typeElement.classNames().contains("sx_d90fcc"))
+                item.setType(FacebookNotificationItem.LOCATION);
+            else if(typeElement.classNames().contains("sx_ce9b35"))
+                item.setType(FacebookNotificationItem.LOVE);
+            else {
+                item.setType(-1);
+                Log.e("ERROR","FacebookHtmlCodeProcessor.processNotification() : unknown type - " + typeElement.classNames());
             }
-        } else {
-            return "matcher1 is empty";
+
+            items.add(item);
         }
+
+        return items;
+    }
+
+    private static String restoreImageUrl(Elements damagedElement, String originHtml) {
+        String key = Essentials.getMatches("oh=[0-9a-z]+",damagedElement.outerHtml());
+        if(key.equals(""))
+            key = Essentials.getMatches("[\\d]+_[\\d]+_[\\d]+",damagedElement.outerHtml());
+
+        return Essentials.getMatches("https[^\"]*" + key +"[^\"]*",originHtml);
+    }
+
+    private static String restoreImageUrl(Element damagedElement, String originHtml) {
+        return restoreImageUrl(new Elements(damagedElement), originHtml);
     }
 }

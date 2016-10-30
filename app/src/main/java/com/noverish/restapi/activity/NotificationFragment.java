@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
+import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
+import com.noverish.restapi.facebook.FacebookNotificationItem;
+import com.noverish.restapi.facebook.FacebookNotificationView;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 
 public class NotificationFragment extends Fragment {
     private TwitterClient twitterClient;
+    private FacebookClient facebookClient;
     private LinearLayout layout;
     private android.os.Handler handler = new Handler();
 
@@ -40,8 +44,6 @@ public class NotificationFragment extends Fragment {
         layout = (LinearLayout) view.findViewById(R.id.activity_notification_layout);
 
         twitterClient = TwitterClient.getInstance();
-        FacebookClient facebookClient = FacebookClient.getInstance();
-
         twitterClient.getNotification(new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
@@ -56,6 +58,18 @@ public class NotificationFragment extends Fragment {
                     } else {
                         Log.e("ERROR","NotificationFragment.onHtmlLoadSuccess() : The type of this TwitterNotificationItem is unknown - " + item.getType());
                     }
+                }
+            }
+        });
+
+        facebookClient = FacebookClient.getInstance();
+        facebookClient.getNotification(new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                ArrayList<FacebookNotificationItem> items = FacebookHtmlCodeProcessor.processNotification(htmlCode);
+
+                for(FacebookNotificationItem item : items) {
+                    layout.addView(new FacebookNotificationView(getActivity(), item, handler));
                 }
             }
         });

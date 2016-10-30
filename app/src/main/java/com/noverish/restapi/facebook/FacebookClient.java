@@ -6,6 +6,7 @@ import android.util.Log;
 import com.noverish.restapi.R;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 
@@ -97,6 +98,18 @@ public class FacebookClient {
 
     public void setLogined(boolean logined) {
         isLogined = logined;
+    }
+
+    public void getNotification(OnHtmlLoadSuccessListener listener) {
+        webView.setOnHtmlLoadSuccessListener(true, listener);
+        webView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                webView.goBack();
+            }
+        });
+        webView.setExtractHtmlWhenPageFinished(true);
+        webView.loadUrl("https://m.facebook.com/notifications.php?more");
     }
 
     public interface FacebookClientCallback {
