@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="@dimen/article_margin_bottom"
     android:orientation="vertical"
     android:background="@color/pure_white">
 
@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/article_inside_margin"
         android:textSize="@dimen/article_classification_text_size"
-        android:gravity="end"/>
+        android:gravity="end"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/twitter_article_header_layout"
@@ -111,7 +112,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/article_content_margin_top"
+                android:layout_marginBottom="@dimen/article_content_margin_top">
 
                 <FrameLayout
                     android:layout_width="0dp"
@@ -121,7 +124,7 @@
                     <ImageView
                         android:id="@+id/twitter_article_view_reply"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_reply"/>
                 </FrameLayout>
 
@@ -133,7 +136,7 @@
                     <ImageView
                         android:id="@+id/twitter_article_view_retweet"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_retweet_default"/>
                 </FrameLayout>
 
@@ -145,7 +148,7 @@
                     <ImageView
                         android:id="@+id/twitter_article_view_favorite"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_favorite_default"/>
                 </FrameLayout>
 
@@ -156,54 +159,10 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_message"/>
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-
-
-        <!--<Button
-            android:id="@+id/twitter_article_view_reply"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/twitter_article_view_reply"
-            android:textSize="@dimen/article_bottom_button_text_size"
-            android:background="@drawable/icon_twitter_arti_reply"
-            style="?android:attr/borderlessButtonStyle"/>
-
-        <Button
-            android:id="@+id/twitter_article_view_retweet"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/twitter_article_view_retweet"
-            android:textSize="@dimen/article_bottom_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>
-
-        <Button
-            android:id="@+id/twitter_article_view_favorite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/twitter_article_view_like"
-            android:textSize="@dimen/article_bottom_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/twitter_article_view_more"
-            android:textSize="@dimen/article_bottom_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>-->
-    </LinearLayout>
 </LinearLayout>

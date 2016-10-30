@@ -208,10 +208,10 @@ public class RestAPIClient extends Thread {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(classification != null)
+                        if(classification != null) {
                             textView.setText(classification.classification);
-                        else
-                            textView.setVisibility(View.GONE);
+                            textView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
