@@ -17,7 +17,7 @@
     <dimen name="article_header_vertical">8dp</dimen>
     <dimen name="article_inside_margin">8dp</dimen>
     <dimen name="article_profile_size">50dp</dimen>
-    <dimen name="article_title_text_size">17sp</dimen>
+    <dimen name="article_title_text_size">16sp</dimen>
     <dimen name="article_title_margin_left">8dp</dimen>
     <dimen name="article_content_margin_top">8dp</dimen>
     <dimen name="article_bottom_button_text_size">14sp</dimen>
@@ -25,6 +25,8 @@
 
     <dimen name="twitter_article_screen_name_left_margin">4dp</dimen>
     <dimen name="twitter_article_content_top_margin">8dp</dimen>
+    <dimen name="twitter_article_screen_name_text_size">14sp</dimen>
+    <dimen name="twitter_article_content_text_size">16sp</dimen>
 
     <dimen name="activity_setting_big_cate_margin">12dp</dimen>
     <dimen name="activity_setting_big_cate_text_size">20sp</dimen>

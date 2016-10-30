@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/article_inside_margin">
 
-    <ImageView
-        android:id="@+id/twitter_notification_view_activity_type"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="@dimen/article_title_margin_left"/>
+    <RelativeLayout
+        android:layout_width="@dimen/article_profile_size"
+        android:layout_height="@dimen/article_profile_size">
+
+        <ImageView
+            android:id="@+id/twitter_notification_view_activity_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/twitter_notification_view_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/article_title_margin_left"/>
 </LinearLayout>

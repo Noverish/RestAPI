@@ -2,10 +2,8 @@ package com.noverish.restapi.twitter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -89,7 +87,7 @@ public class TwitterArticleView extends LinearLayout {
 
         }
 
-        Button replyButton = (Button) findViewById(R.id.twitter_article_view_reply);
+        ImageView replyButton = (ImageView) findViewById(R.id.twitter_article_view_reply);
         replyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +97,7 @@ public class TwitterArticleView extends LinearLayout {
             }
         });
 
-        Button retweetButton = (Button) findViewById(R.id.twitter_article_view_retweet);
+        ImageView retweetButton = (ImageView) findViewById(R.id.twitter_article_view_retweet);
         retweetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,11 +107,10 @@ public class TwitterArticleView extends LinearLayout {
             }
         });
         if(item.isRetweeted()) {
-            retweetButton.setTextColor(ContextCompat.getColor(context, R.color.twitter_retweet));
-            retweetButton.setText(R.string.twitter_article_view_retweetd);
+            retweetButton.setImageResource(R.drawable.icon_twitter_arti_retweet_active);
         }
 
-        Button favoriteButton = (Button) findViewById(R.id.twitter_article_view_favorite);
+        ImageView favoriteButton = (ImageView) findViewById(R.id.twitter_article_view_favorite);
         favoriteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +120,7 @@ public class TwitterArticleView extends LinearLayout {
             }
         });
         if(item.isFavorited()) {
-            favoriteButton.setTextColor(ContextCompat.getColor(context, R.color.twitter_favorite));
-            favoriteButton.setText(R.string.twitter_article_view_favorited);
+            favoriteButton.setImageResource(R.drawable.icon_twitter_arti_favorite_active);
         }
     }
 

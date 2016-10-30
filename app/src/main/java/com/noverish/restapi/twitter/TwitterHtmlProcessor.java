@@ -56,7 +56,8 @@ public class TwitterHtmlProcessor {
             item.setRetweetUrl(retweetElement.attr("href"));
             item.setFavoriteUrl(favoriteElement.attr("href"));
 
-            item.setRetweeted(retweetElement.select("span").first().className().contains("active"));
+            if(retweetElement.select("span").size() != 0)
+                item.setRetweeted(retweetElement.select("span").first().className().contains("active"));
             item.setFavorited(favoriteElement.select("span").first().className().contains("active"));
 
             items.add(item);
