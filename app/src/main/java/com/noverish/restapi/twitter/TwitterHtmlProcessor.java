@@ -109,11 +109,11 @@ public class TwitterHtmlProcessor {
                 item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
                 item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
 
-                if(activityTypeElement.html().contains("follow")) {
+                if(activityTypeElement.html().contains("_follow_")) {
                     item.setActivityType(TwitterNotificationItem.FOLLOW);
-                } else if(activityTypeElement.html().contains("rt")) {
+                } else if(activityTypeElement.html().contains("_rt_")) {
                     item.setActivityType(TwitterNotificationItem.RETWEET);
-                } else if(activityTypeElement.html().contains("heart")) {
+                } else if(activityTypeElement.html().contains("_heart_")) {
                     item.setActivityType(TwitterNotificationItem.FAVORITE);
                 } else {
                     item.setActivityType(0);

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -98,6 +99,12 @@ public class TwitterClient {
 
     public void getNotification(OnHtmlLoadSuccessListener listener) {
         webView.setOnHtmlLoadSuccessListener(true, listener);
+        webView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                webView.goBack();
+            }
+        });
         webView.setExtractHtmlWhenPageFinished(true);
         webView.loadUrl("https://mobile.twitter.com/i/connect");
     }
