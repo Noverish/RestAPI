@@ -37,9 +37,9 @@ public class TwitterHtmlProcessor {
             Elements mediaElement = article.select("a.twitter_external_link.dir-ltr.tco-link.has-expanded-path");
 
             Elements tweetActionElement = article.select("span.tweet-actions");
-            Element replyElement = tweetActionElement.select("a").get(0);
-            Element retweetElement = tweetActionElement.select("a").get(1);
-            Element favoriteElement = tweetActionElement.select("a").get(2);
+            Elements replyElement = tweetActionElement.select("a.first");
+            Elements retweetElement = tweetActionElement.select("a[href*=retweet]");
+            Elements favoriteElement = tweetActionElement.select("a.favorite");
 
             item.setArticleId(article.attr("href").split("/")[3].replaceAll("\\D",""));
             item.setHeader(HttpConnectionThread.unicodeToString(headerElement.html()));
@@ -129,7 +129,7 @@ public class TwitterHtmlProcessor {
                 item.setType(TwitterNotificationItem.TWEET);
                 item.setProfileImageUrl(profileImageElement.attr("src"));
                 item.setName(HttpConnectionThread.unicodeToString(nameElement.html()));
-                item.setScreenName(screenNameElement.html().replaceAll("(<[^>]*>|\\\\n)",""));
+                item.setScreenName(screenNameElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim());
                 item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
                 item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
             }
