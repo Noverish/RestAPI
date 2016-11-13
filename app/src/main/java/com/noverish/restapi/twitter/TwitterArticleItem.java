@@ -8,15 +8,17 @@ import com.noverish.restapi.article.ArticleItem;
 public class TwitterArticleItem extends ArticleItem {
     private String header = "";
     private String profileImageUrl = "";
-    private String fullName = "";
+    private String name = "";
     private String screenName = "";
     private String content = "";
     private String media = "";
     private String replyUrl = "";
     private boolean retweeted = false;
     private String retweetUrl = "";
+    private int retweetNumber;
     private boolean favorited = false;
     private String favoriteUrl = "";
+    private int favoriteNumber;
 
     void setHeader(String header) {
         this.header = header;
@@ -26,8 +28,8 @@ public class TwitterArticleItem extends ArticleItem {
         this.profileImageUrl = profileImageUrl;
     }
 
-    void setFullName(String fullName) {
-        this.fullName = fullName;
+    void setName(String name) {
+        this.name = name;
     }
 
     void setScreenName(String screenName) {
@@ -54,12 +56,20 @@ public class TwitterArticleItem extends ArticleItem {
         this.retweetUrl = retweetUrl;
     }
 
+    void setRetweetNumber(int retweetNumber) {
+        this.retweetNumber = retweetNumber;
+    }
+
     void setFavorited(boolean favorited) {
         this.favorited = favorited;
     }
 
     void setFavoriteUrl(String favoriteUrl) {
         this.favoriteUrl = favoriteUrl;
+    }
+
+    void setFavoriteNumber(int favoriteNumber) {
+        this.favoriteNumber = favoriteNumber;
     }
 
 
@@ -71,8 +81,8 @@ public class TwitterArticleItem extends ArticleItem {
         return profileImageUrl;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
     public String getScreenName() {
@@ -99,6 +109,10 @@ public class TwitterArticleItem extends ArticleItem {
         return retweetUrl;
     }
 
+    public int getRetweetNumber() {
+        return retweetNumber;
+    }
+
     public boolean isFavorited() {
         return favorited;
     }
@@ -107,12 +121,16 @@ public class TwitterArticleItem extends ArticleItem {
         return favoriteUrl;
     }
 
+    public int getFavoriteNumber() {
+        return favoriteNumber;
+    }
+
     @Override
     public String toString() {
         return "TwitterArticleItem{" +
                 "header='" + header + '\'' +
                 ", profileImageUrl='" + profileImageUrl + '\'' +
-                ", fullName='" + fullName + '\'' +
+                ", name='" + name + '\'' +
                 ", screenName='" + screenName + '\'' +
                 ", content='" + content + '\'' +
                 ", media='" + media + '\'' +

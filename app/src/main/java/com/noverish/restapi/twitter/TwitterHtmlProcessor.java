@@ -46,7 +46,7 @@ public class TwitterHtmlProcessor {
             item.setProfileImageUrl(profileImageElement.attr("src"));
             item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
             item.setTimeMillis(Essentials.stringToMillisInTwitter(item.getTimeString()));
-            item.setFullName(HttpConnectionThread.unicodeToString(nameElement.html()));
+            item.setName(HttpConnectionThread.unicodeToString(nameElement.html()));
             item.setPosterUrl("https://mobile.twitter.com" + nameElement.parents().attr("href"));
             item.setScreenName(screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim());
             item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n","\n").trim()));
@@ -76,17 +76,34 @@ public class TwitterHtmlProcessor {
         Document document = Jsoup.parse(html);
         Elements articles = document.select("div._1eF_MiFx");
 
+        System.out.println("articles - " + articles.size());
+
         for(Element article : articles) {
-            Element headerElement = article.select("div[class=\"_1axCTvm5 _2rKrV7oY _3f2NsD-H\"]").first();
-            Element profileImageElement = article.select("div[class=\"_1RntlttV _1-I0zYji\"]").first();
-            Element timeElement = article.select("time").first();
-            Element nameElement = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]").first();
-            Element screenNameElement = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]").first();
-            Element contentElement = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]").first();
-            Element mediaElement = article.select("div[class=\"_2di_LxCm\"]").first();
+            TwitterArticleItem item = new TwitterArticleItem();
+
+            Elements headerElement = article.select("div[class=\"_1axCTvm5 _2rKrV7oY _3f2NsD-H\"]");
+            Elements profileImageElement = article.select("img[class=\"_1RntlttV _1-I0zYji\"]");
+            Elements nameElement = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]");
+            Elements screenNameElement = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]");
+            Elements timeElement = article.select("time");
+            Elements contentElement = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]");
+            Elements mediaElement = article.select("div[class=\"_2di_LxCm\"]");
+            Elements retweetButtonElement = article.select("button[class=\"RQ5ECnGZ _1m0pnxeJ\"][aria-label*=Retweet]");
+            Elements favoriteButtonElement = article.select("button[class=\"RQ5ECnGZ _1m0pnxeJ\"][aria-label*=Like]");
+
+            item.setHeader(headerElement.html());
+            item.setProfileImageUrl(profileImageElement.attr("src"));
+            item.setName(nameElement.html().replaceAll("<!--[^>]*-->","").trim());
+            item.setScreenName(screenNameElement.html());
+            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
+            item.setContent(contentElement.html().replaceAll("<[^>]*>",""));
+
+            System.out.println(item.toString());
+
+            items.add(item);
         }
 
-        return null;
+        return items;
     }
 
     public static ArrayList<TwitterNotificationItem> processNotification(String html) {

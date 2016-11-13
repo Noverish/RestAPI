@@ -86,7 +86,7 @@ public class TwitterNotificationItem {
             TwitterArticleItem item = new TwitterArticleItem();
 
             item.setProfileImageUrl(profileImageUrl);
-            item.setFullName(name);
+            item.setName(name);
             item.setScreenName(screenName);
             item.setContent(content);
 

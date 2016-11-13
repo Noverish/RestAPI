@@ -41,28 +41,33 @@ public class TwitterClient {
     }
 
     public void reload() {
-        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
+        webView.setOnHtmlLoadSuccessListener(false, new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 Document document = Jsoup.parse(htmlCode);
 
-                if(document.body().classNames().contains("AppPage-body")) {
-                    Log.i("Twitter","Newer Version");
-
+                if(document.select("[class=\"_2tOLusnc _2ZBD52R7\"]").size() > 0) { //Post Button
+                    System.out.println("Twitter - Newer Version, Logged in");
                     isNewerVersion = true;
-                    isLogined = document.select("div._1eF_MiFx").size() != 0;
+                    isLogined = true;
+                } else if(document.body().classNames().contains("AppPage-body")) { //Body Class Name
+                    System.out.println("Twitter - Newer Version, Logged out");
+                    isNewerVersion = true;
+                    isLogined = false;
                 } else {
-                    Log.i("Twitter","Older Version");
-
                     isNewerVersion = false;
                     isLogined = document.select("table.tweet").size() != 0;
-                }
 
-                Log.i("Twitter","isLogined - " + isLogined);
+                    Log.i("Twitter","Older Version");
+                    Log.i("Twitter","isLogined - " + isLogined);
+                }
 
                 if(isLogined) {
                     if(twitterClientCallback != null)
-                        twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
+                        if(isNewerVersion)
+                            twitterClientCallback.onSuccess(TwitterHtmlProcessor.processNew(webView.getHtmlCode()));
+                        else
+                            twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
                 } else {
                     if(twitterClientCallback != null)
                         twitterClientCallback.onNotLogin();

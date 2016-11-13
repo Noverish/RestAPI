@@ -68,7 +68,7 @@ public class TwitterArticleView extends LinearLayout {
         profileImageView.setOnClickListener(goToPoster);
 
         TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);
-        nameTextView.setText(item.getFullName());
+        nameTextView.setText(item.getName());
         nameTextView.setOnClickListener(goToPoster);
 
         TextView screenNameTextView = (TextView) findViewById(R.id.twitter_article_view_screen_name);
