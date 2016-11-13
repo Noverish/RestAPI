@@ -36,6 +36,7 @@ public class HtmlParseWebView extends WebView {
 
         WebSettings webSettings = getSettings();
         webSettings.setBuiltInZoomControls(true);
+        webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 4.4.2; IM-A920S Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.85 Mobile Safari/537.36");
     }
 
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
