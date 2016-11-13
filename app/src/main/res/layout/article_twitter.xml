@@ -128,7 +128,7 @@
                         android:src="@drawable/icon_twitter_arti_reply"/>
                 </FrameLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -138,9 +138,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_retweet_default"/>
-                </FrameLayout>
 
-                <FrameLayout
+                    <TextView
+                        android:id="@+id/article_twitter_retweet_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="405"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -150,7 +156,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/twitter_article_button_height"
                         android:src="@drawable/icon_twitter_arti_favorite_default"/>
-                </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/article_twitter_favorite_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="405"/>
+                </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="0dp"

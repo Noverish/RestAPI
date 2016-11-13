@@ -135,6 +135,20 @@ public class FacebookHtmlCodeProcessor {
             item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|&nbsp;|\\\\n)","").replaceAll("\\s+"," ").trim()));
             item.setExtensionUrl(extensionElement.select("img").attr("src"));
 
+            /*
+            comment sx_4ae08a
+            facebook sx_acc618
+            doyouknow sx_129ee6
+            like sx_a7249c
+            amazing sx_380594
+            status sx_565471
+            picture sx_9e4ae5
+            group sx_28ef4b
+            location sx_d90fcc
+            love sx_ce9b35
+
+             */
+
             if(typeElement.classNames().contains("sx_4ae08a"))
                 item.setType(FacebookNotificationItem.COMMENT);
             else if(typeElement.classNames().contains("sx_acc618"))
