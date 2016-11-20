@@ -80,9 +80,11 @@ public class MainActivity extends AppCompatActivity
         twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
         facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
 
-        Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
+//        Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
 
-        HomeFragment homeFragment = new HomeFragment();
+        Essentials.changeFragment(this, R.id.activity_main_fragment_main, new TmpMessageActivity());
+
+/*        HomeFragment homeFragment = new HomeFragment();
         homeFragment.setOnFirstLoadFinishedRunnable(new Runnable() {
             @Override
             public void run() {
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         nowFragment = homeFragment;
-        Essentials.changeFragment(this, R.id.activity_main_fragment_main, homeFragment);
+        Essentials.changeFragment(this, R.id.activity_main_fragment_main, homeFragment);*/
 
     }
 
