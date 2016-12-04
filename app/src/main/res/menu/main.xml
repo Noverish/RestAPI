@@ -9,6 +9,12 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_messages"
+        android:icon="@drawable/ic_menu_messages"
+        android:title="debug"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_notifications"
         android:icon="@drawable/ic_menu_notifications"
         android:title="debug"
