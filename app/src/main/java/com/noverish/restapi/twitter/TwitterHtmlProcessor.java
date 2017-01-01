@@ -50,8 +50,8 @@ public class TwitterHtmlProcessor {
             String content = contentEle.html().replaceAll("<[^>]*>","");
             boolean isRetweeted = retweetEle.attr("data-testid").contains("un");
             boolean isLiked = likeEle.attr("data-testid").contains("un");
-            int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html());
-            int likeNum = Integer.parseInt(likeEle.select("span._1H8Mn9AA").html().equals("") ? "0" : likeEle.select("span._1H8Mn9AA").html());
+            int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
+            int likeNum = Integer.parseInt(likeEle.select("span._1H8Mn9AA").html().equals("") ? "0" : likeEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
 
             header = HttpConnectionThread.unicodeToString(header);
             timeStr = HttpConnectionThread.unicodeToString(timeStr);
