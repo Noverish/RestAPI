@@ -189,7 +189,7 @@ public class RestAPIClient extends Thread {
                             listener.onSemanticProcessFinished(null);
                         }
                     } catch (IOException ex) {
-                        ex.printStackTrace();
+//                        ex.printStackTrace();
                     }
                 }
             }

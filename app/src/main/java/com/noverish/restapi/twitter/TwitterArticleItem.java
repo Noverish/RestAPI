@@ -2,23 +2,29 @@ package com.noverish.restapi.twitter;
 
 import com.noverish.restapi.article.ArticleItem;
 
+import java.util.ArrayList;
+
 /**
  * Created by Noverish on 2016-09-18.
  */
 public class TwitterArticleItem extends ArticleItem {
     private String header = "";
-    private String profileImageUrl = "";
+    private String profileImageUrl = null;
     private String name = "";
     private String screenName = "";
     private String content = "";
-    private String media = "";
-    private String replyUrl = "";
+    private ArrayList<String> imageUrls = new ArrayList<>();
+    private String videoUrl = null;
+    private String linkContent = "";
+    private String linkDomain = "";
+    private String linkUrl = null;
+    private String replyUrl = null;
     private boolean retweeted = false;
-    private String retweetUrl = "";
-    private int retweetNumber;
+    private String retweetUrl = null;
+    private int retweetNumber = 0;
     private boolean favorited = false;
-    private String favoriteUrl = "";
-    private int favoriteNumber;
+    private String favoriteUrl = null;
+    private int favoriteNumber = 0;
 
     void setHeader(String header) {
         this.header = header;
@@ -40,8 +46,24 @@ public class TwitterArticleItem extends ArticleItem {
         this.content = content;
     }
 
-    void setMedia(String media) {
-        this.media = media;
+    void addImageUrl(String imageUrl) {
+        imageUrls.add(imageUrl);
+    }
+
+    void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    void setLinkContent(String linkContent) {
+        this.linkContent = linkContent;
+    }
+
+    void setLinkDomain(String linkDomain) {
+        this.linkDomain = linkDomain;
+    }
+
+    void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
     }
 
     void setReplyUrl(String replyUrl) {
@@ -93,8 +115,24 @@ public class TwitterArticleItem extends ArticleItem {
         return content;
     }
 
-    public String getMedia() {
-        return media;
+    public ArrayList<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public String getLinkContent() {
+        return linkContent;
+    }
+
+    public String getLinkDomain() {
+        return linkDomain;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
     }
 
     public String getReplyUrl() {
@@ -133,12 +171,18 @@ public class TwitterArticleItem extends ArticleItem {
                 ", name='" + name + '\'' +
                 ", screenName='" + screenName + '\'' +
                 ", content='" + content + '\'' +
-                ", media='" + media + '\'' +
+                ", imageUrls=" + imageUrls +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", linkContent='" + linkContent + '\'' +
+                ", linkDomain='" + linkDomain + '\'' +
+                ", linkUrl='" + linkUrl + '\'' +
                 ", replyUrl='" + replyUrl + '\'' +
                 ", retweeted=" + retweeted +
                 ", retweetUrl='" + retweetUrl + '\'' +
+                ", retweetNumber=" + retweetNumber +
                 ", favorited=" + favorited +
                 ", favoriteUrl='" + favoriteUrl + '\'' +
+                ", favoriteNumber=" + favoriteNumber +
                 "} " + super.toString();
     }
 }

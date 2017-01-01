@@ -42,22 +42,59 @@ public class TwitterHtmlProcessor {
 
             String header = headerEle.html();
             String profileImg = Essentials.getMatches("url[(][^)]*[)]",profileEle.outerHtml()).replaceAll("url[(]|[)]","");
-            String time = timeEle.attr("aria-label");
+            String timeDetail = timeEle.attr("aria-label");
+            String timeStr = timeEle.html();
             String name = nameEle.html().replaceAll("<[^>]*>","");
             String screenName = screenNameEle.html();
             String content = contentEle.html().replaceAll("<[^>]*>","");
+            boolean isRetweeted = retweetEle.attr("data-testid").contains("un");
+            boolean isLiked = likeEle.attr("data-testid").contains("un");
+            int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html());
+            int likeNum = Integer.parseInt(likeEle.select("span._1H8Mn9AA").html().equals("") ? "0" : likeEle.select("span._1H8Mn9AA").html());
 
             header = HttpConnectionThread.unicodeToString(header);
-            time = HttpConnectionThread.unicodeToString(time);
+            timeStr = HttpConnectionThread.unicodeToString(timeStr);
             name = HttpConnectionThread.unicodeToString(name);
             content = HttpConnectionThread.unicodeToString(content);
 
             item.setHeader(header);
             item.setProfileImageUrl(profileImg);
-            item.setTimeString(time);
+            item.setTimeMillis(Essentials.stringToMillisInTwitter(timeDetail));
+            item.setTimeString(timeStr);
             item.setName(name);
             item.setScreenName(screenName);
             item.setContent(content);
+            item.setRetweeted(isRetweeted);
+            item.setRetweetNumber(retweetNum);
+            item.setFavorited(isLiked);
+            item.setFavoriteNumber(likeNum);
+
+            Elements mediaEle;
+            if((mediaEle = article.select("a[class=\"_3kGl_FG7\"]")).size() != 0) { //link
+                Elements linkImgEle = mediaEle.select("div[class=\"MLZaeRvv _1Yv_hemU i1xnVt31\"]");
+                Elements linkContentEle = mediaEle.select("span[class=\"Fe7ul3Lt _2DggF3sL _1HXcreMa\"]");
+                Elements linkDomainEle = mediaEle.select("span[class=\"Fe7ul3Lt _2DggF3sL _34Ymm628\"]");
+
+                String linkUrl = mediaEle.attr("href");
+                String linkImg = Essentials.getMatches("url[(][^)]*[)]",linkImgEle.outerHtml()).replaceAll("url[(]|[)]","");
+                String linkContent = linkContentEle.html();
+                String linkDomain = linkDomainEle.html();
+
+                item.addImageUrl(linkImg);
+                item.setLinkUrl(linkUrl);
+                item.setLinkContent(linkContent);
+                item.setLinkDomain(linkDomain);
+            } else if ((mediaEle = article.select("div[class=\"_2zP-4IzO _3f2NsD-H\"]")).size() != 0) { //video
+                String videoImg = mediaEle.select("img").first().attr("src");
+                String videoUrl = mediaEle.select("a").first().attr("href");
+
+                item.addImageUrl(videoImg);
+                item.setVideoUrl(videoUrl);
+            } else if ((mediaEle = article.select("div[class=\"_2di_LxCm\"]")).size() != 0) { //image
+                for(Element imgEle : mediaEle.select("img")) {
+                    item.addImageUrl(imgEle.attr("src"));
+                }
+            }
 
             Log.i("<process>",item.toString());
 

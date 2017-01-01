@@ -30,28 +30,18 @@ public class Essentials {
 
     public static long stringToMillisInTwitter(String str) {
         Calendar calendar = Calendar.getInstance();
-        String tmp;
 
-        if(!(tmp = getMatches("[\\d]+초",str)).equals(""))
-            calendar.add(Calendar.SECOND, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
+        String[] values = str.split("[^0-9]+");
+        calendar.set(
+                Integer.valueOf(values[0]),
+                Integer.valueOf(values[1]),
+                Integer.valueOf(values[2]),
+                Integer.valueOf(values[3]),
+                Integer.valueOf(values[4]),
+                Integer.valueOf(values[5])
+         );
 
-        if(!(tmp = getMatches("[\\d]+분",str)).equals(""))
-            calendar.add(Calendar.MINUTE, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
-
-        if(!(tmp = getMatches("[\\d]+시간",str)).equals(""))
-            calendar.add(Calendar.HOUR, -Integer.parseInt(tmp.replaceAll("[\\D]","")));
-
-        if(!(tmp = getMatches("[\\d]+일", str)).equals(""))
-            calendar.set(Calendar.DATE, Integer.parseInt(tmp.replaceAll("[\\D]","")));
-
-        if(!(tmp = getMatches("[\\d]+월", str)).equals(""))
-            calendar.set(Calendar.MONTH, Integer.parseInt(tmp.replaceAll("[\\D]","")));
-
-        if(!(tmp = getMatches("[\\d]+년", str)).equals("")) {
-            if((tmp = tmp.replaceAll("[\\D]", "")).length() <= 2)
-                tmp = "20" + tmp;
-            calendar.set(Calendar.YEAR, Integer.parseInt(tmp));
-        }
+        calendar.set(Calendar.AM_PM, str.contains("오전") ? Calendar.AM : Calendar.PM);
 
         return calendar.getTimeInMillis();
     }

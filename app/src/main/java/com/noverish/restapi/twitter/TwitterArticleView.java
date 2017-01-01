@@ -13,9 +13,6 @@ import com.noverish.restapi.other.RestAPIClient;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
-import twitter4j.MediaEntity;
-import twitter4j.Status;
-
 /**
  * Created by Noverish on 2016-05-30.
  */
@@ -79,13 +76,6 @@ public class TwitterArticleView extends LinearLayout {
         timeTextView.setText(item.getTimeString());
 
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
-        try {
-            Long tweetId = Long.parseLong(item.getMedia().split("[/]")[5]);
-            Thread thread = new Thread(new CustomRunnable(mediaLayout, tweetId));
-            thread.start();
-        } catch (Exception ex) {
-
-        }
 
         ImageView replyButton = (ImageView) findViewById(R.id.twitter_article_view_reply);
         replyButton.setOnClickListener(new OnClickListener() {
@@ -121,37 +111,6 @@ public class TwitterArticleView extends LinearLayout {
         });
         if(item.isFavorited()) {
             favoriteButton.setImageResource(R.drawable.icon_twitter_arti_favorite_active);
-        }
-    }
-
-    class CustomRunnable implements Runnable {
-        LinearLayout mediaLayout;
-        long tweetId;
-
-        CustomRunnable(LinearLayout mediaLayout, long tweetId) {
-            this.mediaLayout = mediaLayout;
-            this.tweetId = tweetId;
-        }
-
-        @Override
-        public void run() {
-            Twitter4jClient client = Twitter4jClient.getInstance();
-
-            Status status = client.getStatusById(tweetId);
-
-            MediaEntity[] entities = status.getMediaEntities();
-            for(MediaEntity entity : entities) {
-                final String imageUrl = entity.getMediaURL();
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageView imageView = new ImageView(context);
-                        Picasso.with(context).load(imageUrl).into(imageView);
-                        mediaLayout.addView(imageView);
-                    }
-                });
-            }
         }
     }
 }
