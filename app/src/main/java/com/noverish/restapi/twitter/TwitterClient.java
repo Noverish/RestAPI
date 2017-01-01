@@ -8,7 +8,6 @@ import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 
@@ -44,15 +43,18 @@ public class TwitterClient {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                Document document = Jsoup.parse(htmlCode);
+                if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
+                    Log.i("<twitter login>","Twitter login");
 
-                if(document.select("html[class=\"AppPage CorePage\"]").size() > 0) {
-                    Log.d("<reload>","Twitter not login");
-                    isLogined = false;
+                    isLogined = true;
+                    if(twitterClientCallback != null)
+                        twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(htmlCode));
                 } else {
-                    Log.d("<reload>","Twitter login");
+                    Log.i("<twitter login>","Twitter not login");
 
-                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(htmlCode));
+                    isLogined = false;
+                    if(twitterClientCallback != null)
+                        twitterClientCallback.onNotLogin();
                 }
             }
         };

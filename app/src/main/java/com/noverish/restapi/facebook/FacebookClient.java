@@ -22,7 +22,7 @@ public class FacebookClient {
 
     private FacebookClientCallback facebookClientCallback;
 
-    private ArrayList<FacebookArticleItem> items;
+    private ArrayList<FacebookArticleItem> showedItems = new ArrayList<>();
     
     private static FacebookClient instance;
     public static FacebookClient getInstance() {
@@ -43,14 +43,20 @@ public class FacebookClient {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                isLogined = Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0;
-                Log.i("facebook","isLogined - " + isLogined);
+                if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
+                    Log.i("<facebook login>","Facebook login");
 
-                if (isLogined) {
-                    items = FacebookHtmlCodeProcessor.process(webView.getLastParsedHtml());
+                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getLastParsedHtml());
+                    newItems.removeAll(showedItems);
+                    showedItems.addAll(newItems);
+
+                    isLogined = true;
                     if(facebookClientCallback != null)
-                        facebookClientCallback.onSuccess(items);
+                        facebookClientCallback.onSuccess(newItems);
                 } else {
+                    Log.i("<facebook login>","Facebook login");
+
+                    isLogined = false;
                     if(facebookClientCallback != null)
                         facebookClientCallback.onNotLogin();
                 }
@@ -68,11 +74,11 @@ public class FacebookClient {
                 for(int i = 0;i<newItems.size();i++) {
                     FacebookArticleItem item = newItems.get(i);
 
-                    if (items.contains(item)) {
+                    if (showedItems.contains(item)) {
                         newItems.remove(i);
                         i--;
                     } else {
-                        items.add(item);
+                        showedItems.add(item);
                     }
                 }
 

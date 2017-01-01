@@ -24,7 +24,7 @@ public class TwitterHtmlProcessor {
         Document document = Jsoup.parse(html);
         Elements articles = document.select("div._1eF_MiFx");
 
-        Log.d("<process>","twitter article is " + articles.size());
+        Log.i("<twitter article>","twitter article is " + articles.size());
 
         for(Element article : articles) {
             TwitterArticleItem item = new TwitterArticleItem();
@@ -40,6 +40,7 @@ public class TwitterHtmlProcessor {
             Element likeEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(2);
             Element dmEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(3);
 
+            String articleId = timeEle.first().parent().attr("href").replaceAll("\\D","");
             String header = headerEle.html();
             String profileImg = Essentials.getMatches("url[(][^)]*[)]",profileEle.outerHtml()).replaceAll("url[(]|[)]","");
             String timeDetail = timeEle.attr("aria-label");
@@ -57,6 +58,7 @@ public class TwitterHtmlProcessor {
             name = HttpConnectionThread.unicodeToString(name);
             content = HttpConnectionThread.unicodeToString(content);
 
+            item.setArticleId(articleId);
             item.setHeader(header);
             item.setProfileImageUrl(profileImg);
             item.setTimeMillis(Essentials.stringToMillisInTwitter(timeDetail));
@@ -95,8 +97,6 @@ public class TwitterHtmlProcessor {
                     item.addImageUrl(imgEle.attr("src"));
                 }
             }
-
-            Log.i("<process>",item.toString());
 
             items.add(item);
         }

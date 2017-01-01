@@ -33,6 +33,8 @@ public class FacebookHtmlCodeProcessor {
         Document document = Jsoup.parse(htmlCode);
         Elements articles = document.select("article");
 
+        Log.i("<facebook article>","facebook article is " + articles.size());
+
         for(Element article : articles) {
             FacebookArticleItem item = new FacebookArticleItem();
 
