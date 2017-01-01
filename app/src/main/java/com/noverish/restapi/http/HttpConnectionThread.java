@@ -173,6 +173,8 @@ public class HttpConnectionThread extends Thread {
             return "";
         }
 
+        str = str.replaceAll("\\\\u200E"," ▶ ");
+
         Pattern pattern = Pattern.compile("(\\\\){1,2}u([0-9]|[A-F]|[a-f]){4}");
         Matcher matcher = pattern.matcher(str);
 
