@@ -124,13 +124,6 @@ public class FacebookArticleItem extends ArticleItem {
 
 
     @Override
-    public boolean equals(Object obj) {
-        FacebookArticleItem item = (FacebookArticleItem) obj;
-
-        return getArticleId().equals(item.getArticleId());
-    }
-
-    @Override
     public String toString() {
         return "FacebookArticleItem{" +
                 "header='" + header + '\'' +

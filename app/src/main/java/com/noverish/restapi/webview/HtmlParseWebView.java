@@ -118,6 +118,33 @@ public class HtmlParseWebView extends WebView {
         scrollTo(0, computeVerticalScrollRange());
     }
 
+    public void scrollBottom(final OnHtmlLoadSuccessListener loaded, final int delay) {
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollTo(0, computeVerticalScrollRange());
+                    }
+                });
+
+                try {
+                    Thread.sleep(delay);
+                } catch (Exception e) {
+
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        extractHtml(loaded);
+                    }
+                });
+            }
+        })).start();
+    }
+
     public String getLastParsedHtml() {
         return lastParsedHtml;
     }

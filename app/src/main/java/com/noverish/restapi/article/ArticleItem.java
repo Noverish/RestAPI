@@ -45,6 +45,10 @@ public class ArticleItem {
         return posterUrl;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return ((ArticleItem) obj).getArticleId().equals(articleId);
+    }
 
     public static Comparator<ArticleItem> comparator = new Comparator<ArticleItem>() {
         @Override

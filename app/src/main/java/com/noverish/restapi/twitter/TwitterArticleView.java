@@ -19,15 +19,12 @@ import com.squareup.picasso.Picasso;
  */
 public class TwitterArticleView extends LinearLayout {
     private Context context;
-    private android.os.Handler handler;
-
     private TwitterArticleItem item;
 
-    public TwitterArticleView(Context context, TwitterArticleItem item, android.os.Handler handler) {
+    public TwitterArticleView(Context context, TwitterArticleItem item) {
         super(context);
         this.item = item;
         this.context = context;
-        this.handler = handler;
 
         if(!isInEditMode()) {
             init();
@@ -62,7 +59,8 @@ public class TwitterArticleView extends LinearLayout {
         contentTextTextView.setText(item.getContent());
 
         ImageView profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
-        Picasso.with(context).load(item.getProfileImageUrl()).into(profileImageView);
+        if(item.getProfileImageUrl() != null && !item.getProfileImageUrl().equals(""))
+            Picasso.with(context).load(item.getProfileImageUrl()).into(profileImageView);
         profileImageView.setOnClickListener(goToPoster);
 
         TextView nameTextView = (TextView) findViewById(R.id.twitter_article_view_name);

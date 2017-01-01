@@ -1,8 +1,8 @@
 package com.noverish.restapi.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +35,6 @@ public class HomeFragment extends BaseFragment {
 
     private ScrollBottomDetectScrollview scrollBottomDetectScrollview;
     private LinearLayout mainLayout;
-
-    private android.os.Handler handler = new Handler();
 
     private ArrayList<ArticleItem> newArticleItems = new ArrayList<>();
     @Nullable
@@ -129,17 +127,17 @@ public class HomeFragment extends BaseFragment {
 
         for(ArticleItem item : newArticleItems) {
             try {
-                FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
-                mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
+                if(item instanceof FacebookArticleItem) {
+                    FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
+                    Log.d("facebook new item",item.getArticleId());
+                    mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
+                } else if(item instanceof TwitterArticleItem) {
+                    TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
+                    Log.d("twitter new item",item.getArticleId());
+                    mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem));
+                }
             } catch (Exception ex) {
-
-            }
-
-            try {
-                TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
-                mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem, handler));
-            } catch (Exception ex) {
-
+                ex.printStackTrace();
             }
         }
 

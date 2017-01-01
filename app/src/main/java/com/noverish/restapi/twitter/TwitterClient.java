@@ -15,14 +15,13 @@ import java.util.ArrayList;
  * Created by Noverish on 2016-09-27.
  */
 public class TwitterClient {
-    private Context context;
-    private HtmlParseWebView webView;
-
     private TwitterClientCallback twitterClientCallback;
-
+    private HtmlParseWebView webView;
+    private Context context;
     private boolean isNewerVersion;
     private boolean isLogined;
     private String userScreenName;
+    private ArrayList<TwitterArticleItem> showedItems = new ArrayList<>();
 
     private static TwitterClient instance;
     public static TwitterClient getInstance() {
@@ -40,15 +39,20 @@ public class TwitterClient {
     }
 
     public void reload() {
+        showedItems.clear();
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
                     Log.i("<twitter login>","Twitter login");
 
+                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
+                    newItems.removeAll(showedItems);
+                    showedItems.addAll(newItems);
+
                     isLogined = true;
                     if(twitterClientCallback != null)
-                        twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(htmlCode));
+                        twitterClientCallback.onSuccess(newItems);
                 } else {
                     Log.i("<twitter login>","Twitter not login");
 
@@ -69,11 +73,15 @@ public class TwitterClient {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
+                newItems.removeAll(showedItems);
+                showedItems.addAll(newItems);
+
                 if(twitterClientCallback != null)
-                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getLastParsedHtml()));
+                    twitterClientCallback.onSuccess(newItems);
             }
         };
-        webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl, loaded, null, null);
+        webView.scrollBottom(loaded, 2000);
     }
 
     public boolean isLogined() {

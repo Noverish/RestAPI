@@ -54,7 +54,7 @@ public class NotificationFragment extends Fragment {
                         layout.addView(new TwitterNotificationView(getActivity(), item));
                     } else if(item.getType() == TwitterNotificationItem.TWEET) {
                         TwitterArticleItem articleItem = item.toTwtiterArticleItem();
-                        layout.addView(new TwitterArticleView(getActivity(), articleItem, handler));
+                        layout.addView(new TwitterArticleView(getActivity(), articleItem));
                     } else {
                         Log.e("ERROR","NotificationFragment.onHtmlLoadSuccess() : The type of this TwitterNotificationItem is unknown - " + item.getType());
                     }
