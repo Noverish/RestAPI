@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.other.RestAPIClient;
+import com.noverish.restapi.view.VideoWebView;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
@@ -75,7 +76,31 @@ public class TwitterArticleView extends LinearLayout {
         TextView timeTextView = (TextView) findViewById(R.id.twitter_article_view_time);
         timeTextView.setText(item.getTimeString());
 
-        LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+        LinearLayout linkLayout = (LinearLayout) findViewById(R.id.twitter_article_view_link_layout);
+        if(item.getLinkUrl() != null) {
+            ImageView linkImg = (ImageView) findViewById(R.id.twitter_article_view_link_img);
+            TextView linkContent = (TextView) findViewById(R.id.twitter_article_view_link_content);
+            TextView linkDomain = (TextView) findViewById(R.id.twitter_article_view_link_domain);
+
+            Picasso.with(context).load(item.getImageUrls().get(0)).into(linkImg);
+            linkContent.setText(item.getLinkContent());
+            linkDomain.setText(item.getLinkDomain());
+        } else {
+            linkLayout.setVisibility(GONE);
+
+            LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.twitter_article_view_media_layout);
+            if(item.getVideoUrl() != null) {
+                mediaLayout.addView(new VideoWebView(context, item.getImageUrls().get(0), item.getVideoUrl()));
+            } else if(item.getImageUrls().size() != 0) {
+                for(String url : item.getImageUrls()) {
+                    ImageView image = new ImageView(context);
+                    Picasso.with(context).load(url).into(image);
+                    mediaLayout.addView(image);
+                }
+            } else {
+                mediaLayout.setVisibility(GONE);
+            }
+        }
 
         ImageView replyButton = (ImageView) findViewById(R.id.twitter_article_view_reply);
         replyButton.setOnClickListener(new OnClickListener() {

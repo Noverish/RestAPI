@@ -104,6 +104,37 @@
                 android:textSize="@dimen/twitter_article_content_text_size"/>
 
             <LinearLayout
+                android:id="@+id/twitter_article_view_link_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/article_content_margin_top"
+                android:orientation="vertical"
+                android:padding="4dp"
+                android:background="@drawable/border_twitter_link">
+
+                <ImageView
+                    android:id="@+id/twitter_article_view_link_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:background="#ABCDEF"/>
+
+                <TextView
+                    android:id="@+id/twitter_article_view_link_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="What"/>
+
+                <TextView
+                    android:id="@+id/twitter_article_view_link_domain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/twitter_gray_text"/>
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:id="@+id/twitter_article_view_media_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +145,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/article_content_margin_top"
-                android:layout_marginBottom="@dimen/article_content_margin_top">
+                android:layout_marginBottom="@dimen/article_content_margin_top"
+                android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="0dp"
@@ -131,7 +163,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/twitter_article_view_retweet"
@@ -149,7 +182,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/twitter_article_view_favorite"
