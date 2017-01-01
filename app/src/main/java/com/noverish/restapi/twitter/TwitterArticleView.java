@@ -119,6 +119,11 @@ public class TwitterArticleView extends LinearLayout {
                 context.startActivity(intent);
             }
         });
+        TextView retweetNum = (TextView) findViewById(R.id.article_twitter_retweet_number);
+        if(item.getRetweetNumber() > 0)
+            retweetNum.setText(String.valueOf(item.getRetweetNumber()));
+        else
+            retweetNum.setVisibility(GONE);
         if(item.isRetweeted()) {
             retweetButton.setImageResource(R.drawable.icon_twitter_arti_retweet_active);
         }
@@ -132,6 +137,11 @@ public class TwitterArticleView extends LinearLayout {
                 TwitterArticleView.this.context.startActivity(intent);
             }
         });
+        TextView favoriteNum = (TextView) findViewById(R.id.article_twitter_favorite_number);
+        if(item.getFavoriteNumber() > 0)
+            favoriteNum.setText(String.valueOf(item.getFavoriteNumber()));
+        else
+            favoriteNum.setVisibility(GONE);
         if(item.isFavorited()) {
             favoriteButton.setImageResource(R.drawable.icon_twitter_arti_favorite_active);
         }

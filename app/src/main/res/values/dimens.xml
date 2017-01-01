@@ -27,8 +27,9 @@
     <dimen name="twitter_article_screen_name_text_size">14sp</dimen>
     <dimen name="twitter_article_content_top_margin">8dp</dimen>
     <dimen name="twitter_article_content_text_size">16sp</dimen>
-    <dimen name="twitter_article_button_height">16dp</dimen>
+    <dimen name="twitter_article_button_height">24dp</dimen>
     <dimen name="twitter_article_link_img_height">150dp</dimen>
+    <dimen name="twitter_article_nums_left_margin">4dp</dimen>
 
     <dimen name="activity_setting_big_cate_margin">12dp</dimen>
     <dimen name="activity_setting_big_cate_text_size">20sp</dimen>
