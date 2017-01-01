@@ -28,7 +28,11 @@
     <dimen name="twitter_article_content_top_margin">8dp</dimen>
     <dimen name="twitter_article_content_text_size">16sp</dimen>
     <dimen name="twitter_article_button_height">16dp</dimen>
+    <dimen name="twitter_article_link_img_height">150dp</dimen>
 
     <dimen name="activity_setting_big_cate_margin">12dp</dimen>
     <dimen name="activity_setting_big_cate_text_size">20sp</dimen>
+
+    <dimen name="view_web_video_height">200dp</dimen>
+    <dimen name="view_web_video_play_button">75dp</dimen>
 </resources>

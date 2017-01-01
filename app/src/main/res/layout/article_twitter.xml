@@ -115,7 +115,7 @@
                 <ImageView
                     android:id="@+id/twitter_article_view_link_img"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/twitter_article_link_img_height"
                     android:scaleType="centerCrop"
                     android:background="#ABCDEF"/>
 
