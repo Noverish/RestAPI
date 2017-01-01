@@ -21,7 +21,6 @@ import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -123,9 +122,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void allLoaded() {
-        onFirstLoadFinishedRunnable.run();
+        if(onFirstLoadFinishedRunnable != null)
+            onFirstLoadFinishedRunnable.run();
 
-        Collections.sort(newArticleItems, ArticleItem.comparator);
+//        Collections.sort(newArticleItems, ArticleItem.comparator);
 
         for(ArticleItem item : newArticleItems) {
             try {

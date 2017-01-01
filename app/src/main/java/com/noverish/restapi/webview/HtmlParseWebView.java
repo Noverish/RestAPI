@@ -13,15 +13,8 @@ import android.webkit.WebViewClient;
  * Created by Noverish on 2016-09-07.
  */
 public class HtmlParseWebView extends WebView {
-    private OnHtmlLoadSuccessListener onHtmlLoadSuccessListener;
-    private OnPageFinishedListener onPageFinishedListener;
-    private OnPageStartedListener onPageStartedListener;
-    private String htmlCode;
-
-    private boolean extractHtmlWhenPageFinished = false;
-    private boolean htmlLoadOnce = false;
-    private boolean pageFinishedOnce = false;
-    private boolean pageStartedOnce = false;
+    private android.os.Handler handler = new android.os.Handler();
+    private String lastParsedHtml;
 
     public HtmlParseWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,41 +25,56 @@ public class HtmlParseWebView extends WebView {
 
     private void init() {
         getSettings().setJavaScriptEnabled(true);
-        setWebViewClient(new Callback());  //HERE IS THE MAIN CHANGE
 
         WebSettings webSettings = getSettings();
-        webSettings.setBuiltInZoomControls(true);
         webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 4.4.2; IM-A920S Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.85 Mobile Safari/537.36");
     }
 
     private class Callback extends WebViewClient {  //HERE IS THE MAIN CHANGE.
+        private OnHtmlLoadSuccessListener loaded;
+        private OnPageStartedListener started;
+        private OnPageFinishedListener finished;
+
+        public Callback(OnHtmlLoadSuccessListener loaded, OnPageStartedListener started, OnPageFinishedListener finished) {
+            this.loaded = loaded;
+            this.started = started;
+            this.finished = finished;
+        }
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 
-            if(onPageStartedListener != null) {
-                onPageStartedListener.onPageStarted(HtmlParseWebView.this, url, favicon);
-                if(pageStartedOnce) {
-                    pageStartedOnce = false;
-                    onPageStartedListener = null;
-                }
-            }
+            if(started != null)
+                started.onPageStarted(HtmlParseWebView.this, url, favicon);
         }
 
         @Override
         public void onPageFinished(final WebView view, String url) {
-            Log.d("onPageFinished",url);
+            Log.d("<onPageFinished>", url);
 
-            if(onPageFinishedListener != null) {
-                onPageFinishedListener.onPageFinished(HtmlParseWebView.this, url);
-                if(pageFinishedOnce) {
-                    pageFinishedOnce = false;
-                    onPageFinishedListener = null;
-                }
+            if (finished != null)
+                finished.onPageFinished(HtmlParseWebView.this, url);
+
+            if (loaded != null) {
+                (new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(3000);
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    extractHtml(loaded);
+                                }
+                            });
+                        } catch (Exception e) {
+
+                        }
+                    }
+                })).start();
             }
-
-            if(extractHtmlWhenPageFinished)
-                extractHtml();
         }
 
         @Override
@@ -76,8 +84,7 @@ public class HtmlParseWebView extends WebView {
         }
     }
 
-    public void extractHtml() {
-        Log.d("extractHtml","extractHtml");
+    private void extractHtml(final OnHtmlLoadSuccessListener listener) {
         evaluateJavascript(
                 "(function() { return ('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>'); })();",
                 new ValueCallback<String>() {
@@ -92,48 +99,26 @@ public class HtmlParseWebView extends WebView {
                         html = html.replaceAll("(\\\\){1,2}u003E",">");
                         html = html.replaceAll("(\\\\){1,2}/","/");
 
-                        htmlCode = html;
+                        lastParsedHtml = html;
 
-                        if(onHtmlLoadSuccessListener != null) {
-                            onHtmlLoadSuccessListener.onHtmlLoadSuccess(HtmlParseWebView.this, html);
-                            if(htmlLoadOnce) {
-                                htmlLoadOnce = false;
-                                onHtmlLoadSuccessListener = null;
-                            }
-                        }
+                        if(listener != null)
+                            listener.onHtmlLoadSuccess(HtmlParseWebView.this, lastParsedHtml);
                     }
                 });
+
     }
 
-    @Override
-    public void loadUrl(String url) {
-        super.loadUrl(url);
+    public void loadUrl(String url, OnHtmlLoadSuccessListener loaded, OnPageStartedListener started, OnPageFinishedListener finished) {
+        setWebViewClient(new Callback(loaded, started, finished));
+        loadUrl(url);
     }
 
-    public void setOnHtmlLoadSuccessListener(boolean once, OnHtmlLoadSuccessListener listener) {
-        this.htmlLoadOnce = once;
-        this.onHtmlLoadSuccessListener = listener;
-    }
-
-    public void setOnPageFinishedListener(boolean once, OnPageFinishedListener listener) {
-        this.pageFinishedOnce = once;
-        this.onPageFinishedListener = listener;
-    }
-
-    public void setOnPageStartedListener(boolean once, OnPageStartedListener listener) {
-        this.pageStartedOnce = once;
-        this.onPageStartedListener = listener;
-    }
-
-    public void setExtractHtmlWhenPageFinished(boolean extractHtmlWhenPageFinished) {
-        this.extractHtmlWhenPageFinished = extractHtmlWhenPageFinished;
-    }
-
-    public String getHtmlCode() {
-        return htmlCode;
-    }
-
-    public void scrollBottom() {
+    public void scrollBottom(OnHtmlLoadSuccessListener loaded) {
+        setWebViewClient(new Callback(loaded, null, null));
         scrollTo(0, computeVerticalScrollRange());
+    }
+
+    public String getLastParsedHtml() {
+        return lastParsedHtml;
     }
 }

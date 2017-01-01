@@ -41,41 +41,22 @@ public class TwitterClient {
     }
 
     public void reload() {
-        webView.setOnHtmlLoadSuccessListener(false, new OnHtmlLoadSuccessListener() {
+        OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 Document document = Jsoup.parse(htmlCode);
 
-                if(document.select("[class=\"_2tOLusnc _2ZBD52R7\"]").size() > 0) { //Post Button
-                    System.out.println("Twitter - Newer Version, Logged in");
-                    isNewerVersion = true;
-                    isLogined = true;
-                } else if(document.body().classNames().contains("AppPage-body")) { //Body Class Name
-                    System.out.println("Twitter - Newer Version, Logged out");
-                    isNewerVersion = true;
+                if(document.select("html[class=\"AppPage CorePage\"]").size() > 0) {
+                    Log.d("<reload>","Twitter not login");
                     isLogined = false;
                 } else {
-                    isNewerVersion = false;
-                    isLogined = document.select("table.tweet").size() != 0;
+                    Log.d("<reload>","Twitter login");
 
-                    Log.i("Twitter","Older Version");
-                    Log.i("Twitter","isLogined - " + isLogined);
-                }
-
-                if(isLogined) {
-                    if(twitterClientCallback != null)
-                        if(isNewerVersion)
-                            twitterClientCallback.onSuccess(TwitterHtmlProcessor.processNew(webView.getHtmlCode()));
-                        else
-                            twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
-                } else {
-                    if(twitterClientCallback != null)
-                        twitterClientCallback.onNotLogin();
+                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(htmlCode));
                 }
             }
-        });
-        webView.setExtractHtmlWhenPageFinished(true);
-        webView.loadUrl("https://mobile.twitter.com/");
+        };
+        webView.loadUrl("https://mobile.twitter.com/home", loaded, null, null);
     }
 
     public void setTwitterClientCallback(TwitterClientCallback twitterClientCallback) {
@@ -83,15 +64,14 @@ public class TwitterClient {
     }
 
     public void loadNextPage() {
-        webView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
+        OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 if(twitterClientCallback != null)
-                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getHtmlCode()));
+                    twitterClientCallback.onSuccess(TwitterHtmlProcessor.process(webView.getLastParsedHtml()));
             }
-        });
-        webView.setExtractHtmlWhenPageFinished(true);
-        webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl);
+        };
+        webView.loadUrl("https://mobile.twitter.com" + TwitterHtmlProcessor.nextPageUrl, loaded, null, null);
     }
 
     public boolean isLogined() {
@@ -103,15 +83,13 @@ public class TwitterClient {
     }
 
     public void getNotification(OnHtmlLoadSuccessListener listener) {
-        webView.setOnHtmlLoadSuccessListener(true, listener);
-        webView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
+        OnPageFinishedListener finished =  new OnPageFinishedListener() {
             @Override
             public void onPageFinished(HtmlParseWebView webView, String url) {
                 webView.goBack();
             }
-        });
-        webView.setExtractHtmlWhenPageFinished(true);
-        webView.loadUrl("https://mobile.twitter.com/i/connect");
+        };
+        webView.loadUrl("https://mobile.twitter.com/i/connect", listener, null, finished);
     }
 
     public interface TwitterClientCallback {

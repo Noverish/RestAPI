@@ -1,6 +1,5 @@
 package com.noverish.restapi.activity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,11 +12,8 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.kakao.KakaoClient;
 import com.noverish.restapi.twitter.TwitterClient;
-import com.noverish.restapi.twitter.TwitterHtmlProcessor;
 import com.noverish.restapi.webview.HtmlParseWebView;
-import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.webview.OnPageFinishedListener;
-import com.noverish.restapi.webview.OnPageStartedListener;
 
 /**
  * Created by Noverish on 2016-09-14.
@@ -57,52 +53,51 @@ public class SettingFragment extends Fragment {
                 if(TwitterClient.getInstance().isLogined()) {
                     loginStatusChanged = true;
 
-                    twitterWebView.loadUrl("https://mobile.twitter.com/logout");
-                    twitterWebView.setOnPageFinishedListener(false, new OnPageFinishedListener() {
+                    OnPageFinishedListener finished =  new OnPageFinishedListener() {
                         @Override
                         public void onPageFinished(HtmlParseWebView webView, String url) {
-                            System.out.println("twitterWebView - onPageFinished" + url);
-                            if(url.equals("https://mobile.twitter.com/logout")) {
+//                            System.out.println("twitterWebView - onPageFinished" + url);
+//                            if(url.equals("https://mobile.twitter.com/logout")) {
                                 webView.loadUrl("javascript:(function(){" +
                                         "l=document.getElementById('logout_button');" +
                                         "e=document.createEvent('HTMLEvents');" +
                                         "e.initEvent('click',true,true);" +
                                         "l.dispatchEvent(e);" +
                                         "})()");
-                            } else if(url.equals("https://mobile.twitter.com/login")) {
-                                TwitterClient.getInstance().setLogined(false);
-                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
-                                onResume();
-                                webView.setOnPageFinishedListener(false, null);
-                            }
+//                            } else if(url.equals("https://mobile.twitter.com/login")) {
+//                                TwitterClient.getInstance().setLogined(false);
+//                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
+//                                onResume();
+//                            }
                         }
-                    });
+                    };
+                    twitterWebView.loadUrl("https://mobile.twitter.com/logout", null, null, finished);
                 } else {
                     twitterWebView.loadUrl("https://mobile.twitter.com/login");
-                    twitterWebView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
-                        @Override
-                        public void onPageFinished(HtmlParseWebView webView, String url) {
-                            if(url.equals("https://mobile.twitter.com/login")) {
-                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
-
-                                twitterWebView.setOnPageStartedListener(false, new OnPageStartedListener() {
-                                    @Override
-                                    public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
-                                        if(url.equals("https://mobile.twitter.com/")) {
-                                            webView.setOnPageStartedListener(false, null);
-
-                                            loginStatusChanged = true;
-
-                                            TwitterClient.getInstance().setLogined(true);
-                                            ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_3);
-
-                                            onResume();
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
+//                    twitterWebView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
+//                        @Override
+//                        public void onPageFinished(HtmlParseWebView webView, String url) {
+//                            if(url.equals("https://mobile.twitter.com/login")) {
+//                                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_TWITTER);
+//
+//                                twitterWebView.setOnPageStartedListener(false, new OnPageStartedListener() {
+//                                    @Override
+//                                    public void onPageStarted(HtmlParseWebView webView, String url, Bitmap favicon) {
+//                                        if(url.equals("https://mobile.twitter.com/")) {
+//                                            webView.setOnPageStartedListener(false, null);
+//
+//                                            loginStatusChanged = true;
+//
+//                                            TwitterClient.getInstance().setLogined(true);
+//                                            ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_3);
+//
+//                                            onResume();
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    });
                 }
             }
         });
@@ -146,16 +141,16 @@ public class SettingFragment extends Fragment {
         twitterFollowingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
-                    @Override
-                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
-                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/following");
-                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
-                    }
-                });
-                twitterWebView.setExtractHtmlWhenPageFinished(true);
-                twitterWebView.loadUrl("https://mobile.twitter.com/account");
+//                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
+//                    @Override
+//                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+//                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
+//                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/following");
+//                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+//                    }
+//                });
+//                twitterWebView.setExtractHtmlWhenPageFinished(true);
+//                twitterWebView.loadUrl("https://mobile.twitter.com/account");
             }
         });
 
@@ -163,17 +158,17 @@ public class SettingFragment extends Fragment {
         twitterFollowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
-                    @Override
-                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
-                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/followers");
-                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
-                        TwitterClient.getInstance().setUserScreenName(userScreenName);
-                    }
-                });
-                twitterWebView.setExtractHtmlWhenPageFinished(true);
-                twitterWebView.loadUrl("https://mobile.twitter.com/account");
+//                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
+//                    @Override
+//                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+//                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
+//                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/followers");
+//                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+//                        TwitterClient.getInstance().setUserScreenName(userScreenName);
+//                    }
+//                });
+//                twitterWebView.setExtractHtmlWhenPageFinished(true);
+//                twitterWebView.loadUrl("https://mobile.twitter.com/account");
             }
         });
 

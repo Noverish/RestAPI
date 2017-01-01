@@ -81,7 +81,7 @@ public class RestAPIClient extends Thread {
         return json;
     }
 
-    public String getHtmlCode() {
+    public String getLastParsedHtml() {
         joining();
         htmlCode = HttpConnectionThread.processHtml(htmlCode);
         return htmlCode;

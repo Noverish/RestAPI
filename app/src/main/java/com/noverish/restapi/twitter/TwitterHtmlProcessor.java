@@ -22,83 +22,44 @@ public class TwitterHtmlProcessor {
         ArrayList<TwitterArticleItem> items = new ArrayList<>();
 
         Document document = Jsoup.parse(html);
-        Elements articles = document.select("table.tweet");
-
-        for(Element article : articles) {
-            TwitterArticleItem item = new TwitterArticleItem();
-
-            Elements headerElement = article.select("span.context");
-            Elements profileImageElement = article.select("td.avatar").select("img");
-            Elements timeElement = article.select("td.timestamp").select("a");
-            Elements nameElement = article.select("strong.fullname");
-            Elements screenNameElement = article.select("div.username");
-            Elements contentElement = article.select("div.dir-ltr");
-            contentElement.select("a").remove();
-            Elements mediaElement = article.select("a.twitter_external_link.dir-ltr.tco-link.has-expanded-path");
-
-            Elements tweetActionElement = article.select("span.tweet-actions");
-            Elements replyElement = tweetActionElement.select("a.first");
-            Elements retweetElement = tweetActionElement.select("a[href*=retweet]");
-            Elements favoriteElement = tweetActionElement.select("a.favorite");
-
-            item.setArticleId(article.attr("href").split("/")[3].replaceAll("\\D",""));
-            item.setHeader(HttpConnectionThread.unicodeToString(headerElement.html()));
-            item.setProfileImageUrl(profileImageElement.attr("src"));
-            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
-            item.setTimeMillis(Essentials.stringToMillisInTwitter(item.getTimeString()));
-            item.setName(HttpConnectionThread.unicodeToString(nameElement.html()));
-            item.setPosterUrl("https://mobile.twitter.com" + nameElement.parents().attr("href"));
-            item.setScreenName(screenNameElement.html().replaceAll("\\n|(\\\\n)|([<][/]?span[>])","").trim());
-            item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("\\\\n","\n").trim()));
-            item.setMedia(mediaElement.attr("data-url"));
-
-            item.setReplyUrl(replyElement.attr("href"));
-            item.setRetweetUrl(retweetElement.attr("href"));
-            item.setFavoriteUrl(favoriteElement.attr("href"));
-
-            if(retweetElement.select("span").size() != 0)
-                item.setRetweeted(retweetElement.select("span").first().className().contains("active"));
-            item.setFavorited(favoriteElement.select("span").first().className().contains("active"));
-
-            items.add(item);
-        }
-
-        String moreUrl = document.select("div.w-button-more").select("a").attr("href");
-        Log.e("moreUrl", moreUrl);
-        nextPageUrl = moreUrl;
-
-        return items;
-    }
-
-    public static ArrayList<TwitterArticleItem> processNew(String html) {
-        ArrayList<TwitterArticleItem> items = new ArrayList<>();
-
-        Document document = Jsoup.parse(html);
         Elements articles = document.select("div._1eF_MiFx");
 
-        System.out.println("articles - " + articles.size());
+        Log.d("<process>","twitter article is " + articles.size());
 
         for(Element article : articles) {
             TwitterArticleItem item = new TwitterArticleItem();
 
-            Elements headerElement = article.select("div[class=\"_1axCTvm5 _2rKrV7oY _3f2NsD-H\"]");
-            Elements profileImageElement = article.select("img[class=\"_1RntlttV _1-I0zYji\"]");
-            Elements nameElement = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]");
-            Elements screenNameElement = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]");
-            Elements timeElement = article.select("time");
-            Elements contentElement = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]");
-            Elements mediaElement = article.select("div[class=\"_2di_LxCm\"]");
-            Elements retweetButtonElement = article.select("button[class=\"RQ5ECnGZ _1m0pnxeJ\"][aria-label*=Retweet]");
-            Elements favoriteButtonElement = article.select("button[class=\"RQ5ECnGZ _1m0pnxeJ\"][aria-label*=Like]");
+            Elements headerEle = article.select("div[class=\"_1axCTvm5 _2rKrV7oY _3f2NsD-H\"]");
+            Elements profileEle = article.select("div[class=\"_3hLw5mbC _1LUwi_k5 _3kJ8i5k7 _3f2NsD-H\"]");
+            Elements timeEle = article.select("time");
+            Elements nameEle = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]");
+            Elements screenNameEle = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]");
+            Elements contentEle = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]");
+            Element replyEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(0);
+            Element retweetEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(1);
+            Element likeEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(2);
+            Element dmEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(3);
 
-            item.setHeader(headerElement.html());
-            item.setProfileImageUrl(profileImageElement.attr("src"));
-            item.setName(nameElement.html().replaceAll("<!--[^>]*-->","").trim());
-            item.setScreenName(screenNameElement.html());
-            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html()));
-            item.setContent(contentElement.html().replaceAll("<[^>]*>",""));
+            String header = headerEle.html();
+            String profileImg = Essentials.getMatches("url[(][^)]*[)]",profileEle.outerHtml()).replaceAll("url[(]|[)]","");
+            String time = timeEle.attr("aria-label");
+            String name = nameEle.html().replaceAll("<[^>]*>","");
+            String screenName = screenNameEle.html();
+            String content = contentEle.html().replaceAll("<[^>]*>","");
 
-            System.out.println(item.toString());
+            header = HttpConnectionThread.unicodeToString(header);
+            time = HttpConnectionThread.unicodeToString(time);
+            name = HttpConnectionThread.unicodeToString(name);
+            content = HttpConnectionThread.unicodeToString(content);
+
+            item.setHeader(header);
+            item.setProfileImageUrl(profileImg);
+            item.setTimeString(time);
+            item.setName(name);
+            item.setScreenName(screenName);
+            item.setContent(content);
+
+            Log.i("<process>",item.toString());
 
             items.add(item);
         }
