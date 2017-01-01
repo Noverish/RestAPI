@@ -2,6 +2,8 @@ package com.noverish.restapi.twitter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,7 +58,14 @@ public class TwitterArticleView extends LinearLayout {
         }
 
         TextView contentTextTextView = (TextView) findViewById(R.id.twitter_article_view_content);
-        contentTextTextView.setText(item.getContent());
+        contentTextTextView.setClickable(true);
+        contentTextTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            contentTextTextView.setText(Html.fromHtml(item.getContent(), Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            contentTextTextView.setText(Html.fromHtml(item.getContent()));
+        }
+
 
         ImageView profileImageView = (ImageView) findViewById(R.id.twitter_article_view_profile_image_view);
         if(item.getProfileImageUrl() != null && !item.getProfileImageUrl().equals(""))

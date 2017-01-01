@@ -40,6 +40,8 @@ public class TwitterHtmlProcessor {
             Element likeEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(2);
             Element dmEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(3);
 
+            contentEle.select("[aria-hidden=\"true\"]").remove();
+
             String articleId = timeEle.first().parent().attr("href").replaceAll("\\D","");
             String header = headerEle.html();
             String profileImg = Essentials.getMatches("url[(][^)]*[)]",profileEle.outerHtml()).replaceAll("url[(]|[)]","");
@@ -47,7 +49,7 @@ public class TwitterHtmlProcessor {
             String timeStr = timeEle.html();
             String name = nameEle.html().replaceAll("<[^>]*>","");
             String screenName = screenNameEle.html();
-            String content = contentEle.html().replaceAll("<[^>]*>","");
+            String content = contentEle.html();
             boolean isRetweeted = retweetEle.attr("data-testid").contains("un");
             boolean isLiked = likeEle.attr("data-testid").contains("un");
             int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
@@ -57,6 +59,7 @@ public class TwitterHtmlProcessor {
             timeStr = HttpConnectionThread.unicodeToString(timeStr);
             name = HttpConnectionThread.unicodeToString(name);
             content = HttpConnectionThread.unicodeToString(content);
+            content = content.replaceAll("href=\"/","href=\"https://mobile.twitter.com/");
 
             item.setArticleId(articleId);
             item.setHeader(header);
