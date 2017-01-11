@@ -2,7 +2,7 @@ package com.noverish.restapi.twitter;
 
 import android.util.Log;
 
-import com.noverish.restapi.article.ArticleItem;
+import com.noverish.restapi.base.ArticleItem;
 
 import java.util.ArrayList;
 

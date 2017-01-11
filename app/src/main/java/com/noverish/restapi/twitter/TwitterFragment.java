@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.base.BaseFragment;
 
 public class TwitterFragment extends BaseFragment {
     @Nullable
@@ -25,6 +25,16 @@ public class TwitterFragment extends BaseFragment {
 
     @Override
     public void onFreshButtonClicked() {
+
+    }
+
+    @Override
+    public void showArticleByCategory(String category) {
+
+    }
+
+    @Override
+    public void scrollTop() {
 
     }
 }

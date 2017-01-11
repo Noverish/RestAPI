@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
 
-import com.noverish.restapi.article.ArticleItem;
+import com.noverish.restapi.base.ArticleItem;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

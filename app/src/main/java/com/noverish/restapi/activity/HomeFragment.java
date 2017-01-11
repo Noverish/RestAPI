@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.article.ArticleItem;
+import com.noverish.restapi.base.ArticleItem;
+import com.noverish.restapi.base.ArticleView;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -140,5 +141,22 @@ public class HomeFragment extends BaseFragment {
         mainLayout.removeAllViews();
         facebookClient.loadFirstPage();
         twitterClient.loadFirstPage();
+    }
+
+    @Override
+    public void showArticleByCategory(String category) {
+        for(int i = 0;i < mainLayout.getChildCount(); i++) {
+            try {
+                ArticleView articleView = (ArticleView) mainLayout.getChildAt(i);
+                articleView.setVisiblityByCategory(category);
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+
+    @Override
+    public void scrollTop() {
+        scrollBottomDetectScrollview.scrollTo(0, 0);
     }
 }

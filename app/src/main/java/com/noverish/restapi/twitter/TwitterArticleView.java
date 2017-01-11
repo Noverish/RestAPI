@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.base.ArticleView;
 import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
 import com.noverish.restapi.webview.WebViewActivity;
@@ -19,12 +20,12 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by Noverish on 2016-05-30.
  */
-public class TwitterArticleView extends LinearLayout {
+public class TwitterArticleView extends ArticleView {
     private Context context;
     private TwitterArticleItem item;
 
     public TwitterArticleView(Context context, TwitterArticleItem item) {
-        super(context);
+        super(context, item);
         this.item = item;
         this.context = context;
 

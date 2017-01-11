@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.base.BaseFragment;
 
 /**
  * Created by Noverish on 2016-08-21.
@@ -28,6 +28,16 @@ public class FacebookFragment extends BaseFragment {
 
     @Override
     public void onFreshButtonClicked() {
+
+    }
+
+    @Override
+    public void showArticleByCategory(String category) {
+
+    }
+
+    @Override
+    public void scrollTop() {
 
     }
 }

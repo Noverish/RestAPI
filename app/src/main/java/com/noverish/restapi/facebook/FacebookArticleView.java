@@ -2,7 +2,6 @@ package com.noverish.restapi.facebook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.base.ArticleView;
 import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
 import com.noverish.restapi.webview.WebViewActivity;
@@ -25,16 +25,14 @@ import org.jsoup.nodes.Document;
 /**
  * Created by Noverish on 2016-07-17.
  */
-public class FacebookArticleView extends LinearLayout {
+public class FacebookArticleView extends ArticleView {
     private Context context;
-    private FacebookArticleItem article;
-    private android.os.Handler handler;
+    private FacebookArticleItem item;
 
-    public FacebookArticleView(Context context, FacebookArticleItem article) {
-        super(context);
+    public FacebookArticleView(Context context, FacebookArticleItem item) {
+        super(context, item);
         this.context = context;
-        this.article = article;
-        handler = new Handler();
+        this.item = item;
 
         init();
     }
@@ -47,54 +45,54 @@ public class FacebookArticleView extends LinearLayout {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, WebViewActivity.class);
-                intent.putExtra("url",article.getPosterUrl());
+                intent.putExtra("url", item.getPosterUrl());
                 context.startActivity(intent);
             }
         };
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIAsyncTask.execute(article.getContent(), classification, article);
+        RestAPIAsyncTask.execute(item.getContent(), classification, item);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
-        if(article.getHeader() == null || article.getHeader().equals(""))
+        if(item.getHeader() == null || item.getHeader().equals(""))
             header.setVisibility(GONE);
         else
-            header.setText(article.getHeader());
+            header.setText(item.getHeader());
 
         ImageView profileImg = (ImageView) findViewById(R.id.facebook_article_profile_img);
-        Picasso.with(context).load(article.getProfileImgUrl()).into(profileImg);
+        Picasso.with(context).load(item.getProfileImgUrl()).into(profileImg);
         profileImg.setOnClickListener(goToPoster);
 
         TextView title = (TextView) findViewById(R.id.facebook_article_title);
-        title.setText(article.getTitle());
+        title.setText(item.getTitle());
         title.setOnClickListener(goToPoster);
 
         TextView time = (TextView) findViewById(R.id.facebook_article_time);
-        time.setText(article.getTimeString());
+        time.setText(item.getTimeString());
 
         TextView content = (TextView) findViewById(R.id.facebook_article_content);
-        content.setText(article.getContent());
+        content.setText(item.getContent());
 
         TextView sympathy = (TextView) findViewById(R.id.facebook_article_sympathy);
-        sympathy.setText(article.getSympathyNum());
+        sympathy.setText(item.getSympathyNum());
 
         TextView comment = (TextView) findViewById(R.id.facebook_article_comment);
-        comment.setText(article.getCommentNum());
+        comment.setText(item.getCommentNum());
 
         TextView sharing = (TextView) findViewById(R.id.facebook_article_sharing);
-        sharing.setText(article.getSharingNum());
+        sharing.setText(item.getSharingNum());
 
         LinearLayout mediaLayout = (LinearLayout) findViewById(R.id.facebook_article_media_layout);
-        if(article.getImageUrls() != null) {
-            for (String url : article.getImageUrls()) {
+        if(item.getImageUrls() != null) {
+            for (String url : item.getImageUrls()) {
                 ImageView image = new ImageView(context);
                 Picasso.with(context).load(url).into(image);
                 mediaLayout.addView(image);
             }
         }
 
-        if(article.getVideo() != null) {
-            VideoWebView videoWebView = new VideoWebView(context, article.getVideo().first, article.getVideo().second);
+        if(item.getVideo() != null) {
+            VideoWebView videoWebView = new VideoWebView(context, item.getVideo().first, item.getVideo().second);
             mediaLayout.addView(videoWebView);
         }
 
@@ -102,15 +100,15 @@ public class FacebookArticleView extends LinearLayout {
         like.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(article.isLiked()) {
+                if(item.isLiked()) {
                     Toast.makeText(context, "좋아요 취소는 아직 지원하지 않습니다", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    System.out.println(article.getLikeUrl());
+                    System.out.println(item.getLikeUrl());
                     try {
-                        Document document = Jsoup.connect(article.getLikeUrl()).get();
+                        Document document = Jsoup.connect(item.getLikeUrl()).get();
                         Log.i("Document",document.outerHtml());
-                        article.setLiked(true);
+                        item.setLiked(true);
                         makeButtonLiked();
                     } catch (Exception ex) {
                         Toast.makeText(context, "연결에 실패했습니다", Toast.LENGTH_SHORT).show();
@@ -119,7 +117,7 @@ public class FacebookArticleView extends LinearLayout {
             }
         });
 
-        if(article.isLiked()) {
+        if(item.isLiked()) {
             makeButtonLiked();
         }
     }

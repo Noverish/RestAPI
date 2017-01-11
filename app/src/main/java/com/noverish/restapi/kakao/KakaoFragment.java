@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
@@ -256,4 +256,14 @@ public class KakaoFragment extends BaseFragment {
             }
         });
     }*/
+
+    @Override
+    public void showArticleByCategory(String category) {
+
+    }
+
+    @Override
+    public void scrollTop() {
+
+    }
 }

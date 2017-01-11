@@ -1,6 +1,6 @@
 package com.noverish.restapi.twitter;
 
-import com.noverish.restapi.article.ArticleItem;
+import com.noverish.restapi.base.ArticleItem;
 
 import java.util.ArrayList;
 

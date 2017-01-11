@@ -14,13 +14,12 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.kakao.KakaoFragment;
-import com.noverish.restapi.other.BaseFragment;
+import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.twitter.TwitterFragment;
@@ -77,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         Menu m = navigationView.getMenu();
         subMenu = m.addSubMenu("Category");
+        subMenu.add("전체보기");
 
         mainFrame = (FrameLayout) findViewById(R.id.activity_main_fragment_main);
         level1Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_1);
@@ -192,7 +192,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nowFragment = fragment;
             Essentials.changeFragment(this, R.id.activity_main_fragment_main, fragment);
         } else {
-            Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+            nowFragment.scrollTop();
+            nowFragment.showArticleByCategory(item.getTitle().toString());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

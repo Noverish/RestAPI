@@ -2,7 +2,7 @@ package com.noverish.restapi.facebook;
 
 import android.util.Pair;
 
-import com.noverish.restapi.article.ArticleItem;
+import com.noverish.restapi.base.ArticleItem;
 
 import java.util.ArrayList;
 

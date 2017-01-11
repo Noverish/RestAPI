@@ -1,4 +1,4 @@
-package com.noverish.restapi.article;
+package com.noverish.restapi.base;
 
 import java.util.Comparator;
 
@@ -11,7 +11,7 @@ public class ArticleItem {
     private long timeMillis;
     private String timeString;
     private String posterUrl;
-    private String category;
+    private String category = "";
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
