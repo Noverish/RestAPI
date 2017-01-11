@@ -15,12 +15,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookFragment;
@@ -33,8 +35,8 @@ import com.noverish.restapi.webview.HtmlParseWebView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public static SubMenu subMenu;
 
     private BaseFragment nowFragment;
 
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu m = navigationView.getMenu();
+        subMenu = m.addSubMenu("Category");
 
         mainFrame = (FrameLayout) findViewById(R.id.activity_main_fragment_main);
         level1Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_1);
@@ -178,10 +182,8 @@ public class MainActivity extends AppCompatActivity
             KakaoFragment fragment = new KakaoFragment();
             nowFragment = fragment;
             Essentials.changeFragment(this, R.id.activity_main_fragment_main, fragment);
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else {
+            Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

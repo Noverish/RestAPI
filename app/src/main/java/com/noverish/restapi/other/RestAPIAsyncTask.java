@@ -5,8 +5,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.noverish.restapi.article.ArticleItem;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.util.ArrayList;
+
+import static com.noverish.restapi.activity.MainActivity.subMenu;
 
 /**
  * Created by Noverish on 2017-01-11.
@@ -14,18 +20,21 @@ import org.jsoup.nodes.Document;
 
 public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     public final static String SERVER_URL = "http://dilab.korea.ac.kr/sigma/sigmaService/Bilingual/ResultServlet";
+    public static ArrayList<String> categoryList = new ArrayList<>();
 
     private String content;
     private TextView textView;
+    private ArticleItem item;
 
-    private RestAPIAsyncTask(String content, TextView textView) {
+    private RestAPIAsyncTask(String content, TextView textView, ArticleItem item) {
         super();
         this.content = content;
         this.textView = textView;
+        this.item = item;
     }
 
-    public static void execute(String content, TextView textView) {
-        RestAPIAsyncTask restAPIAsyncTask = new RestAPIAsyncTask(content, textView);
+    public static void execute(String content, TextView textView, ArticleItem item) {
+        RestAPIAsyncTask restAPIAsyncTask = new RestAPIAsyncTask(content, textView, item);
         restAPIAsyncTask.execute();
     }
 
@@ -61,10 +70,20 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         Log.d("<RestAPI>",content + " => " + result);
-        if(result.equals(""))
+
+        if(result.equals("")) {
             textView.setVisibility(View.GONE);
-        else
+            item.setCategory("");
+        } else {
+            String category = result.split("/")[1];
+            if(!categoryList.contains(category)) {
+                categoryList.add(category);
+                subMenu.add(category);
+            }
+
+            item.setCategory(category);
             textView.setText(result);
+        }
     }
 
     @Override

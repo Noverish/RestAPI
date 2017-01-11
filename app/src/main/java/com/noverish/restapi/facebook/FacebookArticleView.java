@@ -53,7 +53,7 @@ public class FacebookArticleView extends LinearLayout {
         };
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIAsyncTask.execute(article.getContent(), classification);
+        RestAPIAsyncTask.execute(article.getContent(), classification, article);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
         if(article.getHeader() == null || article.getHeader().equals(""))

@@ -11,6 +11,7 @@ public class ArticleItem {
     private long timeMillis;
     private String timeString;
     private String posterUrl;
+    private String category;
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
@@ -26,6 +27,10 @@ public class ArticleItem {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 
@@ -44,6 +49,11 @@ public class ArticleItem {
     public String getPosterUrl() {
         return posterUrl;
     }
+
+    public String getCategory() {
+        return category;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
