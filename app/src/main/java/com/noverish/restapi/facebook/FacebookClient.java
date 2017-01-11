@@ -20,7 +20,6 @@ public class FacebookClient {
     private HtmlParseWebView webView;
     private boolean isLogined;
 
-
     private ArrayList<FacebookArticleItem> showedItems = new ArrayList<>();
     
     private static FacebookClient instance;
@@ -99,7 +98,6 @@ public class FacebookClient {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 webView.goBack();
-
                 callback.onSuccess(FacebookHtmlCodeProcessor.processNotification(htmlCode));
             }
         };
@@ -110,6 +108,7 @@ public class FacebookClient {
         OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                webView.goBack();
                 callback.onSuccess(FacebookHtmlCodeProcessor.processMessage(htmlCode));
             }
         };

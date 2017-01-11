@@ -28,23 +28,33 @@ import com.noverish.restapi.webview.HtmlParseWebView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.noverish.restapi.activity.MainActivity.Status.MESSAGE;
+import static com.noverish.restapi.activity.MainActivity.Status.NOTI;
+import static com.noverish.restapi.activity.MainActivity.Status.SETTING;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static SubMenu subMenu;
+    public static MainActivity instance;
 
     private BaseFragment nowFragment;
 
-    private HtmlParseWebView anotherWebView, kakaoWebView, twitterWebView, facebookWebView;
+    public HtmlParseWebView anotherWebView;
+    private HtmlParseWebView kakaoWebView, twitterWebView, facebookWebView;
     private FrameLayout mainFrame, level1Frame, level2Frame, level3Frame;
 
     private FloatingActionButton fab;
 
     private int debugStatus = 0;
 
+    public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING}
+    private Status status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -102,27 +112,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(mainFrame.getVisibility() == View.GONE) {
-            System.out.println("MAINFRAME - INVISIBLE");
-           changeVisibleLevel(LEVEL_3);
-        } else if(level3Frame.getChildCount() > 0) {
-            level3Frame.removeAllViews();
-        } else if(level2Frame.getChildCount() > 0) {
-            level2Frame.removeAllViews();
-        } else if(level1Frame.getChildCount() > 0) {
-            level1Frame.removeAllViews();
-
-            try {
-                SettingFragment settingFragment = (SettingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_fragment_level_1);
-                if(settingFragment.isLoginStatusChanged())
-                    refresh();
-            } catch (Exception ex) {
-
-            }
-        } else if(!nowFragment.getClass().getSimpleName().equals("HomeFragment")) {
-            Essentials.changeFragment(this, R.id.activity_main_fragment_main, new HomeFragment());
         } else {
-            super.onBackPressed();
+            switch (status) {
+                case HOME: {
+                    finish();
+                }
+                case SETTING:
+                case NOTI:
+                case MESSAGE: {
+                    level1Frame.removeAllViews();
+                    setStatus(Status.HOME);
+                    break;
+                }
+                case MESSAGE_FACEBOOK: {
+                    changeVisibleLevel(LEVEL_3);
+                    setStatus(MESSAGE);
+                    break;
+                }
+            }
         }
     }
 
@@ -139,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_settings) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new SettingFragment());
             fab.setVisibility(GONE);
+            setStatus(SETTING);
         } else if(id == R.id.action_refresh) {
             refresh();
         } else if(id == R.id.action_debug) {
@@ -155,9 +163,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if(id == R.id.action_notifications) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new NotificationFragment());
             fab.setVisibility(GONE);
+            setStatus(NOTI);
         } else if(id == R.id.action_messages) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new MessageFragment());
             fab.setVisibility(GONE);
+            setStatus(MESSAGE);
         }
 
         return super.onOptionsItemSelected(item);
@@ -213,5 +223,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (; i < 7; i++) {
             views[i].setVisibility(GONE);
         }
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

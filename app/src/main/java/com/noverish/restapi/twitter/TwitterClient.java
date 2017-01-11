@@ -99,7 +99,6 @@ public class TwitterClient {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 webView.goBack();
-
                 callback.onSuccess(TwitterHtmlProcessor.processNotification(htmlCode));
             }
         };
@@ -110,6 +109,7 @@ public class TwitterClient {
         OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                webView.goBack();
                 callback.onSuccess(TwitterHtmlProcessor.processMessage(htmlCode));
             }
         };

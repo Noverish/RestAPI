@@ -110,7 +110,7 @@ public class KakaoFragment extends BaseFragment {
         }
 
         if(MainActivity.dialog != null) {
-            Log.d("mainActivity","dialog dismiss");
+            Log.d("instance","dialog dismiss");
             MainActivity.dialog.dismiss();
         }
     }*/
