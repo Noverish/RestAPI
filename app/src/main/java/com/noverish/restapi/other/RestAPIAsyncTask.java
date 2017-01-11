@@ -1,10 +1,13 @@
 package com.noverish.restapi.other;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.base.ArticleItem;
+import com.noverish.restapi.base.ArticleView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,16 +27,18 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     private String content;
     private TextView textView;
     private ArticleItem item;
+    private ArticleView view;
 
-    private RestAPIAsyncTask(String content, TextView textView, ArticleItem item) {
+    private RestAPIAsyncTask(String content, TextView textView, ArticleItem item, ArticleView view) {
         super();
         this.content = content;
         this.textView = textView;
         this.item = item;
+        this.view = view;
     }
 
-    public static void execute(String content, TextView textView, ArticleItem item) {
-        RestAPIAsyncTask restAPIAsyncTask = new RestAPIAsyncTask(content, textView, item);
+    public static void execute(String content, TextView textView, ArticleItem item, ArticleView view) {
+        RestAPIAsyncTask restAPIAsyncTask = new RestAPIAsyncTask(content, textView, item, view);
         restAPIAsyncTask.execute();
     }
 
@@ -68,7 +73,7 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-//        Log.d("<RestAPI>",content + " => " + result);
+        Log.d("<RestAPI>",content + " => " + result);
 
         if(result.equals("")) {
             textView.setVisibility(View.GONE);
@@ -82,6 +87,11 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
 
             item.setCategory(category);
             textView.setText(result);
+
+            Log.d("<RestAPI>","now : " + MainActivity.instance.getNowCategory() + ", this : " + category);
+            if(MainActivity.instance.getNowCategory().equals(category)) {
+                view.setVisibility(View.VISIBLE);
+            }
         }
     }
 

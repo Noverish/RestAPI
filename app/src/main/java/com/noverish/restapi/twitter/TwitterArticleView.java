@@ -48,7 +48,7 @@ public class TwitterArticleView extends ArticleView {
         };
 
         TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
-        RestAPIAsyncTask.execute(item.getContent(), classificationTextView, item);
+        RestAPIAsyncTask.execute(item.getContent(), classificationTextView, item, this);
 
         TextView headerTextView = (TextView) findViewById(R.id.twitter_article_view_header);
         if(item.getHeader() == null || item.getHeader().equals("")) {

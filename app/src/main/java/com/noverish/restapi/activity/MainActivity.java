@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING}
     private Status status;
 
+    public String nowCategory = "전체보기";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             nowFragment.scrollTop();
             nowFragment.showArticleByCategory(item.getTitle().toString());
+            setNowCategory(item.getTitle().toString());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -228,5 +231,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setNowCategory(String category) {
+        this.nowCategory = category;
+    }
+
+    public String getNowCategory() {
+        return nowCategory;
     }
 }

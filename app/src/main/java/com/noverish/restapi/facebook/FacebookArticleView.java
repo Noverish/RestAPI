@@ -51,7 +51,7 @@ public class FacebookArticleView extends ArticleView {
         };
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIAsyncTask.execute(item.getContent(), classification, item);
+        RestAPIAsyncTask.execute(item.getContent(), classification, item, this);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
         if(item.getHeader() == null || item.getHeader().equals(""))

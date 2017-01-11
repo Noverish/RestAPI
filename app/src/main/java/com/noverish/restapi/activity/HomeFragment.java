@@ -21,6 +21,8 @@ import com.noverish.restapi.view.ScrollBottomDetectScrollview;
 
 import java.util.ArrayList;
 
+import static android.view.View.GONE;
+
 /**
  * Created by Noverish on 2016-08-21.
  */
@@ -113,12 +115,20 @@ public class HomeFragment extends BaseFragment {
             try {
                 if(item instanceof FacebookArticleItem) {
                     FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
-//                    Log.d("<facebook new item>",item.getArticleId());
-                    mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
+                    FacebookArticleView facebookArticleView = new FacebookArticleView(getActivity(), facebookArticleItem);
+
+                    if(!MainActivity.instance.getNowCategory().equals("전체보기"))
+                        facebookArticleView.setVisibility(GONE);
+
+                    mainLayout.addView(facebookArticleView);
                 } else if(item instanceof TwitterArticleItem) {
                     TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
-//                    Log.d("<twitter new item>",item.getArticleId());
-                    mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem));
+                    TwitterArticleView twitterArticleView = new TwitterArticleView(getActivity(), twitterArticleItem);
+
+                    if(!MainActivity.instance.getNowCategory().equals("전체보기"))
+                        twitterArticleView.setVisibility(GONE);
+
+                    mainLayout.addView(twitterArticleView);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
