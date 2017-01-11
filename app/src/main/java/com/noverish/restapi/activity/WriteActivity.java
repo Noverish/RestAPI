@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.twitter.TwitterClient;
 
 /**
  * Created by cscoi019 on 2017. 1. 11..
@@ -33,6 +32,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         finish();
 
         FacebookClient.getInstance().post(content);
-        TwitterClient.getInstance().post(content);
+//        TwitterClient.getInstance().post(content);
     }
 }

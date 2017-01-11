@@ -120,8 +120,8 @@ public class HtmlParseWebView extends WebView {
         setWebViewClient(new WebViewClient());
         evaluateJavascript("javascript:(function(){" +
                         "l=document.querySelectorAll('button." + classNames + "');" +
-                        "l[0].removeAttribute('disabled')" +
-                        "alert(l[0].outerHTML);" +
+                        "l[0].removeAttribute('disabled');" +
+//                        "alert(l[0].outerHTML);" +
                         "l[0].click();" +
                         "})()",
                 new ValueCallback<String>() {
@@ -137,7 +137,7 @@ public class HtmlParseWebView extends WebView {
         setWebViewClient(new WebViewClient());
         evaluateJavascript("javascript:(function(){" +
                         "l=document.getElementsByClassName('" + classNames + "');" +
-                        "alert(l[0]);" +
+//                        "alert(l[0]);" +
                         "l[0].submit();" +
                         "})()",
                 new ValueCallback<String>() {

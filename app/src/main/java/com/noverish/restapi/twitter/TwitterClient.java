@@ -91,7 +91,7 @@ public class TwitterClient {
                 webView.setContentInTextArea(content, "_2wjpwbis _1YGC8xFq _2RmultvD _1VqMahaT _2Z8UymHS", new Runnable() {
                     @Override
                     public void run() {
-                        webView.clickButton("MmJh82_T _1xFtK706 SpbPGaHr _2Rz0TobF KMM_MJg9 _1pzUva68 _2m0B23vv _3f2NsD-H", null);
+                        webView.clickButton("MmJh82_T _1xFtK706 SpbPGaHr _2Rz0TobF", null);
                     }
                 });
             }
