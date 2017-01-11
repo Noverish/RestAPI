@@ -35,6 +35,7 @@
         </activity>
         <activity android:name=".kakao.KakaoLoginActivity" />
         <activity android:name=".webview.WebViewActivity" />
+        <activity android:name=".activity.WriteActivity" />
     </application>
 
 </manifest>

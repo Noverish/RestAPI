@@ -89,6 +89,20 @@ public class FacebookClient {
         webView.scrollBottom(loaded);
     }
 
+    public void post(String content) {
+        webView.setContentInTextArea(content, "_1svy _2ya3 _3jce _26wa", new Runnable() {
+            @Override
+            public void run() {
+                webView.clickButton("_54k8 _56bs _56bu", new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("clicked");
+                    }
+                });
+            }
+        });
+    }
+
     public void setFacebookClientCallback(FacebookClientCallback facebookClientCallback) {
         this.facebookClientCallback = facebookClientCallback;
     }

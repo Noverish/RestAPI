@@ -67,7 +67,7 @@ public class FacebookHtmlCodeProcessor {
 
             Elements title = titlePart.select("h3._52jd._52jb._5qc3"); //제목에 행동이 있는 경우 _52jd _52jb _52jg _5qc3 이고 이름만 있는 경우 _52jd _52jb _52jh _5qc3 이다.
             item.setTitle(HttpConnectionThread.unicodeToString(title.outerHtml().replaceAll("<[^>]*>","")));
-            item.setPosterUrl("https://m.facebook.com/" + title.select("a").attr("href").split("/")[1]);
+//            item.setPosterUrl("https://m.facebook.com/" + title.select("a").attr("href").split("/")[1]);
 
             Elements timeLocationPart = titlePart.select("div._52jc._5qc4._24u0").select("a");
             if(timeLocationPart.size() == 1) {

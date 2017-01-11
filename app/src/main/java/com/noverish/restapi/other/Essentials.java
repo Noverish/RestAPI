@@ -29,21 +29,27 @@ public class Essentials {
     }
 
     public static long stringToMillisInTwitter(String str) {
-        Calendar calendar = Calendar.getInstance();
+        try {
+            Calendar calendar = Calendar.getInstance();
 
-        String[] values = str.split("[^0-9]+");
-        calendar.set(
-                Integer.valueOf(values[0]),
-                Integer.valueOf(values[1]),
-                Integer.valueOf(values[2]),
-                Integer.valueOf(values[3]),
-                Integer.valueOf(values[4]),
-                Integer.valueOf(values[5])
-         );
+            String[] values = str.split("[^0-9]+");
+            calendar.set(
+                    Integer.valueOf(values[0]),
+                    Integer.valueOf(values[1]),
+                    Integer.valueOf(values[2]),
+                    Integer.valueOf(values[3]),
+                    Integer.valueOf(values[4]),
+                    Integer.valueOf(values[5])
+            );
 
-        calendar.set(Calendar.AM_PM, str.contains("오전") ? Calendar.AM : Calendar.PM);
+            calendar.set(Calendar.AM_PM, str.contains("오전") ? Calendar.AM : Calendar.PM);
 
-        return calendar.getTimeInMillis();
+            return calendar.getTimeInMillis();
+        } catch (Exception ex) {
+            Log.d("<time>",str);
+//            ex.printStackTrace();
+            return 0;
+        }
     }
 
     public static long stringToMillisInFacebook(String str) {
