@@ -15,11 +15,11 @@ import java.util.ArrayList;
  * Created by Noverish on 2016-09-27.
  */
 public class FacebookClient {
+    private FacebookArticleCallback callback;
     private Context context;
     private HtmlParseWebView webView;
     private boolean isLogined;
 
-    private FacebookClientCallback facebookClientCallback;
 
     private ArrayList<FacebookArticleItem> showedItems = new ArrayList<>();
     
@@ -33,31 +33,35 @@ public class FacebookClient {
     
     private FacebookClient() {}
     
-    public void setData(HtmlParseWebView webView) {
+    public void setWebView(HtmlParseWebView webView) {
         this.webView = webView;
         this.context = webView.getContext();
     }
 
-    public void reload() {
+    public void setCallback(FacebookArticleCallback callback) {
+        this.callback = callback;
+    }
+
+    public void loadFirstPage() {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
-                    Log.i("<facebook login>","Facebook login");
+                    Log.i("<facebook load first>","Facebook login");
 
                     ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
                     isLogined = true;
-                    if(facebookClientCallback != null)
-                        facebookClientCallback.onSuccess(newItems);
+                    if(callback != null)
+                        callback.onSuccess(newItems);
                 } else {
-                    Log.i("<facebook login>","Facebook login");
+                    Log.i("<facebook load first>","Facebook not login");
 
                     isLogined = false;
-                    if(facebookClientCallback != null)
-                        facebookClientCallback.onNotLogin();
+                    if(callback != null)
+                        callback.onNotLogin();
                 }
             }
         };
@@ -68,24 +72,38 @@ public class FacebookClient {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
+                if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
+                    Log.i("<facebook load next>","Facebook login");
 
-                for(int i = 0;i<newItems.size();i++) {
-                    FacebookArticleItem item = newItems.get(i);
+                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
+                    newItems.removeAll(showedItems);
+                    showedItems.addAll(newItems);
 
-                    if (showedItems.contains(item)) {
-                        newItems.remove(i);
-                        i--;
-                    } else {
-                        showedItems.add(item);
-                    }
+                    isLogined = true;
+                    if(callback != null)
+                        callback.onSuccess(newItems);
+                } else {
+                    Log.i("<facebook load next>","Facebook not login");
+
+                    isLogined = false;
+                    if(callback != null)
+                        callback.onNotLogin();
                 }
-
-                if(facebookClientCallback != null)
-                    facebookClientCallback.onSuccess(newItems);
             }
         };
         webView.scrollBottom(loaded);
+    }
+
+    public void getNotification(final FacebookNotificationCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                webView.goBack();
+
+                callback.onSuccess(FacebookHtmlCodeProcessor.processNotification(htmlCode));
+            }
+        };
+        webView.loadUrl("https://m.facebook.com/notifications.php?more", listener, null, null, HtmlParseWebView.SNSType.Facebook);
     }
 
     public void post(String content) {
@@ -102,36 +120,12 @@ public class FacebookClient {
         });
     }
 
-    public void setFacebookClientCallback(FacebookClientCallback facebookClientCallback) {
-        this.facebookClientCallback = facebookClientCallback;
-    }
-
     public boolean isLogined() {
         return isLogined;
     }
 
     public void setLogined(boolean logined) {
         isLogined = logined;
-    }
-
-    public void getNotification(final FacebookNotificationCallback callback) {
-        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
-            @Override
-            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                webView.goBack();
-
-                callback.onSuccess(FacebookHtmlCodeProcessor.processNotification(htmlCode));
-            }
-        };
-        webView.loadUrl("https://m.facebook.com/notifications.php?more", listener, null, null, HtmlParseWebView.SNSType.Facebook);
-    }
-
-    public interface FacebookClientCallback {
-        void onSuccess(ArrayList<FacebookArticleItem> items);
-
-        void onNotLogin();
-
-        void onFailure();
     }
 
     public interface FacebookArticleCallback {

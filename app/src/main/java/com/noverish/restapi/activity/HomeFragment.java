@@ -17,7 +17,6 @@ import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.view.ScrollBottomDetectScrollview;
-import com.noverish.restapi.webview.HtmlParseWebView;
 
 import java.util.ArrayList;
 
@@ -51,13 +50,9 @@ public class HomeFragment extends BaseFragment {
         });
 
         mainLayout = (LinearLayout) view.findViewById(R.id.fragment_home_layout_main);
-        
-        HtmlParseWebView facebookWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_facebook_web_view);
-        HtmlParseWebView twitterWebView = (HtmlParseWebView) getActivity().findViewById(R.id.activity_main_twitter_web_view);
 
         facebookClient = FacebookClient.getInstance();
-        facebookClient.setData(facebookWebView);
-        facebookClient.setFacebookClientCallback(new FacebookClient.FacebookClientCallback() {
+        facebookClient.setCallback(new FacebookClient.FacebookArticleCallback() {
             @Override
             public void onSuccess(ArrayList<FacebookArticleItem> items) {
                 newArticleItems.addAll(items);
@@ -75,17 +70,11 @@ public class HomeFragment extends BaseFragment {
                 if(twitterFirstLoaded)
                     allLoaded();
             }
-
-            @Override
-            public void onFailure() {
-
-            }
         });
-        facebookClient.reload();
+        facebookClient.loadFirstPage();
 
         twitterClient = TwitterClient.getInstance();
-        twitterClient.setData(twitterWebView);
-        twitterClient.setTwitterClientCallback(new TwitterClient.TwitterClientCallback() {
+        twitterClient.setCallback(new TwitterClient.TwitterArticleCallback() {
             @Override
             public void onSuccess(ArrayList<TwitterArticleItem> items) {
                 newArticleItems.addAll(items);
@@ -103,13 +92,8 @@ public class HomeFragment extends BaseFragment {
                 if(facebookFirstLoaded)
                     allLoaded();
             }
-
-            @Override
-            public void onFailure() {
-
-            }
         });
-        twitterClient.reload();
+        twitterClient.loadFirstPage();
 
         return view;
     }
@@ -154,7 +138,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onFreshButtonClicked() {
         mainLayout.removeAllViews();
-        facebookClient.reload();
-        twitterClient.reload();
+        facebookClient.loadFirstPage();
+        twitterClient.loadFirstPage();
     }
 }

@@ -17,10 +17,12 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.kakao.KakaoFragment;
 import com.noverish.restapi.other.BaseFragment;
 import com.noverish.restapi.other.Essentials;
+import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.twitter.TwitterFragment;
 import com.noverish.restapi.webview.HtmlParseWebView;
 
@@ -72,9 +74,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         level3Frame = (FrameLayout) findViewById(R.id.activity_main_fragment_level_3);
 
         anotherWebView = (HtmlParseWebView) findViewById(R.id.activity_main_another_web_view);
-        kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
         twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
         facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
+
+        FacebookClient.getInstance().setWebView(facebookWebView);
+        TwitterClient.getInstance().setWebView(twitterWebView);
 
         Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
 

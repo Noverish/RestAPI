@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Noverish on 2016-09-27.
  */
 public class TwitterClient {
-    private TwitterClientCallback twitterClientCallback;
+    private TwitterArticleCallback callback;
     private HtmlParseWebView webView;
     private Context context;
     private boolean isNewerVersion;
@@ -32,55 +32,78 @@ public class TwitterClient {
 
     private TwitterClient() {}
 
-    public void setData(HtmlParseWebView webView) {
+    public void setWebView(HtmlParseWebView webView) {
         this.webView = webView;
         this.context = webView.getContext();
     }
 
-    public void reload() {
+    public void setCallback(TwitterArticleCallback callback) {
+        this.callback = callback;
+    }
+
+    public void loadFirstPage() {
         showedItems.clear();
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
-                    Log.i("<twitter login>","Twitter login");
+                    Log.i("<twitter load first>","Twitter login");
 
                     ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
                     isLogined = true;
-                    if(twitterClientCallback != null)
-                        twitterClientCallback.onSuccess(newItems);
+                    if(callback != null)
+                        callback.onSuccess(newItems);
                 } else {
-                    Log.i("<twitter login>","Twitter not login");
+                    Log.i("<twitter load first>","Twitter not login");
 
                     isLogined = false;
-                    if(twitterClientCallback != null)
-                        twitterClientCallback.onNotLogin();
+                    if(callback != null)
+                        callback.onNotLogin();
                 }
             }
         };
         webView.loadUrl("https://mobile.twitter.com/home", loaded, null, null, HtmlParseWebView.SNSType.Twitter);
     }
 
-    public void setTwitterClientCallback(TwitterClientCallback twitterClientCallback) {
-        this.twitterClientCallback = twitterClientCallback;
-    }
-
     public void loadNextPage() {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
-                newItems.removeAll(showedItems);
-                showedItems.addAll(newItems);
+                if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
+                    Log.i("<twitter load next>","Twitter login");
 
-                if(twitterClientCallback != null)
-                    twitterClientCallback.onSuccess(newItems);
+                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
+                    newItems.removeAll(showedItems);
+                    showedItems.addAll(newItems);
+
+                    isLogined = true;
+                    if(callback != null)
+                        callback.onSuccess(newItems);
+                } else {
+                    Log.i("<twitter load next>","Twitter not login");
+
+                    isLogined = false;
+                    if(callback != null)
+                        callback.onNotLogin();
+                }
             }
         };
         webView.scrollBottom(loaded);
+    }
+
+    public void getNotification(final TwitterNotificationCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                webView.goBack();
+
+                callback.onSuccess(TwitterHtmlProcessor.processNotification(htmlCode));
+            }
+        };
+        webView.loadUrl("https://mobile.twitter.com/notifications", listener, null, null, HtmlParseWebView.SNSType.Twitter);
     }
 
     public void post(final String content) {
@@ -103,26 +126,6 @@ public class TwitterClient {
 
     public void setLogined(boolean logined) {
         isLogined = logined;
-    }
-
-    public void getNotification(final TwitterNotificationCallback callback) {
-        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
-            @Override
-            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                webView.goBack();
-
-                callback.onSuccess(TwitterHtmlProcessor.processNotification(htmlCode));
-            }
-        };
-        webView.loadUrl("https://mobile.twitter.com/notifications", listener, null, null, HtmlParseWebView.SNSType.Twitter);
-    }
-
-    public interface TwitterClientCallback {
-        void onSuccess(ArrayList<TwitterArticleItem> items);
-
-        void onNotLogin();
-
-        void onFailure();
     }
 
     public String getUserScreenName() {
