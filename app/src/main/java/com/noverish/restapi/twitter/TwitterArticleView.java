@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.RestAPIClient;
+import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
@@ -47,7 +47,7 @@ public class TwitterArticleView extends LinearLayout {
         };
 
         TextView classificationTextView = (TextView) findViewById(R.id.twitter_article_view_classification);
-        RestAPIClient.getInstance().process(item.getContent(), classificationTextView);
+        RestAPIAsyncTask.execute(item.getContent(), classificationTextView);
 
         TextView headerTextView = (TextView) findViewById(R.id.twitter_article_view_header);
         if(item.getHeader() == null || item.getHeader().equals("")) {

@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/article_inside_margin"
         android:textSize="@dimen/article_classification_text_size"
-        android:gravity="end"
-        android:visibility="gone"/>
+        android:gravity="end"/>
 
     <LinearLayout
         android:id="@+id/twitter_article_header_layout"

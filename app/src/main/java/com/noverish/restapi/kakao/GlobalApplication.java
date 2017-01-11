@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.facebook.FacebookSdk;
 import com.kakao.auth.KakaoSDK;
-import com.noverish.restapi.other.RestAPIClient;
 
 /**
  * Created by Noverish on 2016-07-10.
@@ -40,6 +39,5 @@ public class GlobalApplication extends Application {
         mInstance = this;
         KakaoSDK.init(new KakaoSDKAdapter());
         FacebookSdk.sdkInitialize(getApplicationContext());
-        RestAPIClient.getInstance();
     }
 }

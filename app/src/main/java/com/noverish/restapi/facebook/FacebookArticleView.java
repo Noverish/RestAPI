@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
-import com.noverish.restapi.other.RestAPIClient;
+import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
@@ -53,7 +53,7 @@ public class FacebookArticleView extends LinearLayout {
         };
 
         TextView classification = (TextView) findViewById(R.id.article_facebook_classification);
-        RestAPIClient.getInstance().process(article.getContent(), classification);
+        RestAPIAsyncTask.execute(article.getContent(), classification);
 
         TextView header = (TextView) findViewById(R.id.facebook_article_header);
         if(article.getHeader() == null || article.getHeader().equals(""))
