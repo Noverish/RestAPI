@@ -13,19 +13,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.base.ArticleView;
 import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
+import com.noverish.restapi.webview.HtmlParseWebView;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import static com.noverish.restapi.activity.MainActivity.Status.ARTICLE;
+
 /**
  * Created by Noverish on 2016-07-17.
  */
-public class FacebookArticleView extends ArticleView {
+public class FacebookArticleView extends ArticleView implements View.OnClickListener{
     private Context context;
     private FacebookArticleItem item;
 
@@ -33,6 +38,7 @@ public class FacebookArticleView extends ArticleView {
         super(context, item);
         this.context = context;
         this.item = item;
+        this.setOnClickListener(this);
 
         init();
     }
@@ -128,5 +134,18 @@ public class FacebookArticleView extends ArticleView {
 
         likeIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_facebook_like_true));
         likeText.setTextColor(ContextCompat.getColor(context, R.color.facebook));
+    }
+
+    @Override
+    public void onClick(View view) {
+        OnPageFinishedListener listener = new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                MainActivity.instance.setStatus(ARTICLE);
+                MainActivity.instance.changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                MainActivity.instance.fab.setVisibility(INVISIBLE);
+            }
+        };
+        MainActivity.instance.anotherWebView.loadUrl(item.getArticleUrl(), null, null, listener, HtmlParseWebView.SNSType.Facebook);
     }
 }

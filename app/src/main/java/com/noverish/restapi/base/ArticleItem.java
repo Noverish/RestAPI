@@ -11,6 +11,7 @@ public class ArticleItem {
     private long timeMillis;
     private String timeString;
     private String posterUrl;
+    private String articleUrl;
     private String category = "";
 
     public void setArticleId(String articleId) {
@@ -27,6 +28,10 @@ public class ArticleItem {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
     }
 
     public void setCategory(String category) {
@@ -48,6 +53,10 @@ public class ArticleItem {
 
     public String getPosterUrl() {
         return posterUrl;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
     }
 
     public String getCategory() {

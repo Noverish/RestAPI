@@ -11,16 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.base.ArticleView;
 import com.noverish.restapi.other.RestAPIAsyncTask;
 import com.noverish.restapi.view.VideoWebView;
+import com.noverish.restapi.webview.HtmlParseWebView;
+import com.noverish.restapi.webview.OnPageFinishedListener;
 import com.noverish.restapi.webview.WebViewActivity;
 import com.squareup.picasso.Picasso;
+
+import static com.noverish.restapi.activity.MainActivity.Status.ARTICLE;
 
 /**
  * Created by Noverish on 2016-05-30.
  */
-public class TwitterArticleView extends ArticleView {
+public class TwitterArticleView extends ArticleView implements View.OnClickListener{
     private Context context;
     private TwitterArticleItem item;
 
@@ -28,6 +33,7 @@ public class TwitterArticleView extends ArticleView {
         super(context, item);
         this.item = item;
         this.context = context;
+        this.setOnClickListener(this);
 
         if(!isInEditMode()) {
             init();
@@ -155,5 +161,18 @@ public class TwitterArticleView extends ArticleView {
         if(item.isFavorited()) {
             favoriteButton.setImageResource(R.drawable.icon_twitter_arti_favorite_active);
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        OnPageFinishedListener listener = new OnPageFinishedListener() {
+            @Override
+            public void onPageFinished(HtmlParseWebView webView, String url) {
+                MainActivity.instance.setStatus(ARTICLE);
+                MainActivity.instance.changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                MainActivity.instance.fab.setVisibility(INVISIBLE);
+            }
+        };
+        MainActivity.instance.anotherWebView.loadUrl(item.getArticleUrl(), null, null, listener, HtmlParseWebView.SNSType.Twitter);
     }
 }

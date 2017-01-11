@@ -39,6 +39,7 @@ public class TwitterHtmlProcessor {
             Element retweetEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(1);
             Element likeEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(2);
             Element dmEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(3);
+            Elements articleUrlEle = timeEle.parents();
 
             contentEle.select("[aria-hidden=\"true\"]").remove();
 
@@ -54,6 +55,7 @@ public class TwitterHtmlProcessor {
             boolean isLiked = likeEle.attr("data-testid").contains("un");
             int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
             int likeNum = Integer.parseInt(likeEle.select("span._1H8Mn9AA").html().equals("") ? "0" : likeEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
+            String articleUrl = "https://mobile.twitter.com" + articleUrlEle.attr("href");
 
             header = HttpConnectionThread.unicodeToString(header);
             timeStr = HttpConnectionThread.unicodeToString(timeStr);
@@ -73,6 +75,7 @@ public class TwitterHtmlProcessor {
             item.setRetweetNumber(retweetNum);
             item.setFavorited(isLiked);
             item.setFavoriteNumber(likeNum);
+            item.setArticleUrl(articleUrl);
 
             Elements mediaEle;
             if((mediaEle = article.select("a[class=\"_3kGl_FG7\"]")).size() != 0) { //link

@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private HtmlParseWebView kakaoWebView, twitterWebView, facebookWebView;
     private FrameLayout mainFrame, level1Frame, level2Frame, level3Frame;
 
-    private FloatingActionButton fab;
+    public FloatingActionButton fab;
 
     private int debugStatus = 0;
 
-    public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING, FRIEND_FACEBOOK, PROFILE_FACEBOOK, PROFILE_TWITTER, FOLLOWER_TWITTER, FOLLOWING_TWITTER}
+    public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING, FRIEND_FACEBOOK, PROFILE_FACEBOOK, PROFILE_TWITTER, FOLLOWER_TWITTER, FOLLOWING_TWITTER, ARTICLE}
     private Status status;
 
     public String nowCategory = "전체보기";
@@ -139,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case FRIEND_FACEBOOK: {
                     changeVisibleLevel(LEVEL_3);
                     setStatus(SETTING);
+                }
+                case ARTICLE: {
+                    changeVisibleLevel(LEVEL_3);
+                    setStatus(Status.HOME);
+                    fab.setVisibility(VISIBLE);
                 }
             }
         }

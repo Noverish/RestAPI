@@ -80,6 +80,9 @@ public class FacebookHtmlCodeProcessor {
             Elements content = article.select("div[class=\"_5rgt _5nk5 _5msi\"]");
             item.setContent(HttpConnectionThread.unicodeToString(content.outerHtml().replaceAll("<[^>]*>","").trim()));
 
+            Elements articleUrlEle = content.select("a[class=\"_5msj\"]");
+            item.setArticleUrl("https://m.facebook.com" + articleUrlEle.attr("href"));
+
             Elements mediaPart = article.select("div._5rgu._27x0");
 
             ArrayList<String> imageUrls = new ArrayList<>();
