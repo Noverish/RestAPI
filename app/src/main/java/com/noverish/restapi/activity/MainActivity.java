@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         anotherWebView = (HtmlParseWebView) findViewById(R.id.activity_main_another_web_view);
         twitterWebView = (HtmlParseWebView) findViewById(R.id.activity_main_twitter_web_view);
+        kakaoWebView = (HtmlParseWebView) findViewById(R.id.activity_main_kakao_web_view);
         facebookWebView = (HtmlParseWebView) findViewById(R.id.activity_main_facebook_web_view);
 
         FacebookClient.getInstance().setWebView(facebookWebView);
@@ -153,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } else if(id == R.id.action_notifications) {
             Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new NotificationFragment());
+            fab.setVisibility(GONE);
+        } else if(id == R.id.action_messages) {
+            Essentials.changeFragment(this, R.id.activity_main_fragment_level_1, new MessageFragment());
             fab.setVisibility(GONE);
         }
 

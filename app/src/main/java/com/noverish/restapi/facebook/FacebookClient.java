@@ -49,7 +49,7 @@ public class FacebookClient {
                 if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
                     Log.i("<facebook load first>","Facebook login");
 
-                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
+                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.processArticle(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
@@ -75,7 +75,7 @@ public class FacebookClient {
                 if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
                     Log.i("<facebook load next>","Facebook login");
 
-                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
+                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.processArticle(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
@@ -104,6 +104,16 @@ public class FacebookClient {
             }
         };
         webView.loadUrl("https://m.facebook.com/notifications.php?more", listener, null, null, HtmlParseWebView.SNSType.Facebook);
+    }
+
+    public void getMessage(final FacebookMessageCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                callback.onSuccess(FacebookHtmlCodeProcessor.processMessage(htmlCode));
+            }
+        };
+        webView.loadUrl("https://m.facebook.com/messages/?more",listener, null, null, HtmlParseWebView.SNSType.Facebook);
     }
 
     public void post(String content) {
@@ -135,6 +145,11 @@ public class FacebookClient {
 
     public interface FacebookNotificationCallback {
         void onSuccess(ArrayList<FacebookNotificationItem> items);
+        void onNotLogin();
+    }
+
+    public interface FacebookMessageCallback {
+        void onSuccess(ArrayList<FacebookMessageItem> items);
         void onNotLogin();
     }
 }

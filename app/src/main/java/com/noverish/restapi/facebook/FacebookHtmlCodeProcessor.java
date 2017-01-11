@@ -27,7 +27,7 @@ public class FacebookHtmlCodeProcessor {
          */
 
 
-    public static ArrayList<FacebookArticleItem> process(String htmlCode) {
+    public static ArrayList<FacebookArticleItem> processArticle(String htmlCode) {
         ArrayList<FacebookArticleItem> items = new ArrayList<>();
 
         Document document = Jsoup.parse(htmlCode);
@@ -63,7 +63,7 @@ public class FacebookHtmlCodeProcessor {
             Elements titlePart = article.select("header[class=\"_4g33 _5qc1\"]");
 
             Elements profileImage = titlePart.select("i.img.profpic");
-            item.setProfileImgUrl(restoreImageUrl(profileImage, htmlCode));
+            item.setProfileImgUrl(extractImageUrl(profileImage, htmlCode));
 
             Elements title = titlePart.select("h3._52jd._52jb._5qc3"); //제목에 행동이 있는 경우 _52jd _52jb _52jg _5qc3 이고 이름만 있는 경우 _52jd _52jb _52jh _5qc3 이다.
             item.setTitle(HttpConnectionThread.unicodeToString(title.outerHtml().replaceAll("<[^>]*>","")));
@@ -85,7 +85,7 @@ public class FacebookHtmlCodeProcessor {
             ArrayList<String> imageUrls = new ArrayList<>();
             Elements imageElements = mediaPart.select("a._39pi, a._26ih");
             for(Element imageElement : imageElements) {
-                String imageUrl = restoreImageUrl(imageElement.select("i"), htmlCode);
+                String imageUrl = extractImageUrl(imageElement.select("i"), htmlCode);
 
                 imageUrls.add(imageUrl);
             }
@@ -93,8 +93,8 @@ public class FacebookHtmlCodeProcessor {
 
             Elements videoElements;
             if((videoElements = mediaPart.select("div._53mw._4gbu")).size() > 0) { //동영상만 올라옴
-                String videoUrl = restoreImageUrl(videoElements, htmlCode);
-                String imageUrl = restoreImageUrl(videoElements.select("i"), htmlCode);
+                String videoUrl = extractImageUrl(videoElements, htmlCode);
+                String imageUrl = extractImageUrl(videoElements.select("i"), htmlCode);
 
                 item.setVideo(new Pair<>(imageUrl, videoUrl));
             } else if((videoElements = mediaPart.select("div._53mw")).size() > 0) { //동영상과 사진 같이 올라움
@@ -135,7 +135,7 @@ public class FacebookHtmlCodeProcessor {
 
                 timeElement.remove();
 
-                item.setProfileImageUrl(restoreImageUrl(profileImageElement, htmlCode));
+                item.setProfileImageUrl(extractImageUrl(profileImageElement, htmlCode));
                 item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|&nbsp;|\\\\n)", "").replaceAll("\\s+", " ").trim()));
 
                 if (typeElement.classNames().contains("sx_7c2106"))
@@ -172,7 +172,48 @@ public class FacebookHtmlCodeProcessor {
         return items;
     }
 
-    private static String restoreImageUrl(Elements damagedElement, String originHtml) {
+    public static ArrayList<FacebookMessageItem> processMessage(String html) {
+        ArrayList<FacebookMessageItem> items = new ArrayList<>();
+
+        Document document = Jsoup.parse(html);
+        Elements messages = document.select("div._55wp._4g33._5b6o._2ycx.del_area.async_del.abb.touchable._592p._25mv");
+
+        Log.i("<facebook message>","facebook message is " + messages.size());
+
+        for(Element message : messages) {
+            FacebookMessageItem item = new FacebookMessageItem();
+
+            Elements urlEle = message.select("a[class=\"_5b6s\"]");
+            Elements profileEle = message.select("i[class=\"img profpic\"]");
+            Elements timeEle = message.select("abbr[data-store]");
+            Elements nameEle = message.select("h3[class=\"_52je _5tg_\"]");
+            Elements contentEle = message.select("h3[class=\"_52jc _52jg _3z10 _3z11\"]");
+
+            String url = "https://m.facebook.com" + urlEle.attr("href");
+            String profileImg = extractImageUrl(profileEle, html);
+            String timeStr = timeEle.html();
+            String name = nameEle.html().replaceAll("<[^>]*>","");
+            String content = contentEle.html().replaceAll("<[^>]*>","");
+
+            timeStr = HttpConnectionThread.unicodeToString(timeStr);
+            name = HttpConnectionThread.unicodeToString(name);
+            content = HttpConnectionThread.unicodeToString(content);
+
+            item.setUrl(url);
+            item.setProfileImg(profileImg);
+            item.setTimeStr(timeStr);
+            item.setName(name);
+            item.setContent(content);
+
+            System.out.println(item.toString());
+
+            items.add(item);
+        }
+
+        return items;
+    }
+
+    private static String extractImageUrl(Elements damagedElement, String originHtml) {
         String key = Essentials.getMatches("oh=[0-9a-z]+",damagedElement.outerHtml());
         if(key.equals(""))
             key = Essentials.getMatches("[\\d]+_[\\d]+_[\\d]+",damagedElement.outerHtml());
@@ -180,7 +221,7 @@ public class FacebookHtmlCodeProcessor {
         return Essentials.getMatches("https[^\"]*" + key +"[^\"]*",originHtml);
     }
 
-    private static String restoreImageUrl(Element damagedElement, String originHtml) {
-        return restoreImageUrl(new Elements(damagedElement), originHtml);
+    private static String extractImageUrl(Element damagedElement, String originHtml) {
+        return extractImageUrl(new Elements(damagedElement), originHtml);
     }
 }

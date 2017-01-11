@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class TwitterHtmlProcessor {
     public static String nextPageUrl;
 
-    public static ArrayList<TwitterArticleItem> process(String html) {
+    public static ArrayList<TwitterArticleItem> processArticle(String html) {
         ArrayList<TwitterArticleItem> items = new ArrayList<>();
 
         Document document = Jsoup.parse(html);
@@ -214,6 +214,47 @@ public class TwitterHtmlProcessor {
 
                 }
             }
+
+            items.add(item);
+        }
+
+        return items;
+    }
+
+    public static ArrayList<TwitterMessageItem> processMessage(String html) {
+        ArrayList<TwitterMessageItem> items = new ArrayList<>();
+
+        Document document = Jsoup.parse(html);
+        Elements messages = document.select("main").select("div[tabindex]");
+
+        Log.i("<twitter message>","twitter message is " + messages.size());
+
+        for(Element message : messages) {
+            TwitterMessageItem item = new TwitterMessageItem();
+
+            Elements profileEle = message.select("div[class=\"_3hLw5mbC _1LUwi_k5 _3kJ8i5k7 _3f2NsD-H\"]");
+            Elements timeEle = message.select("time");
+            Elements nameEle = message.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _2DggF3sL _3WJqTbOE\"]");
+            Elements screenNameEle = message.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]");
+            Elements contentEle = message.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]");
+
+            String profileImg = Essentials.getMatches("url[(][^)]*[)]", profileEle.outerHtml()).replaceAll("url[(]|[)]", "");
+            String timeStr = timeEle.html();
+            String name = nameEle.html().replaceAll("<[^>]*>", "");
+            String screenName = screenNameEle.html();
+            String content = contentEle.html();
+
+            timeStr = HttpConnectionThread.unicodeToString(timeStr);
+            name = HttpConnectionThread.unicodeToString(name);
+            content = HttpConnectionThread.unicodeToString(content);
+
+            item.setProfileImg(profileImg);
+            item.setTimeStr(timeStr);
+            item.setName(name);
+            item.setScreenName(screenName);
+            item.setContent(content);
+
+            Log.d("<twitter message>",item.toString());
 
             items.add(item);
         }

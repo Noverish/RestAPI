@@ -49,7 +49,7 @@ public class TwitterClient {
                 if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
                     Log.i("<twitter load first>","Twitter login");
 
-                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
+                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.processArticle(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
@@ -75,7 +75,7 @@ public class TwitterClient {
                 if(Jsoup.parse(htmlCode).select("html[class=\"AppPage CorePage\"]").size() == 0) {
                     Log.i("<twitter load next>","Twitter login");
 
-                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.process(htmlCode);
+                    ArrayList<TwitterArticleItem> newItems = TwitterHtmlProcessor.processArticle(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
@@ -104,6 +104,16 @@ public class TwitterClient {
             }
         };
         webView.loadUrl("https://mobile.twitter.com/notifications", listener, null, null, HtmlParseWebView.SNSType.Twitter);
+    }
+
+    public void getMessage(final TwitterMessageCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
+            @Override
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                callback.onSuccess(TwitterHtmlProcessor.processMessage(htmlCode));
+            }
+        };
+        webView.loadUrl("https://mobile.twitter.com/messages",listener, null, null, HtmlParseWebView.SNSType.Twitter);
     }
 
     public void post(final String content) {
@@ -144,6 +154,11 @@ public class TwitterClient {
 
     public interface TwitterNotificationCallback {
         void onSuccess(ArrayList<TwitterNotificationItem> items);
+        void onNotLogin();
+    }
+
+    public interface TwitterMessageCallback {
+        void onSuccess(ArrayList<TwitterMessageItem> items);
         void onNotLogin();
     }
 }

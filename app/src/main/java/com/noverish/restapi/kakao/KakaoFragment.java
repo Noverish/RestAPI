@@ -73,7 +73,7 @@ public class KakaoFragment extends BaseFragment {
         }
 
         Log.d("htmlHasChanged","htmlHasChanged");
-        ArrayList<KakaoArticleItem> newItems = KakaoHtmlCodeProcessor.process(html);
+        ArrayList<KakaoArticleItem> newItems = KakaoHtmlCodeProcessor.processArticle(html);
 
         Iterator<KakaoArticleItem> iterator = newItems.iterator();
         while(iterator.hasNext()) {
