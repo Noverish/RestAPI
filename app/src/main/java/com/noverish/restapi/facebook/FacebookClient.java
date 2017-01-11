@@ -46,7 +46,7 @@ public class FacebookClient {
                 if (Jsoup.parse(htmlCode).select("button[name=\"login\"][class=\"_54k8 _56bs _56b_ _56bw _56bu\"]").size() == 0) {
                     Log.i("<facebook login>","Facebook login");
 
-                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getLastParsedHtml());
+                    ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
                     newItems.removeAll(showedItems);
                     showedItems.addAll(newItems);
 
@@ -62,14 +62,14 @@ public class FacebookClient {
                 }
             }
         };
-        webView.loadUrl(context.getString(R.string.facebook_url), loaded, null, null);
+        webView.loadUrl(context.getString(R.string.facebook_url), loaded, null, null, HtmlParseWebView.SNSType.Facebook);
     }
 
     public void loadNextPage() {
         OnHtmlLoadSuccessListener loaded = new OnHtmlLoadSuccessListener() {
             @Override
             public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(webView.getLastParsedHtml());
+                ArrayList<FacebookArticleItem> newItems = FacebookHtmlCodeProcessor.process(htmlCode);
 
                 for(int i = 0;i<newItems.size();i++) {
                     FacebookArticleItem item = newItems.get(i);
@@ -108,7 +108,7 @@ public class FacebookClient {
                 webView.goBack();
             }
         };
-        webView.loadUrl("https://m.facebook.com/notifications.php?more", loaded, null, finished);
+        webView.loadUrl("https://m.facebook.com/notifications.php?more", loaded, null, finished, HtmlParseWebView.SNSType.Facebook);
     }
 
     public interface FacebookClientCallback {

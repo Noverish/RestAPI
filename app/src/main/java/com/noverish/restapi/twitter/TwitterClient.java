@@ -62,7 +62,7 @@ public class TwitterClient {
                 }
             }
         };
-        webView.loadUrl("https://mobile.twitter.com/home", loaded, null, null);
+        webView.loadUrl("https://mobile.twitter.com/home", loaded, null, null, HtmlParseWebView.SNSType.Twitter);
     }
 
     public void setTwitterClientCallback(TwitterClientCallback twitterClientCallback) {
@@ -81,7 +81,7 @@ public class TwitterClient {
                     twitterClientCallback.onSuccess(newItems);
             }
         };
-        webView.scrollBottom(loaded, 2000);
+        webView.scrollBottom(loaded);
     }
 
     public boolean isLogined() {
@@ -99,7 +99,7 @@ public class TwitterClient {
                 webView.goBack();
             }
         };
-        webView.loadUrl("https://mobile.twitter.com/i/connect", listener, null, finished);
+        webView.loadUrl("https://mobile.twitter.com/i/connect", listener, null, finished, HtmlParseWebView.SNSType.Twitter);
     }
 
     public interface TwitterClientCallback {

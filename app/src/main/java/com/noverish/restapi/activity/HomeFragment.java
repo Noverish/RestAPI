@@ -129,11 +129,11 @@ public class HomeFragment extends BaseFragment {
             try {
                 if(item instanceof FacebookArticleItem) {
                     FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
-                    Log.d("facebook new item",item.getArticleId());
+                    Log.d("<facebook new item>",item.getArticleId());
                     mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
                 } else if(item instanceof TwitterArticleItem) {
                     TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
-                    Log.d("twitter new item",item.getArticleId());
+                    Log.d("<twitter new item>",item.getArticleId());
                     mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem));
                 }
             } catch (Exception ex) {

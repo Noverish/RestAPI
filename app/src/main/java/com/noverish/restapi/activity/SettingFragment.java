@@ -71,7 +71,7 @@ public class SettingFragment extends Fragment {
 //                            }
                         }
                     };
-                    twitterWebView.loadUrl("https://mobile.twitter.com/logout", null, null, finished);
+                    twitterWebView.loadUrl("https://mobile.twitter.com/logout", null, null, finished, HtmlParseWebView.SNSType.Twitter);
                 } else {
                     twitterWebView.loadUrl("https://mobile.twitter.com/login");
 //                    twitterWebView.setOnPageFinishedListener(true, new OnPageFinishedListener() {
