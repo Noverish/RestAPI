@@ -13,7 +13,17 @@ import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.kakao.KakaoClient;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.webview.HtmlParseWebView;
+import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 import com.noverish.restapi.webview.OnPageFinishedListener;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import static com.noverish.restapi.activity.MainActivity.Status.FOLLOWER_TWITTER;
+import static com.noverish.restapi.activity.MainActivity.Status.FOLLOWING_TWITTER;
+import static com.noverish.restapi.activity.MainActivity.Status.FRIEND_FACEBOOK;
+import static com.noverish.restapi.activity.MainActivity.Status.PROFILE_FACEBOOK;
+import static com.noverish.restapi.activity.MainActivity.Status.PROFILE_TWITTER;
 
 /**
  * Created by Noverish on 2016-09-14.
@@ -114,8 +124,14 @@ public class SettingFragment extends Fragment {
         facebookProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                anotherWebView.loadUrl("https://m.facebook.com/profile.php?ref=bookmarks");
-                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                OnPageFinishedListener listener = new OnPageFinishedListener() {
+                    @Override
+                    public void onPageFinished(HtmlParseWebView webView, String url) {
+                        MainActivity.instance.setStatus(PROFILE_FACEBOOK);
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                    }
+                };
+                anotherWebView.loadUrl("https://m.facebook.com/profile.php?ref=bookmarks", null, null, listener, HtmlParseWebView.SNSType.Facebook);
             }
         });
 
@@ -123,8 +139,14 @@ public class SettingFragment extends Fragment {
         facebookFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                anotherWebView.loadUrl("https://m.facebook.com/friends/center/friends/?fb_ref=fbm&ref=bookmarks&app_id=2356318349");
-                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                OnPageFinishedListener listener = new OnPageFinishedListener() {
+                    @Override
+                    public void onPageFinished(HtmlParseWebView webView, String url) {
+                        MainActivity.instance.setStatus(FRIEND_FACEBOOK);
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                    }
+                };
+                anotherWebView.loadUrl("https://m.facebook.com/friends/center/friends/?fb_ref=fbm&ref=bookmarks&app_id=2356318349", null, null, listener, HtmlParseWebView.SNSType.Facebook);
             }
         });
 
@@ -132,8 +154,21 @@ public class SettingFragment extends Fragment {
         twitterProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                anotherWebView.loadUrl("https://mobile.twitter.com/settings");
-                ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
+                    @Override
+                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
+                        Document document = Jsoup.parse(htmlCode);
+
+                        TwitterClient.getInstance().setUserScreenName(document.select("a[class=\"_1y-7iMRs\"]").attr("href").replaceAll("/",""));
+
+                        String profileUrl = "https://mobile.twitter.com/" + TwitterClient.getInstance().getUserScreenName();
+
+                        webView.loadUrl(profileUrl, null, null, null, HtmlParseWebView.SNSType.Twitter);
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                        MainActivity.instance.setStatus(PROFILE_TWITTER);
+                    }
+                };
+                anotherWebView.loadUrl("https://mobile.twitter.com/account", listener, null, null, HtmlParseWebView.SNSType.Twitter);
             }
         });
 
@@ -141,16 +176,14 @@ public class SettingFragment extends Fragment {
         twitterFollowingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
-//                    @Override
-//                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-//                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
-//                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/following");
-//                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
-//                    }
-//                });
-//                twitterWebView.setExtractHtmlWhenPageFinished(true);
-//                twitterWebView.loadUrl("https://mobile.twitter.com/account");
+                OnPageFinishedListener listener = new OnPageFinishedListener() {
+                    @Override
+                    public void onPageFinished(HtmlParseWebView webView, String url) {
+                        MainActivity.instance.setStatus(FOLLOWING_TWITTER);
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                    }
+                };
+                anotherWebView.loadUrl("https://mobile.twitter.com/" + TwitterClient.getInstance().getUserScreenName() + "/following", null, null, listener, HtmlParseWebView.SNSType.Twitter);
             }
         });
 
@@ -158,17 +191,14 @@ public class SettingFragment extends Fragment {
         twitterFollowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                twitterWebView.setOnHtmlLoadSuccessListener(true, new OnHtmlLoadSuccessListener() {
-//                    @Override
-//                    public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-//                        String userScreenName = TwitterHtmlProcessor.getUserScreenName(htmlCode);
-//                        anotherWebView.loadUrl("https://mobile.twitter.com/" + userScreenName + "/followers");
-//                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
-//                        TwitterClient.getInstance().setUserScreenName(userScreenName);
-//                    }
-//                });
-//                twitterWebView.setExtractHtmlWhenPageFinished(true);
-//                twitterWebView.loadUrl("https://mobile.twitter.com/account");
+                OnPageFinishedListener listener = new OnPageFinishedListener() {
+                    @Override
+                    public void onPageFinished(HtmlParseWebView webView, String url) {
+                        MainActivity.instance.setStatus(FOLLOWER_TWITTER);
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+                    }
+                };
+                anotherWebView.loadUrl("https://mobile.twitter.com/" + TwitterClient.getInstance().getUserScreenName() + "/followers", null, null, listener, HtmlParseWebView.SNSType.Twitter);
             }
         });
 

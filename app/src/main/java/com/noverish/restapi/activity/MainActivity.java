@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private int debugStatus = 0;
 
-    public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING}
+    public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING, FRIEND_FACEBOOK, PROFILE_FACEBOOK, PROFILE_TWITTER, FOLLOWER_TWITTER, FOLLOWING_TWITTER}
     private Status status;
 
     public String nowCategory = "전체보기";
@@ -124,12 +124,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case MESSAGE: {
                     level1Frame.removeAllViews();
                     setStatus(Status.HOME);
+                    fab.setVisibility(VISIBLE);
                     break;
                 }
                 case MESSAGE_FACEBOOK: {
                     changeVisibleLevel(LEVEL_3);
                     setStatus(MESSAGE);
                     break;
+                }
+                case FOLLOWER_TWITTER:
+                case FOLLOWING_TWITTER:
+                case PROFILE_TWITTER:
+                case PROFILE_FACEBOOK:
+                case FRIEND_FACEBOOK: {
+                    changeVisibleLevel(LEVEL_3);
+                    setStatus(SETTING);
                 }
             }
         }
