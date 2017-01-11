@@ -1,7 +1,6 @@
 package com.noverish.restapi.other;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -69,7 +68,7 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        Log.d("<RestAPI>",content + " => " + result);
+//        Log.d("<RestAPI>",content + " => " + result);
 
         if(result.equals("")) {
             textView.setVisibility(View.GONE);

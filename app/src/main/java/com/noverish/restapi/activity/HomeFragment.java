@@ -2,7 +2,6 @@ package com.noverish.restapi.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,11 +128,11 @@ public class HomeFragment extends BaseFragment {
             try {
                 if(item instanceof FacebookArticleItem) {
                     FacebookArticleItem facebookArticleItem = (FacebookArticleItem) item;
-                    Log.d("<facebook new item>",item.getArticleId());
+//                    Log.d("<facebook new item>",item.getArticleId());
                     mainLayout.addView(new FacebookArticleView(getActivity(), facebookArticleItem));
                 } else if(item instanceof TwitterArticleItem) {
                     TwitterArticleItem twitterArticleItem = (TwitterArticleItem) item;
-                    Log.d("<twitter new item>",item.getArticleId());
+//                    Log.d("<twitter new item>",item.getArticleId());
                     mainLayout.addView(new TwitterArticleView(getActivity(), twitterArticleItem));
                 }
             } catch (Exception ex) {

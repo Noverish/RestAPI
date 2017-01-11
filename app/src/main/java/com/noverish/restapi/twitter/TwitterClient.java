@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 
@@ -106,14 +105,16 @@ public class TwitterClient {
         isLogined = logined;
     }
 
-    public void getNotification(OnHtmlLoadSuccessListener listener) {
-        OnPageFinishedListener finished =  new OnPageFinishedListener() {
+    public void getNotification(final TwitterNotificationCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
             @Override
-            public void onPageFinished(HtmlParseWebView webView, String url) {
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 webView.goBack();
+
+                callback.onSuccess(TwitterHtmlProcessor.processNotification(htmlCode));
             }
         };
-        webView.loadUrl("https://mobile.twitter.com/i/connect", listener, null, finished, HtmlParseWebView.SNSType.Twitter);
+        webView.loadUrl("https://mobile.twitter.com/notifications", listener, null, null, HtmlParseWebView.SNSType.Twitter);
     }
 
     public interface TwitterClientCallback {
@@ -130,5 +131,16 @@ public class TwitterClient {
 
     public void setUserScreenName(String userScreenName) {
         this.userScreenName = userScreenName;
+    }
+
+
+    public interface TwitterArticleCallback {
+        void onSuccess(ArrayList<TwitterArticleItem> items);
+        void onNotLogin();
+    }
+
+    public interface TwitterNotificationCallback {
+        void onSuccess(ArrayList<TwitterNotificationItem> items);
+        void onNotLogin();
     }
 }

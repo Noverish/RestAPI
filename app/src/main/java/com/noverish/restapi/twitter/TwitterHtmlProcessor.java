@@ -111,55 +111,113 @@ public class TwitterHtmlProcessor {
         ArrayList<TwitterNotificationItem> items = new ArrayList<>();
 
         Document document = Jsoup.parse(html);
-        Elements notifications = document.select("table.activity, table.tweet");
+        Elements notifications = document.select("div[class=\"_1eF_MiFx\"]");
 
-        System.out.println("notification number - " + notifications.size());
+        Log.i("<twitter noti>","twitter noti is " + notifications.size());
 
         for(Element notification : notifications) {
             TwitterNotificationItem item = new TwitterNotificationItem();
 
-            if(notification.classNames().contains("activity")) {
-                Elements activityTypeElement = notification.select("div.activity-icon");
-                Elements contentElement = notification.select("td.user-info");
-                Elements timeElement = notification.select("td.timestamp");
+            Elements article = notification.select("article");
 
-                item.setType(TwitterNotificationItem.ACTIVITY);
-                item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
-                item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
+            if(article.hasClass("Ldgs22Bf")) {
+                item.setNotificationType(TwitterNotificationItem.NotificationType.Tweet);
 
-                if(activityTypeElement.html().contains("_follow_")) {
-                    item.setActivityType(TwitterNotificationItem.FOLLOW);
-                } else if(activityTypeElement.html().contains("_rt_")) {
-                    item.setActivityType(TwitterNotificationItem.RETWEET);
-                } else if(activityTypeElement.html().contains("_heart_")) {
-                    item.setActivityType(TwitterNotificationItem.FAVORITE);
-                } else {
-                    item.setActivityType(0);
+                TwitterArticleItem articleItem = new TwitterArticleItem();
+
+                Elements profileEle = article.select("div[class=\"_3hLw5mbC _1LUwi_k5 _3kJ8i5k7 _3f2NsD-H\"]");
+                Elements nameEle = article.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _32vFsOSj _2DggF3sL _3WJqTbOE\"]");
+                Elements screenNameEle = article.select("span[class=\"_1Zp5zVT9 _1rTfukg4\"]");
+                Elements timeEle = article.select("time");
+                Elements contentEle = article.select("span[class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"]");
+                Element replyEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(0);
+                Element retweetEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(1);
+                Element likeEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(2);
+                Element dmEle = article.select("button.RQ5ECnGZ._1m0pnxeJ").get(3);
+
+                contentEle.select("[aria-hidden=\"true\"]").remove();
+
+                String articleId = timeEle.first().parent().attr("href").replaceAll("\\D","");
+                String profileImg = Essentials.getMatches("url[(][^)]*[)]",profileEle.outerHtml()).replaceAll("url[(]|[)]","");
+                String timeDetail = timeEle.attr("aria-label");
+                String timeStr = timeEle.html();
+                String name = nameEle.html().replaceAll("<[^>]*>","");
+                String screenName = screenNameEle.html();
+                String content = contentEle.html();
+                boolean isRetweeted = retweetEle.attr("data-testid").contains("un");
+                boolean isLiked = likeEle.attr("data-testid").contains("un");
+                int retweetNum = Integer.parseInt(retweetEle.select("span._1H8Mn9AA").html().equals("") ? "0" : retweetEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
+                int likeNum = Integer.parseInt(likeEle.select("span._1H8Mn9AA").html().equals("") ? "0" : likeEle.select("span._1H8Mn9AA").html().replaceAll("\\D",""));
+
+                timeStr = HttpConnectionThread.unicodeToString(timeStr);
+                name = HttpConnectionThread.unicodeToString(name);
+                content = HttpConnectionThread.unicodeToString(content);
+                content = content.replaceAll("href=\"/","href=\"https://mobile.twitter.com/");
+
+                articleItem.setArticleId(articleId);
+                articleItem.setProfileImageUrl(profileImg);
+                articleItem.setTimeMillis(Essentials.stringToMillisInTwitter(timeDetail));
+                articleItem.setTimeString(timeStr);
+                articleItem.setName(name);
+                articleItem.setScreenName(screenName);
+                articleItem.setContent(content);
+                articleItem.setRetweeted(isRetweeted);
+                articleItem.setRetweetNumber(retweetNum);
+                articleItem.setFavorited(isLiked);
+                articleItem.setFavoriteNumber(likeNum);
+
+                item.setArticleItem(articleItem);
+            } else {
+                item.setNotificationType(TwitterNotificationItem.NotificationType.Activity);
+
+                Elements svg = article.select("svg");
+                if(svg.hasClass("_1xsIYIFr"))
+                    item.setActivityType(TwitterNotificationItem.ActivityType.Follow);
+                else if(svg.hasClass("PaLKewJ6"))
+                    item.setActivityType(TwitterNotificationItem.ActivityType.Like);
+                else if(svg.hasClass("_201bML4Q"))
+                    item.setActivityType(TwitterNotificationItem.ActivityType.Retweet);
+
+                ArrayList<String> profileImgs = new ArrayList<>();
+                Elements profileListEles = article.select("div[class=\"BVd8eVsI _3f2NsD-H\"]").select("div[class=\"_3hLw5mbC _1LUwi_k5 _3kJ8i5k7 _3f2NsD-H\"]");
+                for(Element ele : profileListEles) {
+                    profileImgs.add(Essentials.getMatches("url[(][^)]*[)]",ele.outerHtml()).replaceAll("url[(]|[)]",""));
                 }
-            }
+                item.setProfileImgs(profileImgs);
 
-            if(notification.classNames().contains("tweet")) {
-                Elements profileImageElement = notification.select("td.avatar").select("img");
-                Elements nameElement = notification.select("strong.fullname");
-                Elements screenNameElement = notification.select("div.username");
-                Elements timeElement = notification.select("td.timestamp").select("a");
-                Elements contentElement = notification.select("div.dir-ltr");
+                Elements contentEle = article.select("span[class=\"Fe7ul3Lt rlkX4fnX _2DggF3sL\"]");
+                String content = contentEle.html();
+                content = HttpConnectionThread.unicodeToString(content);
+                item.setContent(content);
 
-                item.setType(TwitterNotificationItem.TWEET);
-                item.setProfileImageUrl(profileImageElement.attr("src"));
-                item.setName(HttpConnectionThread.unicodeToString(nameElement.html()));
-                item.setScreenName(screenNameElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim());
-                item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","")));
-                item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|\\\\n)","").replaceAll("\\s+"," ").trim()));
+                try {
+                    Elements innerArticle = article.select("div[class=\"_3eCUxUEm _3f2NsD-H\"]");
+
+                    Elements imgEle = innerArticle.select("a[class=\"_2YXT0EI-\"]");
+                    Elements nameEle = innerArticle.select("span[class=\"Fe7ul3Lt _3ZSf8YGw _2DggF3sL _3WJqTbOE\"]");
+                    Elements screenNameEle = innerArticle.select("span[class=\"class=\"_1Zp5zVT9 _1rTfukg4\"\"]");
+                    Elements tweetContentEle = innerArticle.select("class=\"Fe7ul3Lt _10YWDZsG _1rTfukg4 _2DggF3sL\"");
+
+                    String imgUrl = imgEle.first().attr("src");
+                    String name = nameEle.html().replaceAll("<[^>]*>", "");
+                    String screenName = screenNameEle.html();
+                    String tweetContent = tweetContentEle.html();
+
+                    name = HttpConnectionThread.unicodeToString(name);
+                    tweetContent = HttpConnectionThread.unicodeToString(tweetContent);
+
+                    item.setImg(imgUrl);
+                    item.setName(name);
+                    item.setScreenName(screenName);
+                    item.setTweetContent(tweetContent);
+                } catch (Exception ex) {
+
+                }
             }
 
             items.add(item);
         }
 
         return items;
-    }
-
-    public static String getUserScreenName(String html) {
-        return Jsoup.parse(html).select("span.screen-name").html();
     }
 }

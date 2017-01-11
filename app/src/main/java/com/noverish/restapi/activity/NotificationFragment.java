@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,11 @@ import android.widget.LinearLayout;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.facebook.FacebookHtmlCodeProcessor;
 import com.noverish.restapi.facebook.FacebookNotificationItem;
 import com.noverish.restapi.facebook.FacebookNotificationView;
-import com.noverish.restapi.twitter.TwitterArticleItem;
-import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
-import com.noverish.restapi.twitter.TwitterHtmlProcessor;
 import com.noverish.restapi.twitter.TwitterNotificationItem;
 import com.noverish.restapi.twitter.TwitterNotificationView;
-import com.noverish.restapi.webview.HtmlParseWebView;
-import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
 
 import java.util.ArrayList;
 
@@ -44,33 +37,32 @@ public class NotificationFragment extends Fragment {
         layout = (LinearLayout) view.findViewById(R.id.activity_notification_layout);
 
         twitterClient = TwitterClient.getInstance();
-        twitterClient.getNotification(new OnHtmlLoadSuccessListener() {
+        twitterClient.getNotification(new TwitterClient.TwitterNotificationCallback(){
             @Override
-            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<TwitterNotificationItem> items = TwitterHtmlProcessor.processNotification(htmlCode);
-
+            public void onSuccess(ArrayList<TwitterNotificationItem> items) {
                 for(TwitterNotificationItem item : items) {
-                    if(item.getType() == TwitterNotificationItem.ACTIVITY) {
-                        layout.addView(new TwitterNotificationView(getActivity(), item));
-                    } else if(item.getType() == TwitterNotificationItem.TWEET) {
-                        TwitterArticleItem articleItem = item.toTwtiterArticleItem();
-                        layout.addView(new TwitterArticleView(getActivity(), articleItem));
-                    } else {
-                        Log.e("ERROR","NotificationFragment.onHtmlLoadSuccess() : The type of this TwitterNotificationItem is unknown - " + item.getType());
-                    }
+                    layout.addView(new TwitterNotificationView(getActivity(), item));
                 }
+            }
+
+            @Override
+            public void onNotLogin() {
+
             }
         });
 
         facebookClient = FacebookClient.getInstance();
-        facebookClient.getNotification(new OnHtmlLoadSuccessListener() {
+        facebookClient.getNotification(new FacebookClient.FacebookNotificationCallback() {
             @Override
-            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
-                ArrayList<FacebookNotificationItem> items = FacebookHtmlCodeProcessor.processNotification(htmlCode);
-
+            public void onSuccess(ArrayList<FacebookNotificationItem> items) {
                 for(FacebookNotificationItem item : items) {
                     layout.addView(new FacebookNotificationView(getActivity(), item, handler));
                 }
+            }
+
+            @Override
+            public void onNotLogin() {
+
             }
         });
 

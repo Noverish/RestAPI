@@ -120,63 +120,53 @@ public class FacebookHtmlCodeProcessor {
         Document document = Jsoup.parse(htmlCode);
         Elements notifications = document.select("div._55x2").select("div.aclb, div.acw");
 
+        Log.i("<facebook noti>","facebook noti is " + notifications.size());
+
         for(Element notification : notifications) {
-            FacebookNotificationItem item = new FacebookNotificationItem();
+            try {
+                FacebookNotificationItem item = new FacebookNotificationItem();
 
-            Elements profileImageElement = notification.select("i.img.l.profpic");
+                Elements profileImageElement = notification.select("i.img.l.profpic");
+                Elements timeElement = notification.select("span.mfss.fcg"); // Important Order!!
+                Elements contentElement = notification.select("div.c");
+                Element typeElement = contentElement.select("i.img").first();
 
-            Elements timeElement = notification.select("span.mfss.fcg"); // Important Order!!
-            item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>","").trim()));
+                item.setTimeString(HttpConnectionThread.unicodeToString(timeElement.html().replaceAll("<[^>]*>", "").trim()));
 
-            Elements contentElement = notification.select("div.c");
-            contentElement.select("span.mfss.fcg").remove();
-            Element typeElement = contentElement.select("i.img").first();
-            Elements extensionElement = notification.select("div.ext");
+                timeElement.remove();
 
-            item.setProfileImageUrl(restoreImageUrl(profileImageElement, htmlCode));
-            item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|&nbsp;|\\\\n)","").replaceAll("\\s+"," ").trim()));
-            item.setExtensionUrl(extensionElement.select("img").attr("src"));
+                item.setProfileImageUrl(restoreImageUrl(profileImageElement, htmlCode));
+                item.setContent(HttpConnectionThread.unicodeToString(contentElement.html().replaceAll("(<[^>]*>|&nbsp;|\\\\n)", "").replaceAll("\\s+", " ").trim()));
 
-            /*
-            comment sx_4ae08a
-            facebook sx_acc618
-            doyouknow sx_129ee6
-            like sx_a7249c
-            amazing sx_380594
-            status sx_565471
-            picture sx_9e4ae5
-            group sx_28ef4b
-            location sx_d90fcc
-            love sx_ce9b35
+                if (typeElement.classNames().contains("sx_7c2106"))
+                    item.setType(FacebookNotificationItem.COMMENT);
+                else if (typeElement.classNames().contains("sx_f48c17"))
+                    item.setType(FacebookNotificationItem.FACEBOOK);
+                else if (typeElement.classNames().contains("sx_0ab4d8"))
+                    item.setType(FacebookNotificationItem.DOYOUKNOW);
+                else if (typeElement.classNames().contains("sx_a51c7f"))
+                    item.setType(FacebookNotificationItem.LIKE);
+                else if (typeElement.classNames().contains("sx_a0c5ba"))
+                    item.setType(FacebookNotificationItem.AMAZING);
+                else if (typeElement.classNames().contains("sx_565471"))
+                    item.setType(FacebookNotificationItem.STATUS);
+                else if (typeElement.classNames().contains("sx_abd2b0"))
+                    item.setType(FacebookNotificationItem.PICTURE);
+                else if (typeElement.classNames().contains("sx_28ef4b"))
+                    item.setType(FacebookNotificationItem.GROUP);
+                else if (typeElement.classNames().contains("sx_b8f510"))
+                    item.setType(FacebookNotificationItem.LOCATION);
+                else if (typeElement.classNames().contains("sx_ce9b35"))
+                    item.setType(FacebookNotificationItem.LOVE);
+                else {
+                    item.setType(FacebookNotificationItem.FACEBOOK);
+                    Log.e("ERROR", "FacebookHtmlCodeProcessor.processNotification() : unknown type - " + typeElement.classNames());
+                }
 
-             */
+                items.add(item);
+            } catch (Exception ex) {
 
-            if(typeElement.classNames().contains("sx_4ae08a"))
-                item.setType(FacebookNotificationItem.COMMENT);
-            else if(typeElement.classNames().contains("sx_acc618"))
-                item.setType(FacebookNotificationItem.FACEBOOK);
-            else if(typeElement.classNames().contains("sx_129ee6"))
-                item.setType(FacebookNotificationItem.DOYOUKNOW);
-            else if(typeElement.classNames().contains("sx_a7249c"))
-                item.setType(FacebookNotificationItem.LIKE);
-            else if(typeElement.classNames().contains("sx_380594"))
-                item.setType(FacebookNotificationItem.AMAZING);
-            else if(typeElement.classNames().contains("sx_565471"))
-                item.setType(FacebookNotificationItem.STATUS);
-            else if(typeElement.classNames().contains("sx_9e4ae5"))
-                item.setType(FacebookNotificationItem.PICTURE);
-            else if(typeElement.classNames().contains("sx_28ef4b"))
-                item.setType(FacebookNotificationItem.GROUP);
-            else if(typeElement.classNames().contains("sx_d90fcc"))
-                item.setType(FacebookNotificationItem.LOCATION);
-            else if(typeElement.classNames().contains("sx_ce9b35"))
-                item.setType(FacebookNotificationItem.LOVE);
-            else {
-                item.setType(-1);
-                Log.e("ERROR","FacebookHtmlCodeProcessor.processNotification() : unknown type - " + typeElement.classNames());
             }
-
-            items.add(item);
         }
 
         return items;

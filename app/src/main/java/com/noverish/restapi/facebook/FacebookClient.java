@@ -6,7 +6,6 @@ import android.util.Log;
 import com.noverish.restapi.R;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
-import com.noverish.restapi.webview.OnPageFinishedListener;
 
 import org.jsoup.Jsoup;
 
@@ -115,14 +114,16 @@ public class FacebookClient {
         isLogined = logined;
     }
 
-    public void getNotification(OnHtmlLoadSuccessListener loaded) {
-        OnPageFinishedListener finished = new OnPageFinishedListener() {
+    public void getNotification(final FacebookNotificationCallback callback) {
+        OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
             @Override
-            public void onPageFinished(HtmlParseWebView webView, String url) {
+            public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
                 webView.goBack();
+
+                callback.onSuccess(FacebookHtmlCodeProcessor.processNotification(htmlCode));
             }
         };
-        webView.loadUrl("https://m.facebook.com/notifications.php?more", loaded, null, finished, HtmlParseWebView.SNSType.Facebook);
+        webView.loadUrl("https://m.facebook.com/notifications.php?more", listener, null, null, HtmlParseWebView.SNSType.Facebook);
     }
 
     public interface FacebookClientCallback {
@@ -131,5 +132,15 @@ public class FacebookClient {
         void onNotLogin();
 
         void onFailure();
+    }
+
+    public interface FacebookArticleCallback {
+        void onSuccess(ArrayList<FacebookArticleItem> items);
+        void onNotLogin();
+    }
+
+    public interface FacebookNotificationCallback {
+        void onSuccess(ArrayList<FacebookNotificationItem> items);
+        void onNotLogin();
     }
 }
