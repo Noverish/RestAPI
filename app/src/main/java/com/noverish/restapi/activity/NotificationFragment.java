@@ -13,6 +13,7 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.facebook.FacebookNotificationItem;
 import com.noverish.restapi.facebook.FacebookNotificationView;
+import com.noverish.restapi.other.GlobalProgressDialog;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.twitter.TwitterNotificationItem;
 import com.noverish.restapi.twitter.TwitterNotificationView;
@@ -34,6 +35,8 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_notification, container, false);
 
+        GlobalProgressDialog.showDialog(getActivity());
+
         layout = (LinearLayout) view.findViewById(R.id.activity_notification_layout);
 
         twitterClient = TwitterClient.getInstance();
@@ -43,6 +46,8 @@ public class NotificationFragment extends Fragment {
                 for(TwitterNotificationItem item : items) {
                     layout.addView(new TwitterNotificationView(getActivity(), item));
                 }
+
+                GlobalProgressDialog.dismissDialog();
             }
 
             @Override
@@ -58,6 +63,8 @@ public class NotificationFragment extends Fragment {
                 for(FacebookNotificationItem item : items) {
                     layout.addView(new FacebookNotificationView(getActivity(), item, handler));
                 }
+
+                GlobalProgressDialog.dismissDialog();
             }
 
             @Override

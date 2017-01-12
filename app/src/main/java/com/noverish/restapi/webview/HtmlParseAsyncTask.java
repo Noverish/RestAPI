@@ -46,7 +46,7 @@ public class HtmlParseAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... strings) {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2500);
         } catch (Exception ex) {
 
         }

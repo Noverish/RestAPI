@@ -12,6 +12,7 @@ import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.facebook.FacebookMessageItem;
 import com.noverish.restapi.facebook.FacebookMessageView;
+import com.noverish.restapi.other.GlobalProgressDialog;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.twitter.TwitterMessageItem;
 import com.noverish.restapi.twitter.TwitterMessageView;
@@ -30,6 +31,8 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container, false);
 
+        GlobalProgressDialog.showDialog(getActivity());
+
         layout = (LinearLayout) view.findViewById(R.id.fragment_message_layout);
 
         TwitterClient twitterClient = TwitterClient.getInstance();
@@ -39,6 +42,8 @@ public class MessageFragment extends Fragment {
                 for(TwitterMessageItem item : items) {
                     layout.addView(new TwitterMessageView(getActivity(), item));
                 }
+
+                GlobalProgressDialog.dismissDialog();
             }
 
             @Override
@@ -54,6 +59,8 @@ public class MessageFragment extends Fragment {
                 for(FacebookMessageItem item : items) {
                     layout.addView(new FacebookMessageView(getActivity(), item));
                 }
+
+                GlobalProgressDialog.dismissDialog();
             }
 
             @Override

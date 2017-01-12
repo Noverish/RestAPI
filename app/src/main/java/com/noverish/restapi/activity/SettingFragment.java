@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.noverish.restapi.R;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.kakao.KakaoClient;
+import com.noverish.restapi.other.GlobalProgressDialog;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnHtmlLoadSuccessListener;
@@ -124,10 +125,12 @@ public class SettingFragment extends Fragment {
         facebookProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GlobalProgressDialog.showDialog(getActivity());
                 OnPageFinishedListener listener = new OnPageFinishedListener() {
                     @Override
                     public void onPageFinished(HtmlParseWebView webView, String url) {
                         MainActivity.instance.setStatus(PROFILE_FACEBOOK);
+                        GlobalProgressDialog.dismissDialog();
                         ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 };
@@ -139,10 +142,12 @@ public class SettingFragment extends Fragment {
         facebookFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GlobalProgressDialog.showDialog(getActivity());
                 OnPageFinishedListener listener = new OnPageFinishedListener() {
                     @Override
                     public void onPageFinished(HtmlParseWebView webView, String url) {
                         MainActivity.instance.setStatus(FRIEND_FACEBOOK);
+                        GlobalProgressDialog.dismissDialog();
                         ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 };
@@ -154,6 +159,7 @@ public class SettingFragment extends Fragment {
         twitterProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GlobalProgressDialog.showDialog(getActivity());
                 OnHtmlLoadSuccessListener listener = new OnHtmlLoadSuccessListener() {
                     @Override
                     public void onHtmlLoadSuccess(HtmlParseWebView webView, String htmlCode) {
@@ -164,8 +170,10 @@ public class SettingFragment extends Fragment {
                         String profileUrl = "https://mobile.twitter.com/" + TwitterClient.getInstance().getUserScreenName();
 
                         webView.loadUrl(profileUrl, null, null, null, HtmlParseWebView.SNSType.Twitter);
-                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
+
                         MainActivity.instance.setStatus(PROFILE_TWITTER);
+                        GlobalProgressDialog.dismissDialog();
+                        ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 };
                 anotherWebView.loadUrl("https://mobile.twitter.com/account", listener, null, null, HtmlParseWebView.SNSType.Twitter);
@@ -176,10 +184,12 @@ public class SettingFragment extends Fragment {
         twitterFollowingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GlobalProgressDialog.showDialog(getActivity());
                 OnPageFinishedListener listener = new OnPageFinishedListener() {
                     @Override
                     public void onPageFinished(HtmlParseWebView webView, String url) {
                         MainActivity.instance.setStatus(FOLLOWING_TWITTER);
+                        GlobalProgressDialog.dismissDialog();
                         ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 };
@@ -191,10 +201,12 @@ public class SettingFragment extends Fragment {
         twitterFollowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GlobalProgressDialog.showDialog(getActivity());
                 OnPageFinishedListener listener = new OnPageFinishedListener() {
                     @Override
                     public void onPageFinished(HtmlParseWebView webView, String url) {
                         MainActivity.instance.setStatus(FOLLOWER_TWITTER);
+                        GlobalProgressDialog.dismissDialog();
                         ((MainActivity) getActivity()).changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                     }
                 };

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.noverish.restapi.R;
 import com.noverish.restapi.activity.MainActivity;
+import com.noverish.restapi.other.GlobalProgressDialog;
 import com.noverish.restapi.webview.HtmlParseWebView;
 import com.noverish.restapi.webview.OnPageFinishedListener;
 import com.squareup.picasso.Picasso;
@@ -49,12 +50,14 @@ public class FacebookMessageView extends LinearLayout implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        GlobalProgressDialog.showDialog(context);
         OnPageFinishedListener listener = new OnPageFinishedListener() {
             @Override
             public void onPageFinished(HtmlParseWebView webView, String url) {
                 webView.scrollBottom(null);
-                MainActivity.instance.changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
                 MainActivity.instance.setStatus(MainActivity.Status.MESSAGE_FACEBOOK);
+                GlobalProgressDialog.dismissDialog();
+                MainActivity.instance.changeVisibleLevel(MainActivity.LEVEL_ANOTHER);
             }
         };
         MainActivity.instance.anotherWebView.loadUrl(item.getUrl(), null, null, listener, HtmlParseWebView.SNSType.Facebook);
