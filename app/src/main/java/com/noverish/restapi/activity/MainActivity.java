@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (status) {
                 case HOME: {
                     finish();
+                    break;
                 }
                 case SETTING:
                 case NOTI:
@@ -139,11 +140,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case FRIEND_FACEBOOK: {
                     changeVisibleLevel(LEVEL_3);
                     setStatus(SETTING);
+                    break;
                 }
                 case ARTICLE: {
                     changeVisibleLevel(LEVEL_3);
                     setStatus(Status.HOME);
                     fab.setVisibility(VISIBLE);
+                    break;
                 }
             }
         }
