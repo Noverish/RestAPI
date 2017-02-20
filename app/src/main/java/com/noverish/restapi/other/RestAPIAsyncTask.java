@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.noverish.restapi.activity.MainActivity;
 import com.noverish.restapi.base.ArticleItem;
-import com.noverish.restapi.base.ArticleView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,9 +26,9 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
     private String content;
     private TextView textView;
     private ArticleItem item;
-    private ArticleView view;
+    private View view;
 
-    private RestAPIAsyncTask(String content, TextView textView, ArticleItem item, ArticleView view) {
+    public RestAPIAsyncTask(String content, TextView textView, ArticleItem item, View view) {
         super();
         this.content = content;
         this.textView = textView;
@@ -37,7 +36,7 @@ public class RestAPIAsyncTask extends AsyncTask<Void, Void, String> {
         this.view = view;
     }
 
-    public static void execute(String content, TextView textView, ArticleItem item, ArticleView view) {
+    public static void execute(String content, TextView textView, ArticleItem item, View view) {
         RestAPIAsyncTask restAPIAsyncTask = new RestAPIAsyncTask(content, textView, item, view);
         restAPIAsyncTask.execute();
     }

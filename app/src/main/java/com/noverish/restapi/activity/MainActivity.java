@@ -16,10 +16,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.noverish.restapi.R;
+import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.facebook.FacebookClient;
 import com.noverish.restapi.facebook.FacebookFragment;
 import com.noverish.restapi.kakao.KakaoFragment;
-import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.other.Essentials;
 import com.noverish.restapi.twitter.TwitterClient;
 import com.noverish.restapi.twitter.TwitterFragment;
@@ -27,6 +27,7 @@ import com.noverish.restapi.webview.HtmlParseWebView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.noverish.restapi.activity.MainActivity.Status.HOME;
 import static com.noverish.restapi.activity.MainActivity.Status.MESSAGE;
 import static com.noverish.restapi.activity.MainActivity.Status.NOTI;
 import static com.noverish.restapi.activity.MainActivity.Status.SETTING;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int debugStatus = 0;
 
     public enum Status {HOME, MESSAGE_FACEBOOK, MESSAGE, NOTI, SETTING, FRIEND_FACEBOOK, PROFILE_FACEBOOK, PROFILE_TWITTER, FOLLOWER_TWITTER, FOLLOWING_TWITTER, ARTICLE}
-    private Status status;
+    private Status status = HOME;
 
     public String nowCategory = "전체보기";
 
@@ -93,13 +94,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FacebookClient.getInstance().setWebView(facebookWebView);
         TwitterClient.getInstance().setWebView(twitterWebView);
 
-        Essentials.changeFragment(this, R.id.activity_main_fragment_splash, new SplashFragment());
-
         HomeFragment homeFragment = new HomeFragment();
         homeFragment.setOnFirstLoadFinishedRunnable(new Runnable() {
             @Override
             public void run() {
-                MainActivity.this.findViewById(R.id.activity_main_fragment_splash).setVisibility(GONE);
                 fab.setVisibility(VISIBLE);
             }
         });
@@ -124,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case NOTI:
                 case MESSAGE: {
                     level1Frame.removeAllViews();
-                    setStatus(Status.HOME);
+                    setStatus(HOME);
                     fab.setVisibility(VISIBLE);
                     break;
                 }
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 case ARTICLE: {
                     changeVisibleLevel(LEVEL_3);
-                    setStatus(Status.HOME);
+                    setStatus(HOME);
                     fab.setVisibility(VISIBLE);
                     break;
                 }

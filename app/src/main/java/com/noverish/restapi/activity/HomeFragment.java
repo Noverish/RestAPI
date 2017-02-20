@@ -2,6 +2,7 @@ package com.noverish.restapi.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,12 @@ import android.widget.LinearLayout;
 import com.noverish.restapi.R;
 import com.noverish.restapi.base.ArticleItem;
 import com.noverish.restapi.base.ArticleView;
+import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.facebook.FacebookArticleItem;
 import com.noverish.restapi.facebook.FacebookArticleView;
 import com.noverish.restapi.facebook.FacebookClient;
-import com.noverish.restapi.base.BaseFragment;
 import com.noverish.restapi.other.GlobalProgressDialog;
+import com.noverish.restapi.rss.cnn.CNNAsyncTask;
 import com.noverish.restapi.twitter.TwitterArticleItem;
 import com.noverish.restapi.twitter.TwitterArticleView;
 import com.noverish.restapi.twitter.TwitterClient;
@@ -81,6 +83,7 @@ public class HomeFragment extends BaseFragment {
         twitterClient.setCallback(new TwitterClient.TwitterArticleCallback() {
             @Override
             public void onSuccess(ArrayList<TwitterArticleItem> items) {
+                System.out.println(items);
                 newArticleItems.addAll(items);
 
                 twitterFirstLoaded = true;
@@ -99,6 +102,8 @@ public class HomeFragment extends BaseFragment {
         });
         twitterClient.loadFirstPage();
 
+        new CNNAsyncTask(mainLayout).execute();
+
         return view;
     }
 
@@ -107,6 +112,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void allLoaded() {
+        Log.e("ASDF","ALL LOADED");
+
         GlobalProgressDialog.dismissDialog();
 
         if(onFirstLoadFinishedRunnable != null)

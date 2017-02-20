@@ -84,7 +84,7 @@ public class TwitterHtmlProcessor {
                 Elements linkDomainEle = mediaEle.select("span[class=\"Fe7ul3Lt _2DggF3sL _34Ymm628\"]");
 
                 String linkUrl = mediaEle.attr("href");
-                String linkImg = Essentials.getMatches("url[(][^)]*[)]",linkImgEle.outerHtml()).replaceAll("url[(]|[)]","");
+                String linkImg = Essentials.getMatches("url[(][^)]*[)]",linkImgEle.outerHtml()).replaceAll("url[(]|[)]","").replaceAll("&amp;","&");
                 String linkContent = HttpConnectionThread.unicodeToString(linkContentEle.html());
                 String linkDomain = HttpConnectionThread.unicodeToString(linkDomainEle.html());
 
